@@ -1,0 +1,139 @@
+//==================================================================================================================================================================
+// Notas del script
+//==================================================================================================================================================================
+// Para que funcione correctamente, hay que hacer lo siguiente:
+// Este ayudante es una copia del sprite Margareta Sorin con el ID 3910, las skills estan al final del archivo pero hay que ponerlos en el archivo mob_skill_db.txt	
+//
+// para copiar el sprite hay que agregar la siguiente linea al archivo mob_avail.txt
+// 3910,1637,0
+// Lo que hace este ayudante es ofrecerte dopas, Agi, Bless y Summptio, te ayuda a atacar y te cura cuando estas herido
+//==================================================================================================================================================================
+// Descripcion:
+// El ayudante estara contigo 1 hora, y puedes invocar un segundo despues de 30 minutos de haberlo invocado,
+// si el ayudante muere o el personaje, antes de transcurridos los 30 min, puedes ir a invocar uno, y esperar de nuevo 30 min para poder invocar un segundo
+//==================================================================================================================================================================
+// by: xMigue
+//==================================================================================================================================================================
+
+prontera,164,168,3	script	Rent Healer#RentHealer	475,{
+	
+	mes .npc_name$;
+	mes "Hola, te gustaria obtener un ayudante por " + ($@timeSeg/60) + " min?";
+	mes "Esto te costaria $" + $@price_enter + " z";
+	menu "¿Que hace ese ayudante?", explica, "Quiero uno", comprar, "No, gracias", nope;
+	end;
+	explica:
+	next;
+		mes .npc_name$;
+		mes "Bueno, este ayudante te bufara con algunas de las habilidades de un priest:";
+		mes "Assumptio";
+		mes "Increasy Agiliti";
+		mes "Blessing";
+		mes "Heal";
+	close;
+	
+	comprar:
+		next;
+		mes .npc_name$;
+		if(getd("@tiempode" + $@nIdMob) > gettimetick(2)){
+			mes "Lo siento, pero debes esperar "+ ((getd("@tiempode" + $@nIdMob)-gettimetick(2))/60) +" minutos antes de pedir otro ayudante.";
+			close;
+		}
+		else {
+			mes "Solo puedo ayudarte a invocar 1 cada " + ($@tiempoespera / 60) + " min.";
+			mes "¿Aun quieres continuar?";
+			menu "Si", si, "No, mejor luego", nope;
+		}
+
+	si:		
+		if(Zeny < $@price_enter) goto no_zeny;
+		next;
+		set Zeny, Zeny - $@price_enter;
+		//atcommand "@summon 3910 30" + strcharinfo(0);
+
+		summon strmobinfo(2, 3910), 3910, $@time, "RentHealer::OnPCDieEvent"; // Tiempo en milisegundo 60000 = 1 minuto, 1800000 = 30 min, 3600000 = 1 hr
+		set #lastTimeRentHealer, gettimetick(2);								// Tiempo de la ultima vez que se rento un healer, en valor numerico para usar despues
+		set #lastHealerRequest$, gettimestr("%Y-%m/%d %H:%M:%S",21);			// Tiempo de la ultima vez que se rento un healer, valor en string
+		set #Healer_live$, 1;													// Bandera para saber si el healer aun esta activo (vivo) o no
+		setd("@tiempode" + $@nIdMob, (gettimetick(2) + $@tiempoespera) );
+		mes .npc_name$;
+		mes "Te recuerdo que estara contigo solo " + ($@timeSeg/60) + " min.";
+		mes "Oh!! algo importante, no vallas a morir.";
+		close;
+
+	no_zeny:
+		next;
+		mes .npc_name$;
+		mes "Te adverti que esto te costaria $" + $@price_enter + " z";	
+		mes "vuelve cuando los tengas.";
+	close;
+
+	nope:
+		next;
+		mes .npc_name$;
+		mes "Bueno, estaré aqui por si te arrepientes.";
+	close;
+
+	OnInit:
+		set .npc_name$, "[^CC33CC Rent Healer ^000000]";
+		set $@price_enter, 100000;
+		set $@timeSeg, 3600;		// Tiempo que estara activo el ayudante (en segundos)
+		set $@time, ($@timeSeg * 1000);	// conversion de tiempo del summoner (en ms)
+		set $@tiempoespera, 1200; 	//=> La cantidad del tiempo de espera en segundos, 20 min [60 seg * 20 Cant. minutos]
+		set $@nIdMob, 3910;		// ID del Summoner
+	end;
+
+	OnPCDieEvent:
+		set #lastDieHealer$, gettimestr("%Y-%m/%d %H:%M:%S",21);
+		set #Healer_live$, 0;
+		setd("@tiempode" + $@nIdMob, gettimetick(2));
+	end;
+}
+//prtg_cas01	mapflag	nobranch
+prtg_cas01	mapflag	loadevent
+prontera	mapflag	loadevent
+-	script	NoSlaveWoE	-1,{
+	OnPCLoadMapEvent:
+	// Revisar si hacen logout, establecer de nuevo el tiempo en espera para rentar un nuevo healer
+	set $@nIdMob, 3910;
+	setd("@tiempode" + $@nIdMob, (#lastTimeRentHealer + $@tiempoespera) );
+	
+	// Revisar si algun usuario lleva healer a WoE
+	.@map$ = strcharinfo(3);
+	if( .@map$ == "prtg_cas01" && #Healer_live$ == "1" && agitcheck()){ 
+		sleep2 1500;
+		//killmonster2 .@map$,"All";
+		set #Healer_live$, 0;
+		atcommand "@killmonster2";
+	}
+	end;
+}
+
+// Summons Slave Clone into ../mob_skill_db
+//****
+//3910,Margaretha Sorin@HP_ASSUMPTIO,idle,361,5,10000,1000,10000,no,self,myhpltmaxrate,99,,,,,,,
+//3910,Margaretha Sorin@HP_ASSUMPTIO,chase,361,5,10000,1000,10000,no,self,myhpltmaxrate,100,,,,,,,
+//3910,Margaretha Sorin@HP_ASSUMPTIO,idle,361,5,10000,1000,80000,no,master,friendhpltmaxrate,100,,,,,,,
+//3910,Margaretha Sorin@HP_ASSUMPTIO,chase,361,5,10000,1000,80000,no,master,friendhpltmaxrate,100,,,,,,,
+
+
+//3910,Margaretha Sorin@AL_INCAGI,attack,29,10,10000,0,20000,yes,self,always,0,,,,,,2,
+//3910,Margaretha Sorin@AL_INCAGI,chase,29,10,10000,0,20000,yes,self,always,0,,,,,,2,
+//3910,Margaretha Sorin@AL_INCAGI,idle,29,10,10000,0,80000,yes,master,friendhpltmaxrate,100,,,,,,2,
+//3910,Margaretha Sorin@AL_INCAGI,chase,29,10,10000,0,80000,yes,master,friendhpltmaxrate,100,,,,,,2,
+
+
+//3910,Margaretha Sorin@AL_BLESSING,idle,34,10,10000,0,80000,yes,master,friendhpltmaxrate,100,,,,,,3,
+//3910,Margaretha Sorin@AL_BLESSING,chase,34,10,10000,0,80000,yes,master,friendhpltmaxrate,100,,,,,,3,
+
+
+//3910,Margaretha Sorin@PR_LEXAETERNA,attack,78,1,1000,0,5000,yes,target,always,0,,,,,,29,
+//3910,Margaretha Sorin@PR_LEXAETERNA,chase,78,1,1000,0,5000,yes,target,always,0,,,,,,29,
+
+
+//3910,Margaretha Sorin@AL_HEAL,attack,28,9,3000,0,2000,yes,friend,friendhpltmaxrate,99,,,,,,3,
+//3910,Margaretha Sorin@AL_HEAL,attack,28,9,3000,0,2000,yes,self,myhpltmaxrate,99,,,,,,3,
+//3910,Margaretha Sorin@AL_HEAL,idle,28,9,3000,0,2000,yes,master,friendhpltmaxrate,99,,,,,,3,
+//3910,Margaretha Sorin@AL_HEAL,idle,28,9,3000,0,2000,yes,self,myhpltmaxrate,99,,,,,,3,
+//3910,Margaretha Sorin@AL_HEAL,chase,28,9,3000,0,2000,yes,master,friendhpltmaxrate,99,,,,,,3,
+//***

@@ -1,0 +1,72 @@
+//===== rAthena Script ================================
+//= Costume Preview
+//===== By: ==================================================
+//= JETH-RO
+//===== Last Updated: ========================================
+//= 03-30-2017
+//===== Description: =========================================
+//= Costume Preview?
+//============================================================
+
+new_5-2,91,112,5	script	Costume Preview	509,{
+setarray @look[0], getlook(LOOK_HEAD_BOTTOM), getlook(LOOK_HEAD_TOP), getlook(LOOK_HEAD_MID), getlook(LOOK_ROBE);
+@i = 0;
+M_REPEAT:
+	@equip = getiteminfo(.items[@i], 5);
+	@view = getiteminfo(.items[@i], 11);
+
+
+	if(@equip != -1 && @view > 0) {
+			changelook LOOK_HEAD_BOTTOM, @look[0];
+			changelook LOOK_HEAD_TOP, @look[1];
+			changelook LOOK_HEAD_MID, @look[2];
+			changelook LOOK_ROBE, @look[3];
+			deltimer strnpcinfo(0)+"::OnEnd";
+			if ((@equip & 1) || (@equip & 4096)) changelook LOOK_HEAD_BOTTOM, @view;
+			else if ((@equip & 256) || (@equip & 1024)) changelook LOOK_HEAD_TOP, @view;
+			else if ((@equip & 512) || (@equip & 2048)) changelook LOOK_HEAD_MID, @view;
+			else if ((@equip & 4) || (@equip & 8192)) changelook LOOK_ROBE, @view;
+			addtimer 5000, strnpcinfo(0)+"::OnEnd";
+	}
+	
+	@next = @i == getarraysize(.items)-1 ? 0 : @i+1;
+	@prev = @i == 0 ? getarraysize(.items)-1 : @i-1;
+	mes "[ Costume Preview ]";
+	mes "Item Name: ^6666ff"+getitemname(.items[@i])+"^000000";
+	mes "Item ID: "+.items[@i];
+	
+	menu "Next [ ^6666ff"+getitemname(.items[@next])+" ^000000]",M_NEXT,"Previous [ ^6666ff"+getitemname(.items[@prev])+"^000000 ]",M_PREVIOUS,"Random",M_RANDOM;	
+	
+	end;
+
+M_NEXT:
+	next;
+	@i = @next;
+	goto M_REPEAT;
+	end;
+
+M_PREVIOUS:
+	next;
+	@i = @prev;
+	goto M_REPEAT;
+	end;
+
+M_RANDOM:
+	next;
+	@i = rand(getarraysize(.items));
+	goto M_REPEAT;
+	end;
+
+
+OnEnd:
+	changelook LOOK_HEAD_BOTTOM, @look[0];
+	changelook LOOK_HEAD_TOP, @look[1];
+	changelook LOOK_HEAD_MID, @look[2];
+	changelook LOOK_ROBE, @look[3];
+	end;
+	
+
+OnInit:
+	setarray .items[0],33001,33016,33027,33039,33042,33069;
+	end;
+}

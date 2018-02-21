@@ -1,0 +1,228 @@
+///	================================================================================================
+/// [Como configurar el comando @identifyitems]
+///	================================================================================================
+/// En el codigo fuente, clase atcommand.c, se agrega el siguiente metodo para invocar el script
+///     Buscar el metodo -> ACMD_FUNC(identifyall) {
+///		y luego agregar en la siguiente linea
+/// 	ACMD_FUNC(identifyitems) {
+///	 	 npc_event(sd, "IdentifyItems::OnSettings", 0);
+///	 	 return 0;
+/// 	}
+///
+/// 	Buscar -> ACMD_DEF(identifyall), 
+///		y luego agregar en la siguiente linea
+///		ACMD_DEF(identifyitems),
+///		Recompilar y revisar que funcione
+///	================================================================================================
+///	[Configuraciones en el conf del emulador]
+///	================================================================================================
+/// Para agregarlo para uso de los usuarios, realizar las siguientes modificaciones
+///
+///	conf/groups.conf [Agregar al grupo]
+///	identifyitems: true
+///
+/// conf/help [Agregar al final del archivo]
+/// identifyitems: "Comando para identificar todos tus items, por una pequeña cantidad de zeny"
+///
+///	conf/atcommand_athena.conf [Dentro de las llaves de aliases]
+///	identifyitems: ["identifyitems", "iditems"]
+///
+/// doc/atcommands [Agregar la descripcion de los comandos al final del archivo]
+/// @identifyitems
+/// Puedes identificar todos tus items, por un pequeño costo.
+/// 
+/// ================================================================================================
+
+prontera,183,213,3	script	Identifier	931,{
+	callfunc("Identifica_Items"); 
+	close;
+}
+
+-	script	IdentifyItems	-1,{
+
+	OnSettings:
+		callfunc("Identifica_Items"); 
+		close;
+}
+
+
+function	script	Identifica_Items	{
+	set @nombreNPC$, "[^FF0000 Identificador^000000]";
+	set @Costo, 80;
+	set @identify, 0;
+
+	if(Zeny < @Costo) goto no_zeny;
+	
+	cutin "merchant",2;
+	mes @nombreNPC$;
+	mes "Hola, yo puedo identificar objetos que tengas en tu inventario, te interesa?";
+	next;
+	menu "Si, por favor!",yes1,"No, gracias.",no1;
+
+	yes1:
+		getinventorylist;
+		for(set @i, 0; @i < @inventorylist_count; set @i, @i + 1) {
+			if (@inventorylist_identify[@i] == 0) set @identify, @identify + 1;
+		}
+		if (@identify == 0) goto no_unid;
+
+		mes @nombreNPC$;
+		if (@identify < 2) {
+			mes "Estas seguro que quieres identificar solo "+@identify+" item sin identificar de tu inventario, eso te costara "+(@identify * @Costo)+" zeny?";
+		}
+		else {
+			mes "Estas seguro que quieres identificar los "+@identify+" item sin identificar de tu inventario, eso te costara "+(@identify * @Costo)+" zeny?";
+		}
+		next;
+		menu "Si, estoy seguro!",yes2,"No, mejor vendre despues.",no2;
+
+	yes2:
+		if(Zeny < (@identify * @Costo)) goto no_zeny;
+		getinventorylist;
+
+		for(set @i, 0; @i < @inventorylist_count; set @i, @i +	1) {
+			if (@inventorylist_identify[@i] == 0) set @identify,
+				@identify + 1;
+		}
+		if (@identify == 0) goto no_unid;
+		getinventorylist;
+		set @identified, 0;
+		for(set @i, 0; @i < @inventorylist_count; set @i, @i + 1) {
+			if (@inventorylist_identify[@i] == 0) {
+				if (Zeny < @Costo) goto no_zeny;
+				else set Zeny, Zeny - @Costo;
+
+				delitem2 @inventorylist_id[@i],1,0,0,0,0,0,0,0;
+				getitem @inventorylist_id[@i],1;
+				set @identified, @identified + 1;
+			}
+		}
+		mes @nombreNPC$;
+		mes "Listo!";
+		mes "Todos tus items se encuentran identificados.";
+		cutin "",255;
+		close;
+
+	no1:
+		mes @nombreNPC$;
+		mes "Hasta luego, espero verte pronto!";
+		cutin "",255;
+		close;
+
+	no2:
+		mes @nombreNPC$;
+		mes "Hasta luego, espero verte pronto!";
+		cutin "",255;
+		close;
+
+	no_zeny:
+		mes @nombreNPC$;
+		mes "No tienes el zeny suficiente, regresa cuando lo tengas.";
+		cutin "",255;
+		close;
+
+	no_unid:
+		mes @nombreNPC$;
+		mes "No tienes nada por identificar, yo solo te puedo ayudar con eso lo siento.";
+		cutin "",255;
+		close;
+
+	no:
+		mes @nombreNPC$;
+		mes "Hasta luego, espero verte pronto!";
+		cutin "",255;
+		close;	
+}
+
+
+
+
+
+//=============================
+//
+// Identifier
+// Version 1.0
+// Author: Fire685
+// Edited: xMigue
+//=============================
+//prontera,183,213,3	script	Identifier	986,{
+//
+//set @nombreNPC$, "[Identificador]";
+//set @Costo, 80;
+//set @identify, 0;
+//
+//if(Zeny < @Costo) goto no_zeny;
+//
+//mes @nombreNPC$;
+//mes "Hola, yo puedo identificar objetos que tengas en tu inventario, te interesa?";
+//next;
+//menu "Si, por favor!",yes1,"No, gracias.",no1;
+//
+//yes1:
+//	getinventorylist;
+//	for(set @i, 0; @i < @inventorylist_count; set @i, @i + 1) {
+//		if (@inventorylist_identify[@i] == 0) set @identify, @identify + 1;
+//	}
+//	if (@identify == 0) goto no_unid;
+//
+//	mes @nombreNPC$;
+//	if (@identify < 2) {
+//		mes "Estas seguro que quieres identificar solo "+@identify+" item sin identificar de tu inventario, eso te costara "+(@identify * @Costo)+" zeny?";
+//	}
+//	else {
+//		mes "Estas seguro que quieres identificar los "+@identify+" item sin identificar de tu inventario, eso te costara "+(@identify * @Costo)+" zeny?";
+//	}
+//	next;
+//	menu "Si, estoy seguro!",yes2,"No, mejor vendre despues.",no2;
+//
+//yes2:
+//	if(Zeny < (@identify * @Costo)) goto no_zeny;
+//	getinventorylist;
+//
+//	for(set @i, 0; @i < @inventorylist_count; set @i, @i +	1) {
+//		if (@inventorylist_identify[@i] == 0) set @identify,
+//			@identify + 1;
+//	}
+//	if (@identify == 0) goto no_unid;
+//	getinventorylist;
+//	set @identified, 0;
+//	for(set @i, 0; @i < @inventorylist_count; set @i, @i + 1) {
+//		if (@inventorylist_identify[@i] == 0) {
+//	  		if (Zeny < 200) goto no_zeny;
+//			else set Zeny, Zeny - 200;
+//
+//			delitem2 @inventorylist_id[@i],1,0,0,0,0,0,0,0;
+//			getitem @inventorylist_id[@i],1;
+//			set @identified, @identified + 1;
+//		}
+//	}
+//	mes @nombreNPC$;
+//	mes "Listo!";
+//	mes "Todos tus items se encuentran identificados.";
+//	close;
+//
+//no1:
+//	mes @nombreNPC$;
+//	mes "Hasta luego, espero verte pronto!";
+//	close;
+//
+//no2:
+//	mes @nombreNPC$;
+//	mes "Hasta luego, espero verte pronto!";
+//	close;
+//
+//no_zeny:
+//	mes @nombreNPC$;
+//	mes "No tienes el zeny suficiente, regresa cuando lo tengas.";
+//	close;
+//
+//no_unid:
+//	mes @nombreNPC$;
+//	mes "No tienes nada por identificar, yo solo te puedo ayudar con eso lo siento.";
+//	close;
+//
+//no:
+//	mes @nombreNPC$;
+//	mes "Hasta luego, espero verte pronto!";
+//	close;
+//}

@@ -1,0 +1,20 @@
+//===== eAthena Script =======================================
+//= Nidhoggr Dungeon Warp Script
+//============================================================
+
+//spl_fild01,373,110,0   warp   nidhoggrwarp0001   1,1,nyd_dun01,72,124
+//nyd_dun01,62,231,0   warp   nidhoggrwarp0002   1,1,spl_fild01,376,65
+//nyd_dun01,255,142,0   warp   nidhoggrwarp0003   1,1,nyd_dun02,61,265
+//nyd_dun02,56,264,0   warp   nidhoggrwarp0004   1,1,nyd_dun01,249,143
+
+nyd_dun02,99,199,0	warp	nidhoggrwarp0005	1,1,1@nyd,32,38
+1@nyd,32,34,0	warp	nidhoggrwarp0006	1,1,nyd_dun02,96,196
+1@nyd,195,320,0	warp	nidhoggrwarp0007	1,1,2@nyd,199,11
+2@nyd,199,8,0	warp	nidhoggrwarp0008	1,1,1@nyd,195,319
+2@nyd,199,178,0	warp	nidhoggrwarp0009	1,1,2@nyd,199,257
+2@nyd,199,253,0	warp	nidhoggrwarp0010	1,1,2@nyd,199,174
+
+
+nyd_dun02	mapflag	nomemo
+1@nyd	mapflag	nomemo
+2@nyd	mapflag	nomemo

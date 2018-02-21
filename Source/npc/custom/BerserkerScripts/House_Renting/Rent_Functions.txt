@@ -1,0 +1,397 @@
+//===== eAthena Script ======================================= 
+//= Shared Functions - Housing for Rent
+//===== By: ================================================== 
+//= Zephyrus
+//=====Translation by: =======================================
+//= Preima
+//===== Current Version: ===================================== 
+//= 1.0 10399
+//= 1.1 - Did some spell and translation changes
+//===== Compatible With: ===================================== 
+//= eAthena SVN Stable 
+//===== Description: ========================================= 
+//= Contains the functions needed for Renting the houses
+//===== Additional Comments: ================================= 
+//= 1.0 Initial Version
+//============================================================ 
+
+//============================================================ 
+//= Function for liberating a house
+//============================================================ 
+
+function	script	rent_freehouse	{
+	if ((getd("$house" + getarg(0) + "_buy_day") == gettime(5)) && (getd("$house" + getarg(0) + "_buy_month") == gettime(6))) {
+		setd "$house" + getarg(0) + "_rent",0;
+		setd "$house" + getarg(0) + "_user$","";
+		setd "$house" + getarg(0) + "_passwort$","closed123";
+		setd "$house" + getarg(0) + "_userps$","closed123";
+		setd "$house" + getarg(0) + "_buy_day",0;
+		setd "$house" + getarg(0) + "_buy_month",0;
+		setd "$house" + getarg(0) + "_buy_year",0;
+		setd "$house" + getarg(0) + "_bugs",0;
+		killmonsterall "rentin" + getarg(0) + ".gat";
+	}
+	return 0;
+}
+
+//============================================================ 
+//= Control for the time (apples and villas)
+//============================================================ 
+
+-	script	rent_timer	-1,{
+	end;
+
+OnInit:
+	initnpctimer;
+	for (set .@j, 1; .@j < 23; set .@j, .@j + 1) {
+		setd "$@Manzanasa" + .@j, 20;
+		setd "$@Manzanasc" + .@j, 20;
+		setd "$@Manzanasd" + .@j, 20;
+		setd "$@Manzanase" + .@j, 20;
+		setd "$@Manzanasf" + .@j, 20;
+		setd "$@Manzanasg" + .@j, 20;
+	}
+	// Villas Prontera
+	for (set .@j, 1; .@j < 28; set .@j, .@j + 1) {
+		setd "$@Manzanasb" + .@j, 20;
+	}
+	end;
+
+OnTimer600000:
+	// Apple revision in all the npcs (It's for the apple tree)
+	for (set .@j, 1; .@j < 23; set .@j, .@j + 1) {
+		if (getd("$@Manzanasa" + .@j) < 20) { setd "$@Manzanasa" + .@j, getd("$@Manzanasa" + .@j) + 1; donpcevent "Manzano#Ra" + .@j + "::OnManzana"; }
+		if (getd("$@Manzanasc" + .@j) < 20) { setd "$@Manzanasc" + .@j, getd("$@Manzanasc" + .@j) + 1; donpcevent "Manzano#Rc" + .@j + "::OnManzana"; }
+		if (getd("$@Manzanasd" + .@j) < 20) { setd "$@Manzanasd" + .@j, getd("$@Manzanasd" + .@j) + 1; donpcevent "Manzano#Rd" + .@j + "::OnManzana"; }
+		if (getd("$@Manzanase" + .@j) < 20) { setd "$@Manzanase" + .@j, getd("$@Manzanase" + .@j) + 1; donpcevent "Manzano#Re" + .@j + "::OnManzana"; }
+		if (getd("$@Manzanasf" + .@j) < 20) { setd "$@Manzanasf" + .@j, getd("$@Manzanasf" + .@j) + 1; donpcevent "Manzano#Rf" + .@j + "::OnManzana"; }
+		if (getd("$@Manzanasg" + .@j) < 20) { setd "$@Manzanasg" + .@j, getd("$@Manzanasg" + .@j) + 1; donpcevent "Manzano#Rg" + .@j + "::OnManzana"; }
+	}
+	// Villas Prontera
+	for (set .@j, 1; .@j < 28; set .@j, .@j + 1) {
+		if (getd("$@Manzanasb" + .@j) < 20) { setd "$@Manzanasb" + .@j, getd("$@Manzanasb" + .@j) + 1; donpcevent "Manzano#Rb" + .@j + "::OnManzana"; }
+	}
+	//Reopening of the Accountant (Hard to explain, refreshes npc)
+	stopnpctimer;
+	initnpctimer;
+	end;
+
+OnClock0001:
+	for (set .@i, 1; .@i < 23; set .@i, .@i + 1) {
+		callfunc "rent_freehouse","a" + .@i + "";
+		callfunc "rent_freehouse","c" + .@i + "";
+		callfunc "rent_freehouse","d" + .@i + "";
+		callfunc "rent_freehouse","e" + .@i + "";
+		callfunc "rent_freehouse","f" + .@i + "";
+		callfunc "rent_freehouse","g" + .@i + "";
+	}
+	for (set .@i, 1; .@i < 23; set .@i, .@i + 1) {
+		callfunc "rent_freehouse","b" + .@i + "";
+	}
+	end;
+}
+
+//============================================================ 
+//= Function that calculates how many houses are available
+//= (Id of Villa, Amount of Houses)
+//============================================================ 
+
+function	script	rent_disponible	{
+	set .@j, getarg(1);
+	set .@k, getarg(1);
+	for (set .@i, 1; .@i <= .@k; set .@i, .@i + 1) {
+		if (getd("$house" + getarg(0) + .@i + "_rent") == 1) set .@j, .@j - 1;
+	}
+	return .@j;
+}
+
+//============================================================ 
+//= NPC in prontera that talks about House availability
+//= NOTE: Location can always be changed (Preima)
+//============================================================ 
+
+prontera.gat,152,187,5	script	Real Estate Agent::RentMainNPC	833,{
+	mes "[Real Estate Agent]";
+	mes "Hello, how are you?";
+	mes "Interested in visiting the houses that are for rent?";
+L_Menu:	
+	next;
+	menu "Warp to the Houses",L_Teleport,"Who are you?",L_Quien,"Renting?",L_Info,"Availability of Houses",L_Disponible,"Cancel",-;
+	mes "[Real Estate Agent]";
+	mes "We'll see each other soon...";
+	close;
+
+// Rent Availability
+
+L_Disponible:
+	mes "[Real Estate Agent]";
+	mes "Let me review my documents and I will tell you which houses are available.";
+	next;
+	mes "[Real Estate Agent]";
+	//mes "Payon: " + callfunc("rent_disponible","a",22) + " houses";
+	mes "Prontera: " + callfunc("rent_disponible","b",27) + " houses";
+	//mes "Morroc: " + callfunc("rent_disponible","c",22) + " houses";
+	//mes "Geffen: " + callfunc("rent_disponible","d",22) + " houses";
+	//mes "Alberta: " + callfunc("rent_disponible","e",22) + " houses";
+	//mes "Izlude: " + callfunc("rent_disponible","f",22) + " houses";
+	//mes "Aldebaran: " + callfunc("rent_disponible","g",22) + " houses";
+	next;
+	mes "[Real Estate Agent]";
+	mes "Hrm..some doubts on our service?";
+	goto L_Menu;
+
+//Rent Information
+
+L_Info:
+	mes "[Real Estate Agent]";
+	mes "Yes, people constructed several houses for a while.";
+	mes "These houses are in the main cities.";
+	next;
+
+L_Info1:
+	mes "[Real Estate Agent]";
+	mes "What exactly do you want to know?";
+	next;
+	menu "Locations and Costs",L_Costos,"Information on Houses",L_Casas,"Contract Conditions",L_Contrato,"Return to past menu",-;
+	mes "[Real Estate Agent]";
+	mes "Hrm..some doubts on our service?";
+	goto L_Menu;
+
+L_Costos:
+	mes "[Real Estate Agent]";
+	mes "These are the following cities and corresponding prices:";
+	next;
+	mes "[Real Estate Agent]";
+	mes "Prontera Villas.";
+	mes "Cost: 300000 zeny";
+	mes "Directions:In Prontera City, upper left.";
+	next;
+	//mes "[Real Estate Agent]";
+	//mes "Payon Villas";
+	//mes "Cost: 100000 zeny";
+	//mes "Directions: In Archer Village, entrance to the right just a little above the Buddha statue.";
+	//next;
+	//mes "[Real Estate Agent]";
+	//mes "Geffen Villas.";
+	//mes "Costs: 250000 zeny";
+	//mes "Direction: West of the city, upper right.";
+	//next;
+	//mes "[Real Estate Agent]";
+	//mes "Morocc Villas.";
+	//mes "Costs: 150000 zeny";
+	//mes "Directions: North of the city, upper right.";
+	//next;
+	//mes "[Real Estate Agent]";
+	//mes "Izlude Villas.";
+	//mes "Costs: 250000 zeny";
+	//mes "Directions: Map west from the city, a little below the entrance to Izlude, the descending hill.";
+	//next;
+	//mes "[Real Estate Agent]";
+	//mes "Alberta Villas";
+	//mes "Costs: 150000 zeny";
+	//mes "Directions: Map west from the city, close to the entrance to Alberta.";
+	//next;
+	//mes "[Real Estate Agent]";
+	//mes "Aldebaran Villas.";
+	//mes "Costs: 250000 zeny";
+	//mes "Directions: Map south of the city, upper right.";
+	//next;
+	goto L_Info1;
+	
+L_Casas:
+	mes "[Real Estate Agent]";
+	mes "All the houses include:";
+	mes "2 beds for sleeping";
+	mes "1 Closet to access Storage";
+	mes "1 Piano to play 19 songs";
+	mes "Room service to clean the room.";
+	next;
+	mes "[Real Estate Agent]";
+	mes "Outside the houses you can find:";
+	mes "1 Pvp activation switch";
+	mes "An Apple Tree";
+	mes "3 Lunatics";
+	mes "A garden with herbs.";
+	mes "Option to use dead branch";
+	next;
+	mes "[Real Estate Agent]";
+	mes "In time, there will be new things to add.";
+	next;
+	goto L_Info1;
+
+L_Contrato:
+	mes "[Real Estate Agent]";
+	mes "Condition is simple - visit your house and use it.";
+	mes "If you do not enter your house for a while, it will be filled with annoying insects and weeds - then you lose it.";
+	next;
+	mes "[Real Estate Agent]";
+	mes "A tiny beast appears every 2 hours, and if twenty of these are accumulated, you will use the property.";
+	next;
+	mes "[Real Estate Agent]";
+	mes "You can only have one house, please leave some for other people to rent.";
+	next;
+	goto L_Info1;
+
+// NPC Information
+	
+L_Quien:
+	mes "[Real Estate Agent]";
+	mes "I was ordered to look for renters for the houses in the following cities:";
+	mes "Prontera";//, Payon, Geffen, Aldebaran, Izlude, Morroc and Alberta";
+	next;
+	mes "[Real Estate Agent]";
+	mes "Do you still doubt our service?";
+	goto L_Menu;
+
+// Teleport to Villas ********
+
+L_Teleport:
+	mes "[Real Estate Agent]";
+	mes "Which villa would you like to go to?";
+	mes "It costs 2000 zeny to warp you.";
+	if (Zeny < 2000) {
+		mes "I'm sorry, you don't seem to have enough money.";
+		mes "Return when you have enough to pay me.";
+		close;
+	}
+	next;
+	menu "Villas Prontera",L_VProntera,"No where",-;
+	//"Villas Geffen",L_VGeffen,"Villas Morroc",L_VMorroc,"Villas Payon",L_VPayon,"Villas Alberta",L_VAlberta,"Villas Izlude",L_VIzlude,"Villas Aldebaran",L_VAldebaran,"No where",-;
+	mes "[Real Estate Agent]";
+	mes "Come back when you need my service. Good day.";
+	close;
+
+L_VProntera:  set Zeny, Zeny - 2000; mes "[Real Estate Agent]"; mes "Have nice trip!!"; close2; warp "rent_mb.gat",133,113; end;
+L_VGeffen:    set Zeny, Zeny - 2000; mes "[Real Estate Agent]"; mes "Have nice trip!!"; close2; warp "rent_md.gat",49,92; end;
+L_VMorroc:    set Zeny, Zeny - 2000; mes "[Real Estate Agent]"; mes "Have nice trip!!"; close2; warp "rent_mc.gat",49,92; end;
+L_VPayon:     set Zeny, Zeny - 2000; mes "[Real Estate Agent]"; mes "Have nice trip!!"; close2; warp "rent_ma.gat",49,92; end;
+L_VAlberta:   set Zeny, Zeny - 2000; mes "[Real Estate Agent]"; mes "Have nice trip!!"; close2; warp "rent_me.gat",49,92; end;
+L_VIzlude:    set Zeny, Zeny - 2000; mes "[Real Estate Agent]"; mes "Have nice trip!!"; close2; warp "rent_mf.gat",49,92; end;
+L_VAldebaran: set Zeny, Zeny - 2000; mes "[Real Estate Agent]"; mes "Have nice trip!!"; close2; warp "rent_mg.gat",49,92; end;
+
+}
+
+//============================================================ 
+//= Function that creates insects after purchase of a house
+//============================================================ 
+
+function	script	rent_dobugs	{
+	if (getd("$house" + getarg(0) + "_rent") == 1 && getd("$house" + getarg(0) + "_bugs") > 0) {
+		monster "rentin" + getarg(0) + ".gat",0,0,"Thief Bug",1051,getd("$house" + getarg(0) + "_bugs"),"Cleaning Service#R" + getarg(0) + "::OnBicho";
+	}
+	end;
+}
+
+//============================================================ 
+//= Function that creates an hourly bug in the property
+//  which causes a plague.
+//= (Id of House)
+//============================================================ 
+
+function	script	rent_spawnbug	{
+	if (getd("$house" + getarg(0) + "_rent") == 1 && getd("$@house" + getarg(0) + "_alice") < 1) {
+		setd "$house" + getarg(0) + "_bugs", getd("$house" + getarg(0) + "_bugs") + 1;
+		monster "rentin" + getarg(0) + ".gat",0,0,"Thief Bug",1051,1,"Cleaning Service#R" + getarg(0) + "::OnBicho";
+		if (getd("$house" + getarg(0) + "_bugs") > 25) {
+			// Automatic liberation of the property due to a plague
+			setd "$house" + getarg(0) + "_rent",0;
+			setd "$house" + getarg(0) + "_user$","";
+			setd "$house" + getarg(0) + "_passwort$","closed123";
+			setd "$house" + getarg(0) + "_userps$","closed123";
+			setd "$house" + getarg(0) + "_buy_day",0;
+			setd "$house" + getarg(0) + "_buy_month",0;
+			setd "$house" + getarg(0) + "_buy_year",0;
+			setd "$house" + getarg(0) + "_bugs",0;
+			killmonsterall "rentin" + getarg(0) + ".gat";
+		}
+	}
+	return 0;
+}
+
+//============================================================ 
+//= Updates the amount of bugs whe one dies
+//= (Id of House)
+//============================================================ 
+
+function	script	rent_bugkilled	{
+	specialeffect2 363;
+	setd "$house" + getarg(0) + "_bugs", getd("$house" + getarg(0) + "_bugs") - 1;
+	end;
+}
+
+//============================================================ 
+//= Controls on the production of bugs
+//============================================================ 
+
+-	script	rent_bichos	-1,{
+	end;
+
+OnInit:
+	set $@GTB, 0;
+	initnpctimer;
+	end;
+
+OnTimer7200000:
+	// Respawn of bugs in the house
+	for (set .@j, 1; .@j < 23; set .@j, .@j + 1) {
+		callfunc "rent_spawnbug","a" + .@j + "";
+		callfunc "rent_spawnbug","c" + .@j + "";
+		callfunc "rent_spawnbug","d" + .@j + "";
+		callfunc "rent_spawnbug","e" + .@j + "";
+		callfunc "rent_spawnbug","f" + .@j + "";
+		callfunc "rent_spawnbug","g" + .@j + "";
+	}
+	// Villas Prontera
+	for (set .@j, 1; .@j < 28; set .@j, .@j + 1) {
+		callfunc "rent_spawnbug","b" + .@j + "";
+	}
+	
+	if (rand(1,10000) <= 100 && $@GTB == 0) {
+		// Respawn of GTB
+		switch (rand(1,7)) {
+			case 1:
+				set .@j, rand(1,22);
+				monster "rentina" + .@j + ".gat",0,0,"Golden Thief Bug",1086,1,"rent_bichos::OnGTB";
+				announce "Uh-oh! It seems that we have a plague in the Payon Villas, house" + .@j + ".",0,0x99CCFF;
+			break;
+			case 2:
+				set .@j, rand(1,27);
+				monster "rentinb" + .@j + ".gat",0,0,"Golden Thief Bug",1086,1,"rent_bichos::OnGTB";
+				announce "Uh-oh! It seems that we have a plague in the Prontera Villas, house " + .@j + ".",0,0x99CCFF;
+			break;
+			case 3:
+				set .@j, rand(1,22);
+				monster "rentinc" + .@j + ".gat",0,0,"Golden Thief Bug",1086,1,"rent_bichos::OnGTB";
+				announce "Uh-oh! It seems that we have a plague in the Morocc Villas, house " + .@j + ".",0,0x99CCFF;
+			break;
+			case 4:
+				set .@j, rand(1,22);
+				monster "rentind" + .@j + ".gat",0,0,"Golden Thief Bug",1086,1,"rent_bichos::OnGTB";
+				announce "Uh-oh! It seems that we have a plague in the Geffen Villas, house " + .@j + ".",0,0x99CCFF;
+			break;
+			case 5:
+				set .@j, rand(1,22);
+				monster "rentine" + .@j + ".gat",0,0,"Golden Thief Bug",1086,1,"rent_bichos::OnGTB";
+				announce "Uh-oh! It seems that we have a plague in the Alberta Villas, house " + .@j + ".",0,0x99CCFF;
+			break;
+			case 6:
+				set .@j, rand(1,22);
+				monster "rentinf" + .@j + ".gat",0,0,"Golden Thief Bug",1086,1,"rent_bichos::OnGTB";
+				announce "Uh-oh! It seems that we have a plague in the Izlude Villas, house " + .@j + ".",0,0x99CCFF;
+			break;
+			case 7:
+				set .@j, rand(1,22);
+				monster "renting" + .@j + ".gat",0,0,"Golden Thief Bug",1086,1,"rent_bichos::OnGTB";
+				announce "Uh-oh! It seems that we have a plague in the Aldebaran Villas, house " + .@j + ".",0,0x99CCFF;
+			break;
+		}
+		set $@GTB, 1; // Active GTB
+	}
+	stopnpctimer;
+	initnpctimer;
+	end;
+
+OnGTB:
+	set $@GTB, 0;
+	end;
+}

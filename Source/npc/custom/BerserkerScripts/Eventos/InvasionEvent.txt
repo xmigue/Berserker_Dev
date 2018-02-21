@@ -1,0 +1,445 @@
+//=========================================================================================================================================================================================
+// Evento Invasion
+// xMigue v1.0
+//=========================================================================================================================================================================================
+// Descripcion:
+// Evento de invasión en 2 fases
+// Fase 1: Habra spawn de mobs normales, el usuario que mate al mob se llevará 1 punto de cash
+// Fase 2: Una vez que maten a todos los mobs normales, al centro del mapa aparecerá un MVP, el que logue matarlo se lleva 1 item + 50 cash
+// Los mobs y recompensas son configurables por medio de base de datos y la funcionalidad para agregar/habilitar/deshabilitar por medio de este script
+// En el Init del script se puede configurar lo siguiente:
+// .nRecompensaMobNormal	// Cantidad de Cash al matar mob normal
+// .nRecompensaMVP			// Cantidad de Cash al matar el mvp
+// .nRecompensaItem			// Cantidad de items a entregar a quien mate el mvp
+// .Npc_Name$ 				// Titulo del npc
+// .map_name$ 				// Nombre del mapa donde se lleva a cabo el evento
+//=========================================================================================================================================================================================
+// Funcionalidades:
+// - Habilita y deshabilita mobs e items
+// - Al iniciar el evento, los mobs e items son seleccionados de manera aletoria
+// - Se iniciará el evento si hay 1 solo usuario en el mapa, si no hay usuarios no se habilita el evento y se limpian variables
+// - Por cada mob normal que se mate, dara 1 cash
+// - El que mate al MVP se lleva un item y 50 cash
+//
+// Restricciones
+// - Por cada usuario en el mapa se crearan 10 mobs normales, es decir la posibilidad de 10 cash por usuario.
+// - Restringido el uso de skill
+// - Restringido el dropeo de mobs
+// - Restringido el uso de teleportacion
+//announce "[ Rune-Midgard Guard ]: We have trouble here in the town " + .invasion_map$ + "!", bc_all;
+
+//====================================================================== INICIO SCRIPT ======================================================================
+prontera,156,185,0	script	WarpPortalInvasion	723,{
+	mes "[^0000FF Invasion Event ^000000]";
+	mes "Quieres participar en el evento de invasion?";
+	if (select("Yes:No") == 2)
+		close;
+	next;
+	.map_name$ = "ordeal_1-1";
+	set .nPosX, 0;
+	set .nPosY, 0;
+	switch(rand(5)){
+		case 1: .nPosX = 149; .nPosY = 149;	break;
+		case 2: .nPosX = 145; .nPosY = 145;	break;
+		case 3: .nPosX = 145; .nPosY = 155;	break;
+		case 4: .nPosX = 154; .nPosY = 155;	break;
+		case 5: .nPosX = 154; .nPosY = 144;	break;
+		default: .nPosX = 152; .nPosY = 149;	break;
+	}
+	warp .map_name$, .nPosX, .nPosY;
+	close;
+}
+
+job3_rune01,73,62,5	script	Invasion	8W_SOLDIER,{ 
+
+OnTouch:
+	// Menu GM's
+	if(getgroupid() >= .GM_Min_Access){
+		//================================ Inicializa Arrays ===============================================
+		// Get Id's -- ntype = 0 Id Mobs, 1 Id Mvp, 2 Id Items
+		callfunc "F_GarbageCollector";
+		
+		set .@ntype, 0;
+		set .@query$, "SELECT id FROM invasion_event WHERE ntype = " + .@ntype + " AND available = 1 ORDER BY available DESC";
+		query_sql(.@query$, .MobNormalId);
+		
+		set .@ntype, 1;
+		set .@query$, "SELECT id FROM invasion_event WHERE ntype = " + .@ntype + " AND available = 1 ORDER BY available DESC";
+		//set .@nRows, query_sql(.@query$, .MobMvpId);
+		query_sql(.@query$, .MobMvpId);
+				
+		set .@ntype, 2;
+		set .@query$, "SELECT id FROM invasion_event WHERE ntype = " + .@ntype + " AND available = 1 ORDER BY available DESC";
+		query_sql(.@query$, .ItemId);	
+		//==================================================================================================
+		mes .Npc_Name$;
+		mes "Hola " + strcharinfo(0);
+		mes "Que te gustaria realizar?";
+		switch(select("^3355FFStart Invasion^000000:Ver lista de MVPs:Ver lista de Mobs:Ver lista de Premios:Terminar Evento:^FF0000Nothing now^000000")){
+			case 1:
+				close2;
+				goto OnStartAnunces;
+				break;
+			case 2:
+				//callfunc "F_GetList", ".MobMvpId", getarraysize(.MobMvpId), 1;
+				callfunc "F_GeneraSelect", 1;
+			break;
+			case 3:
+				//callfunc "F_GetList", ".MobNormalId", getarraysize(.MobNormalId), 1;
+				callfunc "F_GeneraSelect", 0;
+			break;
+			case 4:
+				//callfunc "F_GetList", ".ItemId", getarraysize(.ItemId), 2;
+				callfunc "F_GeneraSelect", 2;
+			break;
+			case 5:
+				if(.bEventEnabled)
+					goto OnEndEvent;
+				else
+					dispbottom "[ Rune-Midgard Guard ]: El evento no se encuentra habilitado!";
+			break;
+			default:
+				callfunc "F_GarbageCollector";
+				close;
+				break;
+		}
+		//dispbottom "Hola " + getgroupid();
+	}
+end;
+
+OnStartAnunces:
+	//================================ Inicializa Arrays ===============================================
+	// Get Id's -- ntype = 0 Id Mobs, 1 Id Mvp, 2 Id Items
+	callfunc "F_GarbageCollector";
+		
+	set .@ntype, 0;
+	set .@query$, "SELECT id FROM invasion_event WHERE ntype = " + .@ntype + " AND available = 1 ORDER BY available DESC";
+	query_sql(.@query$, .MobNormalId);
+		
+	set .@ntype, 1;
+	set .@query$, "SELECT id FROM invasion_event WHERE ntype = " + .@ntype + " AND available = 1 ORDER BY available DESC";
+	//set .@nRows, query_sql(.@query$, .MobMvpId);
+	query_sql(.@query$, .MobMvpId);
+				
+	set .@ntype, 2;
+	set .@query$, "SELECT id FROM invasion_event WHERE ntype = " + .@ntype + " AND available = 1 ORDER BY available DESC";
+	query_sql(.@query$, .ItemId);	
+	//==================================================================================================
+	killmonster .map_name$,"All";
+	setmapflag .map_name$,mf_nocommand,5;
+	setmapflag .map_name$,mf_noskill;
+	setmapflag .map_name$,mf_noitemconsumption;
+	announce "[ Rune-Midgard Guard ]: Tenemos problemas en los tuneles de Ordeal!", bc_all;
+	sleep2 3000;
+	enablenpc "WarpPortalInvasion";
+	announce "[ Rune-Midgard Guard ]: Tenemos al menos 60 segundos para evitar que nos invadan, si nos quieres ayudar, entra al portal que se encuentra en el Centro de Prontera, les recuerdo que no estara permitido el uso de skills!", bc_all;
+	sleep2 30000;
+	announce "[ Rune-Midgard Guard ]: En 30 segundos desaparecera el portal que se encuentra en el Centro de Prontera!", bc_all;
+	sleep2 20000;
+	announce "[ Rune-Midgard Guard ]: Rapido solo quedan 10 segundos para que entren al portal!", bc_all;
+	sleep2 5000;
+	announce "[ Rune-Midgard Guard ]: 5", bc_all;
+	sleep2 1000;
+	announce "[ Rune-Midgard Guard ]: 4", bc_all;
+	sleep2 1000;
+	announce "[ Rune-Midgard Guard ]: 3", bc_all;
+	sleep2 1000;
+	announce "[ Rune-Midgard Guard ]: 2", bc_all;
+	sleep2 1000;
+	announce "[ Rune-Midgard Guard ]: 1", bc_all;
+	sleep2 1000;
+	disablenpc "WarpPortalInvasion";
+	sleep2 2000;
+	goto OnStartEvent;
+end;
+
+OnStartEvent:
+	.nUsersAtMap = getmapusers(.map_name$);	// 10 mobs por usuario = 10 CASHPOINTS
+	if(.nUsersAtMap > 0){
+		announce "[ Rune-Midgard Guard ]: Mucha suerte a esas vidas que se sacrificaran por todos nosotros", bc_all;
+		.bEventEnabled = 1;
+		
+		sleep2 2000;
+		mapannounce .map_name$, "[ Invasion - Mob ] Gracias por sacrificar sus vidas por nosotros, seran recordados como HEROES!!!", 0;
+		sleep2 3000;
+		mapannounce .map_name$, "[ Invasion - Mob ] En pocos segundos apareceran los mobs por todo el mapa.", 0;
+		
+		// Mob Aleatorio
+		.nMobIdRand1 = rand(getarraysize(.MobNormalId));
+	
+		.nTotalMobs = (.nMobPorUsuario * .nUsersAtMap);
+		.nLeftMobs = (.nMobPorUsuario * .nUsersAtMap);
+		sleep2 5000;
+		
+		//for(set .@i,0; .@i < getarraysize(.MobNormalId); set .@i, .@i+1){ doSomething(); }
+		mapannounce .map_name$, "[ Invasion - Mob ] Estan aquiiii!!! A por elloooos valientes guerreros!!!!", 0;
+		monster .map_name$, 0, 0, "[Event] " + getmonsterinfo(.MobNormalId[.nMobIdRand1], MOB_NAME), .MobNormalId[.nMobIdRand1], .nTotalMobs, strnpcinfo(3) + "::OnKillMob";
+	}
+	else {
+		announce "[ Rune-Midgard Guard ]: Nadie fue a defensar los tuneles, estamos perdidos!!!", bc_all;
+		.bEventEnabled = 1;
+		goto OnEndEvent;
+	}
+end;
+
+OnKillMob:
+	set #CASHPOINTS, #CASHPOINTS + .nRecompensaMobNormal;
+	callfunc "SQL_Log_EventReward", "Invasion_Event::MobNormal", .nRecompensaMobNormal, getcharid(3), strcharinfo(0);
+	dispbottom "[Cashpoint] Balance actual: " + #CASHPOINTS;
+	.nLeftMobs -= 1;
+	if(.nLeftMobs <= 0){
+		removemapflag .map_name$,mf_nocommand;
+		removemapflag .map_name$,mf_noskill;
+		removemapflag .map_name$,mf_noitemconsumption;
+		mapannounce .map_name$, "[ Invasion - Boss ] Ooh no preparense, esta por aparecer el Boss en el centro del mapa", 0;
+		sleep2 3000;	// 2 seg
+		mapannounce .map_name$, "[ Invasion - Boss ] Ahora tienes permitido usar skills y consumir items de curacion o dopa.", 0;
+		sleep2 5000;	// 5 seg
+		mapannounce .map_name$, "[ Invasion - Boss ] Ten cuidado, si mueres no podras regresar", 0;
+		
+		set .nPosX, 0;
+		set .nPosY, 0;
+		switch(rand(5)){
+			case 1: .nPosX = 149; .nPosY = 149;	break;
+			case 2: .nPosX = 145; .nPosY = 145;	break;
+			case 3: .nPosX = 145; .nPosY = 155;	break;
+			case 4: .nPosX = 154; .nPosY = 155;	break;
+			case 5: .nPosX = 154; .nPosY = 144;	break;
+			default: .nPosX = 152; .nPosY = 149;	break;
+		}		
+		.nMobMVPRand = rand(getarraysize(.MobMvpId));
+		sleep2 3000;
+		mapannounce .map_name$, "[ Invasion - Boss ] Cuidadooooo!!! " + getmonsterinfo(.MobMvpId[.nMobMVPRand], MOB_NAME) + " aparecio!!!", 0;
+		monster .map_name$, .nPosX, .nPosY, "[Event] " + getmonsterinfo(.MobMvpId[.nMobMVPRand], MOB_NAME), .MobMvpId[.nMobMVPRand], 1, strnpcinfo(3) + "::OnKillMVP";
+		attachnpctimer;
+		initnpctimer;
+	}
+	else
+		mapannounce .map_name$, "[ Invasion - Mob ] Aun sobreviven [" + .nLeftMobs + "/" + .nTotalMobs + "]", 0;
+end;
+
+OnTimer3600000:		// 1 Hora
+	if(.bEventEnabled){
+		killmonsterall .map_name$;
+		stopnpctimer;
+		detachnpctimer;
+		callfunc "F_GarbageCollector";
+	}
+end;
+
+OnKillMVP:
+	stopnpctimer;
+	detachnpctimer;
+	//removemapflag .map_name$,mf_nocommand;
+	.nRewardMVPRand = rand(getarraysize(.ItemId));
+	getitem .ItemId[.nRewardMVPRand], .nRecompensaItem;
+	set #CASHPOINTS, #CASHPOINTS + .nRecompensaMVP;
+	callfunc "SQL_Log_EventReward", "Invasion_Event::KillBoss", .nRecompensaMVP, getcharid(3), strcharinfo(0);
+	dispbottom "Has ganado "+ .nRecompensaMVP +" Cash Point, Balance actual: " + #CASHPOINTS;
+	announce "[ Rune-Midgard Guard ]: Gracias a " + strcharinfo(0) + " por matar al Boss!!! Ha ganado " + .nRecompensaMVP + "Cash Point + 1 Item.", bc_all;
+	callfunc "F_GarbageCollector";
+end;
+
+OnEndEvent:
+	if(.bEventEnabled){
+		killmonsterall .map_name$;
+		stopnpctimer;
+		detachnpctimer;
+		callfunc "F_GarbageCollector";
+	}
+end;
+
+OnPCDieEvent:
+	getmapxy .@mapnvz$,.@xnvz,.@ynvz,0;
+	if(.@mapnvz$ == .map_name$){
+		warp "prontera",156,223;
+		if(getmapusers(.map_name$) == 1){
+			announce "[ Rune-Midgard Guard ]: Nuestra defensa ha fracasado, nadie pudo con el Boss!", bc_all;
+			goto OnEndEvent;
+		}
+	}
+end;
+
+OnStartGMEvent:
+	if(getgroupid() >= .GM_Min_Access) goto OnStartAnunces;
+	else{ 
+		.@nAdvertencias = #AdvertenciaInvasion;
+		set #AdvertenciaInvasion, #AdvertenciaInvasion + 1;
+		.@aMensaje$ = "[Commad Security]: ";
+		switch(.@nAdvertencias){
+			case 0:
+				set .@aMensaje$, .@aMensaje$ + " No tienes acceso a este comando.";
+			break;
+			case 1:
+				set .@aMensaje$, .@aMensaje$ + " Si intentas nuevamente usar este comando, tendras un castigo.";
+			break;
+			case 2:
+				set .@aMensaje$, .@aMensaje$ + " Fuiste advertido, 1 hora de mute.";
+				set #AdvertenciaLastMuteInvasion, #AdvertenciaLastMuteInvasion + 60;
+				atcommand "@mute 60 " + strcharinfo(0);
+			break;
+			default:
+				set #AdvertenciaLastMuteInvasion, #AdvertenciaLastMuteInvasion + 60;
+				.nAdvertenciaLastMuteInvasion = #AdvertenciaLastMuteInvasion;
+				set .@aMensaje$, .@aMensaje$ + " Fuiste advertido, " + (.nAdvertenciaLastMuteInvasion/60) + " hora(s) de mute.";				
+				atcommand "@mute " + .nAdvertenciaLastMuteInvasion + " " + strcharinfo(0);
+			break;
+		}
+		dispbottom ""+ .@aMensaje$;
+	}
+end;
+
+OnInit:
+	disablenpc "WarpPortalInvasion";
+	.GM_Min_Access = 6;
+	.bEventEnabled = 0;
+	.Npc_Name$ = "[^0000FF Invasion Event ^000000]";
+	.map_name$ = "ordeal_1-1";
+	.nMobPorUsuario = 10;		// Mobs por usuario
+	.nRecompensaMobNormal = 1;	// Cantidad de Cash al matar mob normal
+	.nRecompensaMVP = 20;		// Cantidad de Cash al matar el mvp
+	.nRecompensaItem = 1;		// Cantidad de items a entregar a quien mate el mvp
+	bindatcmd "einvasion","Invasion::OnStartGMEvent";
+end;
+
+}
+
+
+//============ FUNCTION LIST ==============
+function	script	F_GetList	{
+	//setarray .array, getarg(0);	
+	.@arraySize = getarg(1);
+	.@type = getarg(2);
+	next;
+	mes "[^0000FF Invasion Event ^000000]";
+	for(set .@i,0; .@i < .@arraySize; set .@i, .@i+1){
+		if(.@type == 1){
+			if(.@i == 0)
+				mes "La seleccion del MVP sera de manera aleatoria:";
+			mes "- " + getmonsterinfo(getvariableofnpc(getd(getarg(0)+"["+.@i+"]"),"Invasion"), MOB_NAME);	//getmonsterinfo(.array[.@i], MOB_NAME);
+		}
+		else {
+			if(.@type == 2) {
+				if(.@i == 0)
+					mes "El Item de recompensa sera aleatorio:";
+				mes "- " + getitemname(getvariableofnpc(getd(getarg(0)+"["+.@i+"]"),"Invasion"));
+			}
+		}
+	}
+	return;	
+}
+
+function	script	F_GeneraSelect	{
+	.@nType = getarg(0);
+	do{
+		set .@nRows, query_sql("SELECT id, available FROM invasion_event WHERE ntype = " + .@nType + " ORDER BY available DESC", .@id, .@available);
+		
+		next;
+		.@menu$ = "";
+		.@name$ = "";
+		.@i = 1;
+		while( .@i <= .@nRows ){
+			.@name$ = .@nType == 0 || .@nType == 1 ? getmonsterinfo(.@id[.@i - 1], MOB_NAME) : getitemname(.@id[.@i - 1]);
+			.@menu$ = .@menu$ + "" + .@i + "-" +(( .@available[.@i - 1] == 0 ) ? "^FF0000[Disabled]" : "^088A08[Enabled]" ) + " " + .@name$ +"^000000" + ":";
+			.@i++;
+		}
+		mes "Selecciona el cambio a efectuar";
+		mes "^FF0000RED - Deshabilitado Mob^000000";
+		mes "^088A08GREEN - Habilitado Mob^000000";
+		.@i = select( .@menu$+":Agregar ID:Done" );
+		if(.@i < .@nRows){
+			if(.@nType == 0 || .@nType == 1)
+				set .@name$, (.@nType == 0 ? "El Mob " : "El MVP ") + getmonsterinfo(.@id[.@i], MOB_NAME);
+			else
+				if(.@nType == 2)
+					set .@name$, "El item " + getitemname(.@id[.@i]);
+				
+			if(.@available[.@i]){
+				mes .@name$ + " fue deshabilitado. ";
+				query_sql("UPDATE invasion_event SET available = 0 WHERE id = " + .@id[.@i]);
+			}
+			else{
+				mes .@name$ + " fue habilitado. ";
+				query_sql("UPDATE invasion_event SET available = 1 WHERE id = " + .@id[.@i]);
+			}
+		}
+		else{
+			if(.@i == .@nRows + 2 || .@nRows == 0){ // Agregar ID
+				next;
+				input .@newID;
+				.@nEncontrado = 0;
+				.@Name_ID$ = "";
+				if(.@newID != 0){
+					if(.@nType == 0 || .@nType == 1){
+						.@Name_ID$ = getmonsterinfo(.@newID, MOB_NAME);
+						if(.@Name_ID$ != ""){
+							.@nEncontrado = 1;
+						}
+					}
+					else{
+						if(.@nType == 2){
+							.@Name_ID$ = getitemname(.@newID);
+							if(.@Name_ID$ != ""){
+								.@nEncontrado = 1;
+							}
+						}
+					}
+				}
+				
+				if(!.@nEncontrado)
+					mes "ID no encontrado.";
+				if(.@nEncontrado){
+					.@aQuerySelect$ = "SELECT * FROM invasion_event WHERE id = " + .@newID + " AND ntype = " + .@nType;
+					set .@nExistRow, query_sql(.@aQuerySelect$, .@result$);
+					if(!.@nExistRow){
+						.@aQueryInsert$ = "INSERT INTO invasion_event (id, ntype) VALUES (" + .@newID + ", "+ .@nType +")";
+						query_sql(.@aQueryInsert$);
+						mes "Nuevo ID agregado y habilitado, " + .@Name_ID$;
+					}
+					else{
+						mes .@Name_ID$ + " ya se encuentra habilitado.";
+					}
+				}
+			}
+		}
+		
+	}while(select("Continuar:Finalizar") == 1);
+	return;
+}
+
+function	script	F_GarbageCollector	{
+	deletearray .MobMvpId[0], getarraysize(.MobMvpId);
+	deletearray .MobNormalId[0], getarraysize(.MobNormalId);
+	deletearray .ItemId[0], getarraysize(.ItemId);
+	.bEventEnabled = 0;
+	return;
+}
+//====================================================================== FIN SCRIPT ======================================================================
+
+
+//============ MAPFLAGS ==============
+//ordeal_1-1	mapflag	nocommand	5
+ordeal_1-1	mapflag	nowarp
+ordeal_1-1	mapflag	nomemo
+ordeal_1-1	mapflag	noteleport
+ordeal_1-1	mapflag	nosave	SavePoint
+//ordeal_1-1	mapflag	noskill				// Disables skill usage on a map
+ordeal_1-1	mapflag	noloot				// Disables normal monsters and MVPs from dropping items on a map. 'noloot' is the same as 'nomobloot' and 'nomvploot' combined.
+ordeal_1-1	mapflag	noexp				// Disables gaining base and job experience from monsters. noexp' is the same as 'nobaseexp' and 'nojobexp' combined
+//ordeal_1-1	mapflag	noitemconsumption	// Disables usage of items on a map // revisar que funcione el token
+ordeal_1-1	mapflag	monster_noteleport	// Prevents monsters from teleporting on a map, including through the skill RG_INTIMIDATE
+ordeal_1-1	mapflag	allowks				// Allows kill stealing on a map (rendering the @noks command useless).
+ordeal_1-1	mapflag	notomb				// Disables MVP tombs from appearing on a map
+//===================================
+
+//-- ----------------------------
+//-- Table structure for invasion_event
+//-- ----------------------------
+//DROP TABLE IF EXISTS `invasion_event`;
+//CREATE TABLE `invasion_event` (
+//  `id_invasion` int(11) NOT NULL AUTO_INCREMENT,
+//  `id` int(11) DEFAULT NULL,
+//  `ntype` int(11) DEFAULT '2' COMMENT '0 = Id Mob, 1 = Id Mvp, 2 = Id Item',
+//  `available` tinyint(4) DEFAULT '1',
+//  PRIMARY KEY (`id_invasion`)
+//) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8;

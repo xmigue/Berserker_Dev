@@ -1,0 +1,360 @@
+//====================================================================================================================
+// Maze Game
+//====================================================================================================================
+// First Public Release
+// Written by Euph
+// Evento traducido por Racing
+// Evento editado para Berserker RO
+//====================================================================================================================
+
+gonryun,159,114,0	script	mazeevent	45,2,2,{
+
+	if ( $mazeinit == 0 ) {
+		disablenpc "mazeevent";
+		end;
+	}
+
+	// Check for equipment that would give an advantage.
+	if ( 	countitem(1363) ||
+		countitem(1372) ||
+		countitem(1373) ||
+		countitem(2410) ||
+		countitem(2515) ||
+		countitem(4131) ||
+		countitem(4210) ||
+		countitem(5150) ||
+		countitem(5203) ||
+		countitem(5273) ||
+		countitem(5274) ||
+		countitem(5275) ||
+		countitem(33002) ) {
+			mes "[^FF0000Maze^000000]";
+			mes "Porfavor, Guarda cualquier equipo que aumenta tu velocidad de movimiento.";
+			close;
+			end;
+	}
+
+	// Check for any consumable items that would give an advantage.
+	if ( countitem(662) ||
+		countitem(12016) ||
+		countitem(12028) ||
+		countitem(12262) ) {
+			mes "[^FF0000Maze^000000]";
+			mes "Porfavor, Guarda cualquier item consumible que pueda aumentarte su velocidad de movimiento.";
+			close;
+			end;
+	}
+
+	// Remove Peco / Cart
+	if (checkfalcon() || checkcart() || checkriding() || ismounting() || checkdragon() || checkwug() || checkmadogear()) {
+		mes "No puedes entrar si tienes "+((checkfalcon())?"falcon":"")+((checkcart())?"carrito":"")+((checkriding())?"Peco":"")+((ismounting())?"mount":"")+((checkdragon())?"dragon":"")+(checkwug()?"wug (lobo)":"")+(checkmadogear()?"madogear":"")+", quitatelo antes de entrar.";
+		close;
+	}
+
+	// Remove Any Speed Buffs
+	sc_end SC_SPEEDUP0;
+	sc_end SC_SPEEDUP1;
+	sc_end SC_INCREASEAGI;
+	sc_end SC_WINDWALK;
+	sc_end SC_CARTBOOST;
+	sc_end SC_CLOAKING;
+	sc_end SC_BERSERK;
+	sc_end SC_RUN;
+	sc_end SC_AVOID;
+	sc_end SC_ALL;
+	
+	// Grant 5 Minute Walking Speed Increase
+	sc_start SC_INCREASEAGI,400000,1;
+
+	// Warp to Event
+	warp "force_1-3", 19, 189;
+	
+}
+
+-	script	Maze#announcer	-1,{
+
+OnInit:
+    // Unload NPCs except this one at server start.
+	disablenpc "mazeevent";
+	.nWarpsHabilitados = 1;
+    disablenpc "Maze#asdf";
+	.GM_Min_Access = 6;
+	bindatcmd "elaberinto","Maze#announcer::OnStartGMEvent";
+end;
+
+OnStartGMEvent:
+	if(getgroupid() >= .GM_Min_Access) goto StartEvent;
+	else{ 
+		.@nAdvertencias = #AdvertenciaLaberinto;
+		set #AdvertenciaLaberinto, #AdvertenciaLaberinto + 1;
+		.@aMensaje$ = "[Commad Security]: ";
+		switch(.@nAdvertencias){
+			case 0:
+				set .@aMensaje$, .@aMensaje$ + " No tienes acceso a este comando.";
+			break;
+			case 1:
+				set .@aMensaje$, .@aMensaje$ + " Si intentas nuevamente usar este comando, tendras un castigo.";
+			break;
+			case 2:
+				set .@aMensaje$, .@aMensaje$ + " Fuiste advertido, 1 hora de mute.";
+				set #LastMuteLaberinto, #LastMuteLaberinto + 60;
+				atcommand "@mute 60 " + strcharinfo(0);
+			break;
+			default:
+				set #LastMuteLaberinto, #LastMuteLaberinto + 60;
+				.nLastMuteLaberinto = #LastMuteLaberinto;
+				set .@aMensaje$, .@aMensaje$ + " Fuiste advertido, " + (.nLastMuteLaberinto/60) + " hora(s) de mute.";				
+				atcommand "@mute " + .nLastMuteLaberinto + " " + strcharinfo(0);
+			break;
+		}
+		dispbottom ""+ .@aMensaje$;
+	}
+end;
+
+OnClock1900:
+    goto StartEvent;
+end;
+
+StartEvent:
+	if(.nWarpsHabilitados)
+		callfunc "EnableDisableWarps",0;
+	announce "Maze: Maze event Comenzara en 2 minutos el la ciudad Gonryun (go 11).",bc_all,0x99FFCC;
+    sleep 30000;
+    announce "Maze: Entra al portal en Gonryun (go 11) Para entrar al Maze event.",bc_all,0x99FFCC;
+
+    // Clear up the map.
+    areawarp "force_1-3",104,18,189,10,"gonryun",159,116;
+	
+    // Load NPCs + hide the Maze guy
+	set $mazeinit, 1;
+    enablenpc "mazeevent";
+    enablenpc "Maze#asdf";
+    hideonnpc "Maze#asdf";
+    initnpctimer;
+end;
+
+OnTimer30000:
+	announce "Maze: Ultimos 30 Segundos.",bc_all,0x99FFCC;
+    sleep 5000;
+    announce "Maze: Si desea unirse al evento, Diriganse al portal de la ciudad (go 11).",bc_all,0x99FFCC;
+end;
+
+OnTimer50000:
+    announce "Maze: Ultimos 10 segundos",bc_all,0x99FFCC;
+end;
+
+OnTimer60000:
+    announce "Maze: Se acabo el tiempo.",bc_all,0x99FFCC;
+end;
+
+OnTimer61000:
+    disablenpc "mazeevent";
+    donpcevent "Maze#asdf::OnEnable";
+	.nWarpsHabilitados = 0;
+    stopnpctimer;
+end;
+}
+
+force_1-3,100,187,4	script	Maze#asdf	702,{
+	mes "[Maze]";
+	mes "Aquí está tu premio!";
+	mes "Felicidades has ganado: " + .nReward + " Cashpoint";
+	dispbottom "[Cashpoint] Balance actual: " + #CASHPOINTS;
+	set #CASHPOINTS, #CASHPOINTS + .nReward;
+	callfunc "SQL_Log_EventReward", "Maze_Laberinto", .nReward, getcharid(3), strcharinfo(0);
+	next;
+    warp "prontera",155,175;
+    // Hide the NPC
+    disablenpc "Maze#asdf";
+    end;
+
+
+OnEnable:
+    if(getmapusers("force_1-3") <= 2) goto L_NotEnough;
+    mapannounce "force_1-3","Maze: Estamos a punto de comenzar Maze event... aqui esta la manera de jugar.",0,0x99FFCC;
+    sleep 7000;
+    mapannounce "force_1-3","Maze: Todo el mundo debe Correr a traves de portales. ",0,0x99FFCC;
+    sleep 7000;
+    mapannounce "force_1-3","Maze: Cada portal los llevara a una habitacion al azar.",0,0x99FFCC;
+    sleep 7000;
+    mapannounce "force_1-3","Maze: Con un poco de suerte, alguien se encuentra la meta!",0,0x99FFCC;
+    sleep 7000;
+    mapannounce "force_1-3","Maze: Y ganara el evento.",0,0x99FFCC;
+    sleep 7000;
+    mapannounce "force_1-3","Maze: Listos?! Vamos a empezar!",0,0x99FFCC;
+    sleep 7500;
+    mapannounce "force_1-3","Maze: 3....",0,0x99FFCC;
+    sleep 3000;
+    mapannounce "force_1-3","Maze: 2...",0,0x99FFCC;
+    sleep 3000;
+    mapannounce "force_1-3","Maze: 1..",0,0x99FFCC;
+    sleep 3000;
+    mapannounce "force_1-3","Maze: GO!! GO!!! GOOOOOO!!!",0,0x99FFCC;
+	callfunc "EnableDisableWarps",1;
+end;
+
+L_NotEnough:
+	mapannounce "force_1-3","Maze: No hay jugadores suficientes, se requiere un minimo 3 jugadores. Se cancela esta ronda.",0,0x99FFCC;
+	areawarp "force_1-3",10,189,189,10,"gonryun",159,116;
+	end;
+	
+	OnInit:
+		.nReward = 10;
+	end;
+}
+
+-	script	mz_portal::maze_portal	-1,{
+	OnTouch:
+		set .@win_chance, (getmapusers("force_1-3")*23);
+		if ( rand(1,.@win_chance) == .@win_chance ) {
+			warp "force_1-3",100,184;
+			announce "Maze: "+strcharinfo(0)+" ha resuelto el laberinto!.",bc_all,0x99FFCC;
+			callfunc "EnableDisableWarps",0;
+			sleep 5000;
+			areawarp "force_1-3",10,189,29,170,"prontera",155,175;
+			areawarp "force_1-3",170,189,189,170,"prontera",155,175;
+			areawarp "force_1-3",10,147,189,11,"prontera",155,175;
+			mapannounce "force_1-3","Maze:  Felicidades!!! Habla conmigo para darte tu premio.",0,0x99FFCC;
+			hideoffnpc "Maze#asdf";
+			end;
+		}
+	set .@this_entry, rand(1,15);
+	switch (.@this_entry) {
+		case 1:
+			warp "force_1-3",19,189;
+			end;
+		case 2:
+			warp "force_1-3",170,179;
+			end;
+		case 3:
+			warp "force_1-3",19,147;
+			end;
+		case 4:
+			warp "force_1-3",59,128;
+			end;
+		case 5:
+			warp "force_1-3",90,138;
+			end;
+		case 6:
+			warp "force_1-3",179,128;
+			end;
+		case 7:
+			warp "force_1-3",109,100;
+			end;
+		case 8:
+			warp "force_1-3",140,50;
+			end;
+		case 9:
+			warp "force_1-3",170,99;
+			end;
+		case 10:
+			warp "force_1-3",19,50;
+			end;
+		case 11:
+			warp "force_1-3",100,10;
+			end;
+		case 12:
+			warp "force_1-3",170,60;
+			end;
+		case 13:
+			warp "force_1-3",20,29;
+			end;
+		case 14:
+			warp "force_1-3",60,29;
+			end;
+		case 15:
+			warp "force_1-3",130,20;
+			end;
+	}
+}
+
+function	script	EnableDisableWarps	{
+	// 1 = Enable, 0 Disable
+	if(getarg(0)){
+		enablenpc "mz_portal#1";
+		enablenpc "mz_portal#2";
+		enablenpc "mz_portal#3";
+		enablenpc "mz_portal#4";
+		enablenpc "mz_portal#5";
+		enablenpc "mz_portal#6";
+		enablenpc "mz_portal#7";
+		enablenpc "mz_portal#8";
+		enablenpc "mz_portal#9";
+		enablenpc "mz_portal#10";
+		enablenpc "mz_portal#11";
+		enablenpc "mz_portal#12";
+		enablenpc "mz_portal#13";
+		enablenpc "mz_portal#14";
+		enablenpc "mz_portal#15";
+		enablenpc "mz_portal#16";
+		enablenpc "mz_portal#17";
+		enablenpc "mz_portal#18";
+		enablenpc "mz_portal#19";
+		enablenpc "mz_portal#20";
+		enablenpc "mz_portal#21";
+		enablenpc "mz_portal#22";
+		enablenpc "mz_portal#23";
+		enablenpc "mz_portal#24";
+	}
+	else{		
+		disablenpc "mz_portal#1";
+		disablenpc "mz_portal#2";
+		disablenpc "mz_portal#3";
+		disablenpc "mz_portal#4";
+		disablenpc "mz_portal#5";
+		disablenpc "mz_portal#6";
+		disablenpc "mz_portal#7";
+		disablenpc "mz_portal#8";
+		disablenpc "mz_portal#9";
+		disablenpc "mz_portal#10";
+		disablenpc "mz_portal#11";
+		disablenpc "mz_portal#12";
+		disablenpc "mz_portal#13";
+		disablenpc "mz_portal#14";
+		disablenpc "mz_portal#15";
+		disablenpc "mz_portal#16";
+		disablenpc "mz_portal#17";
+		disablenpc "mz_portal#18";
+		disablenpc "mz_portal#19";
+		disablenpc "mz_portal#20";
+		disablenpc "mz_portal#21";
+		disablenpc "mz_portal#22";
+		disablenpc "mz_portal#23";
+		disablenpc "mz_portal#24";
+	}
+	return;
+}
+
+force_1-3,29,179,0	duplicate(maze_portal)	mz_portal#1	45,2,2
+force_1-3,180,170,0	duplicate(maze_portal)	mz_portal#2	45,2,2
+force_1-3,29,99,0	duplicate(maze_portal)	mz_portal#3	45,2,2
+force_1-3,69,138,0	duplicate(maze_portal)	mz_portal#4	45,2,2
+force_1-3,109,137,0	duplicate(maze_portal)	mz_portal#5	45,2,2
+force_1-3,140,147,0	duplicate(maze_portal)	mz_portal#6	45,2,2
+force_1-3,60,90,0	duplicate(maze_portal)	mz_portal#7	45,2,2
+force_1-3,130,100,0	duplicate(maze_portal)	mz_portal#8	45,2,2
+force_1-3,180,90,0	duplicate(maze_portal)	mz_portal#9	45,2,2
+force_1-3,69,59,0	duplicate(maze_portal)	mz_portal#10	45,2,2
+force_1-3,90,59,0	duplicate(maze_portal)	mz_portal#11	45,2,2
+force_1-3,179,50,0	duplicate(maze_portal)	mz_portal#12	45,2,2
+force_1-3,20,10,0	duplicate(maze_portal)	mz_portal#13	45,2,2
+force_1-3,69,19,0	duplicate(maze_portal)	mz_portal#14	45,2,2
+force_1-3,179,29,0	duplicate(maze_portal)	mz_portal#15	45,2,2
+force_1-3,139,109,0	duplicate(maze_portal)	mz_portal#16	45,2,2
+force_1-3,10,99,0	duplicate(maze_portal)	mz_portal#17	45,2,2
+force_1-3,130,137,0	duplicate(maze_portal)	mz_portal#18	45,2,2
+force_1-3,59,69,0	duplicate(maze_portal)	mz_portal#19	45,2,2
+force_1-3,109,59,0	duplicate(maze_portal)	mz_portal#20	45,2,2
+force_1-3,60,109,0	duplicate(maze_portal)	mz_portal#21	45,2,2
+force_1-3,100,147,0	duplicate(maze_portal)	mz_portal#22	45,2,2
+force_1-3,100,128,0	duplicate(maze_portal)	mz_portal#23	45,2,2
+force_1-3,180,109,0	duplicate(maze_portal)	mz_portal#24	45,2,2
+
+force_1-3	mapflag	nobranch
+force_1-3	mapflag	nomemo
+force_1-3	mapflag	nopenalty
+force_1-3	mapflag	nosave	SavePoint
+force_1-3	mapflag	noskill
+force_1-3	mapflag	noteleport
+force_1-3	mapflag	nowarpto
+force_1-3	mapflag	restricted	3

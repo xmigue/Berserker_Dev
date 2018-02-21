@@ -1,0 +1,89 @@
+new_zone01,48,114,5	script	Bienvenido	920,{
+	set $@npcName$, "[GM Berseker RO]";
+	set .@nResultados, 0;
+	// Validamos que no se haya entregado con anterioridad
+	set @sql$, query_sql("SELECT COUNT(*) FROM welcome WHERE id_account = " + getcharid(3), .@nResultados); 
+
+	mes $@npcName$;
+	mes "Hola " + strcharinfo(0);
+	mes (sex == 1 ? "Bienvenido " : "Bienvenida ") + "a esta nueva experiencia, tengo las siguientes opciones para ti:";
+	if(.@nResultados == 0)
+		menu "Informacion basica",Basic_Info,"Te doy tu regalo", Option2;
+	else
+		menu "Informacion basica",Basic_Info,"Ir a prontera", SeeYou;
+	
+	Basic_Info:
+		next;
+		mes $@npcName$;
+		mes "";
+		mes "Rates";
+		mes "Exp Base 450x, Exp Job 450x, Drop Equipo 250x~15x";
+		mes "----------------------------------";
+		mes "3er Job - Pre-Renewal";
+		mes "Max Level/Job 245/70";
+		mes "Max status 245";
+		mes "Free cast 150";
+		mes "----------------------------------";
+		mes "Card Normal 1%";
+		mes "Card Miniboss & MVP .10%";
+		mes "----------------------------------";
+		mes "Tenemos equipo custom";
+		mes "Contamos con mapas y mobs custom";
+		mes "----------------------------------";
+		goto Option2;
+	
+	Option2:
+		setarray @lsItem[0], 14545, 645, 34047; // items iniciales
+		setarray @lsCantItem[0], 2, 5, 1;
+
+		//setarray @lsRentItems[0], 18500; // tiempo de renta de items 1 semana
+		
+		set .@nResultados, 0;
+		// Validamos que no se haya entregado con anterioridad
+		set @sql$, query_sql("SELECT COUNT(*) FROM welcome WHERE id_account = " + getcharid(3), .@nResultados);
+		if(.@nResultados == 0){
+			//mes $@npcName$;
+			//mes "Hola " + strcharinfo(0);
+			//mes (sex == 1 ? "Bienvenido " : "Bienvenida ") + "a esta nueva experiencia,";
+			//mes "Esperamos sea de tu agrado.";
+			next;		
+			mes $@npcName$;
+			mes "Antes de iniciar esta nueva aventura,";
+			mes "te entregare algunos objetos";
+			next;
+
+			for( .@i = 0; .@i < getarraysize(@lsItem); .@i++ ){
+				getitem @lsItem[.@i], @lsCantItem[.@i];
+				dispbottom "Has obtenido " + @lsCantItem[.@i] + " item(s) de " + getitemname(@lsItem[.@i]);
+			}
+			//next;
+
+			//mes $@npcName$;
+			//mes "Ohh! lo olvidaba, tambien algo de equipo.";
+			//next;
+
+			//for( .@i = 0; .@i < getarraysize(@lsRentItems); .@i++ ){
+			//	rentitem @lsRentItems[.@i], ((7 * 24) * 3600);// (7 = Dias * 24 = Horas), 3600 = segundos que tiene 1 hora
+			//	dispbottom "Has obtenido 1 item de " + getitemname(@lsRentItems[.@i]) + " por 7 dias";
+			//}
+			query_sql "INSERT INTO welcome (id_account, id_char, name_char, dt_fechaentrega) VALUES ("+ getcharid(3) +", "+ getcharid(0) +", '"+ strcharinfo(0) +"', NOW())";
+			
+			deletearray @lsItem;
+			deletearray @lsCantItem;
+			//deletearray @lsRentItems;
+		}
+		goto SeeYou;
+	
+	SeeYou:
+		next;
+		mes $@npcName$;
+		mes "Espero verte seguido";
+		mes "Buena suerte! y nos vemos In-Game";
+		next;
+		announce (sex == 1 ? "Bienvenido [ " : "Bienvenida [ ") + strcharinfo(0) + " ] a esta nueva aventura en Berserker RO!",bc_all,0x40FF00;
+		save "prontera",156,189;
+		warp "prontera",156,189;
+		close;
+}
+
+//que_job03,0,0	monster	Poring Especial	4000,80

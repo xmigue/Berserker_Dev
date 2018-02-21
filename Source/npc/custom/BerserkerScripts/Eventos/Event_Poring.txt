@@ -1,0 +1,96 @@
+//================================
+// npc:EventPoring (like pm)
+// start (like message)
+//================================
+
+-	script	EventPoring	-1,{			
+
+	OnWhisperGlobal:
+		if(getgroupid() >= .GM_Min_Access) goto OnStartGMEvent;
+		else{ 
+			.@nAdvertencias = #AdvertenciaPoring;
+			set #AdvertenciaPoring, #AdvertenciaPoring + 1;
+			.@aMensaje$ = "[Commad Security]: ";
+			switch(.@nAdvertencias){
+				case 0:
+					set .@aMensaje$, .@aMensaje$ + " No tienes acceso a este comando.";
+				break;
+				case 1:
+					set .@aMensaje$, .@aMensaje$ + " Si intentas nuevamente usar este comando, tendras un castigo.";
+				break;
+				case 2:
+					set .@aMensaje$, .@aMensaje$ + " Fuiste advertido, 1 hora de mute.";
+					set #AdvertenciaLastPoring, #AdvertenciaLastPoring + 60;
+					atcommand "@mute 60 " + strcharinfo(0);
+				break;
+				default:
+					set #AdvertenciaLastPoring, #AdvertenciaLastPoring + 60;
+					.nAdvertenciaLastPoring = #AdvertenciaLastPoring;
+					set .@aMensaje$, .@aMensaje$ + " Fuiste advertido, " + (.nAdvertenciaLastPoring/60) + " hora(s) de mute.";				
+					atcommand "@mute " + .nAdvertenciaLastPoring + " " + strcharinfo(0);
+				break;
+			}
+			dispbottom ""+ .@aMensaje$;
+		}
+	end;
+	
+	OnStartGMEvent:
+		set $nPoring, 50;
+		set $nGoldPoring, 50;
+		set $nTotalMobs, $nPoring + $nGoldPoring;
+		set $nQuedan, $nTotalMobs;
+		dispbottom "[EvtPoring] -> Evento poring inciado. Poring desplegados " + $nTotalMobs;
+
+		announce "Se ha iniciado una Invasion de " + $nTotalMobs + "Porings Especiales en Prontera!!!!",bc_all;
+		monster "prontera",0,0,"Poring Gift",3931,$nPoring,"EventPoring::OnDeadMob";
+		monster "prontera",0,0,"Poring Gift",3932,$nGoldPoring,"EventPoring::OnDeadMob";
+	end;
+	
+	OnCheckPermiso:
+		if(getgroupid() >= .GM_Min_Access) goto OnStartGMEvent;
+		else{ 
+			.@nAdvertencias = #AdvertenciaPoring;
+			set #AdvertenciaPoring, #AdvertenciaPoring + 1;
+			.@aMensaje$ = "[Commad Security]: ";
+			switch(.@nAdvertencias){
+				case 0:
+					set .@aMensaje$, .@aMensaje$ + " No tienes acceso a este comando.";
+				break;
+				case 1:
+					set .@aMensaje$, .@aMensaje$ + " Si intentas nuevamente usar este comando, tendras un castigo.";
+				break;
+				case 2:
+					set .@aMensaje$, .@aMensaje$ + " Fuiste advertido, 1 hora de mute.";
+					set #AdvertenciaLastPoring, #AdvertenciaLastPoring + 60;
+					atcommand "@mute 60 " + strcharinfo(0);
+				break;
+				default:
+					set #AdvertenciaLastPoring, #AdvertenciaLastPoring + 60;
+					.nAdvertenciaLastPoring = #AdvertenciaLastPoring;
+					set .@aMensaje$, .@aMensaje$ + " Fuiste advertido, " + (.nAdvertenciaLastPoring/60) + " hora(s) de mute.";				
+					atcommand "@mute " + .nAdvertenciaLastPoring + " " + strcharinfo(0);
+				break;
+			}
+			dispbottom ""+ .@aMensaje$;
+		}
+	end;
+	
+	OnDeadMob:
+		$nQuedan--;
+		//if($nQuedan <= 10){
+			if($nQuedan == 50 || $nQuedan == 40 || $nQuedan == 30 || $nQuedan == 20 || $nQuedan == 10)
+				announce "Rapido solo quedan " + $nQuedan + " Porings Especiales!!!!",bc_all;
+			else
+				if($nQuedan == 0)
+					announce "Felicidades a " + strcharinfo(0) + " que mato al ultimo Poring especial que quedaba",bc_all;
+				else
+					announce "Solo quedan " + $nQuedan + " Porings Especiales!!!!",bc_all;
+		//}
+	end;
+	
+	OnInit:
+		.GM_Min_Access = 6;
+		bindatcmd "eporing","EventPoring::OnCheckPermiso";
+	end;
+}
+

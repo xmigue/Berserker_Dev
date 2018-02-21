@@ -1,0 +1,47 @@
+// Spawn mobs makai
+
+maka_fild01,0,0	monster	Zombie Criminal	3940,30
+maka_fild01,0,0	monster	Zombie Wizard	3941,40
+maka_fild01,0,0	monster	Zombie Soldier	3942,20
+maka_fild01,0,0	monster	Zombie Wolf	3943,25
+
+demon_01,0,0	monster	Zombie Criminal	3940,50
+demon_01,0,0	monster	Zombie Wizard	3941,70
+demon_01,0,0	monster	Zombie Soldier	3942,30
+demon_01,0,0	monster	Zombie Wolf	3943,20
+//demon_01,0,0,0,0	monster	Sunof Wolf	3945,1,43200000,600000,1
+//demon_01,0,0,0,0	monster	Satan MoRrock	3946,1,43200000,600000,1
+
+demon_01,2,2,0	script	summon_boss_makai	-1,{
+OnInit:
+	initnpctimer;
+	end;
+
+OnTimer21600000:	// se invoca cada 6 horas
+//OnTimer10000:		// [10 segundos, test]
+	donpcevent "summon_boss_makai::OnSummon";
+	stopnpctimer;
+	end;
+
+OnSummon:
+	// Select Coordinates to summon a random MVP on
+	switch(rand(1,6)) {
+		case 1: set .@x,140;	set .@y,232;	break;
+		case 2: set .@x,82;	set .@y,130;	break;
+		case 3: set .@x,160;	set .@y,85;		break;
+		case 4: set .@x,220;	set .@y,113;	break;
+		case 5: set .@x,123;	set .@y,137;	break;
+		case 6: set .@x,166;	set .@y,126;	break;
+	}
+	set .@mob,rand(3945,3946);
+	monster "demon_01",.@x,.@y,strmobinfo(1,.@mob),.@mob,1,"summon_boss_makai::OnMakaMvPDead";
+	end;
+
+OnMakaMvPDead:
+	killmonster "demon_01","summon_boss_makai::OnMy999Dead";
+	initnpctimer;
+	end;
+//Required to keep from erroring
+OnMy999Dead:
+	end;
+}

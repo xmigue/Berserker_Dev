@@ -1,0 +1,302 @@
+//Broadcast NPC
+//prontera,147,168,5	script	Berserker Broad	447,{
+prontera,147,163,5	script	Berserker Broad	447,{
+
+// ************************************
+// CONFIGURACIONES
+// ************************************
+set .@nameNPC$, "[^FF0000 Berserker Broad ^000000]";	// Nombre NPC
+set .nDelaySeg, 60; 					// 1 minuto
+set .@nPrecioNormal, 80000; 				// zeny
+set .@nPrecioCustom, 100000;				// zeny
+
+mes .@nameNPC$;
+if (.delay > gettimetick(2)) {
+	mes "Lo siento " + strcharinfo(0) + ", te puedo ofrecer el servicio hasta dentro de " + (.delay - gettimetick(2)) + " segundos.";
+    close;
+}
+.@name$ = strcharinfo(0);
+mes "Yo te puedo ayudar a enviar un mensaje:";
+mes "=============================";
+mes "Básico (Color Blanco): 80,000z";
+mes "Color personalizado: 100,000z";
+mes "=============================";
+mes "Cooldown: " + .@nDelaySeg + " segundos";
+mes "=============================";
+menu "Broadcast", yes, "Cancel", cancelar;
+end;
+	yes:
+		if(Zeny < .@nPrecioNormal) goto nozeny;
+		next;
+		mes .@nameNPC$;
+		mes "=============================";
+		mes "Como quieres que muestre tu mensaje:";
+		mes "=============================";
+		menu "Basico", normal, "Color personalizado", custom, "Cancelar", cancelar;
+		
+		normal:
+			next;
+			mes .@nameNPC$;
+			mes "=============================";
+			mes "Ingresa tu mensaje:";
+			mes "=============================";
+			input @message$;
+			next;
+			mes .@nameNPC$;
+			mes "¿Estás seguro que quieres que envie este mensaje?";
+			mes @message$;
+			menu "Claro", -, "No, mejor regreso luego.", cancelar;
+			next;
+			set Zeny, Zeny - .@nPrecioNormal;
+			announce "[Broad] "+.@name$+": "+@message$+" ",bc_all,0xFFFFFF;
+			set .delay, gettimetick(2) + .nDelaySeg;
+			close;
+		
+		custom:
+			next;
+			set .@endColor$, "^000000";
+			mes .@nameNPC$;
+			mes "=============================";
+			mes "Selecciona en que color quieres que muestre tu mensaje:";
+			mes "=============================";
+			menu "^FF0000Color#1^000000",L_01,
+				 "^FF4000Color#2^000000",L_02,
+				 "^FF8000Color#3^000000",L_03,
+				 "^FFBF00Color#4^000000",L_04,
+				 "^FFFF00Color#5^000000",L_05,
+				 "^BFFF00Color#6^000000",L_06,
+				 "^80FF00Color#7^000000",L_07,
+				 "^40FF00Color#8^000000",L_08,
+				 "^FA5882Color#9^000000",L_09,
+				 "^0101DFColor#10^000000",L_10,
+				 "^7401DFColor#11^000000",L_11,
+				 "^045FB4Color#12^000000",L_12,
+				 "^2ECCFAColor#13^000000",L_13,
+				 "^FF00FFColor#14^000000",L_14,
+				 "^0000FFColor#15^000000",L_15,
+				 "^088A08Color#16^000000",L_16,
+				 "^FA58D0Color#17^000000",L_17,
+				 "^FA8258Color#18^000000",L_18,
+				 "^D0A9F5Color#19^000000",L_19,
+				 "^04B486Color#20^000000",L_20,
+				 "^C1FFC1Color#21^000000",L_21,
+				 "^698B69Color#22^000000",L_22,
+				 "^FFF68FColor#23^000000",L_23,
+				 "^FF6A6AColor#24^000000",L_24,
+				 "^FFA500Color#25^000000",L_25,
+				 "^EE9A00Color#26^000000",L_26,
+				 "^CD8500Color#27^000000",L_27,
+				 "^B0E2FFColor#28^000000",L_28,
+				 "^A4D3EEColor#29^000000",L_29,
+				 "^C6E2FFColor#30^000000",L_30,
+				 "^DA70D6Color#31^000000",L_31,
+				 "^BA55D3Color#32^000000",L_32,
+				 "^BA55D3Color#33^000000",L_33,
+				 "^FAEBD7Color#34^000000",L_34,
+				 "^FFEFD5Color#35^000000",L_35,
+				 "^FFAEB9Color#36^000000",L_36,
+				 "^EEA2ADColor#37^000000",L_37,
+				 "^FF7256Color#38^000000",L_38,
+				 "^FFA07AColor#39^000000",L_39,
+				 "^EE7621Color#40^000000",L_40;
+				end;
+			//input @color$;
+				L_01:
+					set @color$, 0xFF0000;
+					set .@color$, "^FF0000";
+					goto zcustom;
+				L_02:
+					set @color$, 0xFF4000;
+					set .@color$, "^FF4000";
+					goto zcustom;
+				L_03:
+					set @color$, 0xFF8000;
+					set .@color$, "^FF8000";
+					goto zcustom;
+				L_04:
+					set @color$, 0xFFBF00;
+					set .@color$, "^FFBF00";
+					goto zcustom;
+				L_05:
+					set @color$, 0xFFFF00;
+					set .@color$, "^FFFF00";
+					goto zcustom;
+				L_06:
+					set @color$, 0xBFFF00;
+					set .@color$, "^BFFF00";
+					goto zcustom;
+				L_07:
+					set @color$, 0x80FF00;
+					set .@color$, "^80FF00";
+					goto zcustom;
+				L_08:
+					set @color$, 0x40FF00;
+					set .@color$, "^40FF00";
+					goto zcustom;
+				L_09:
+					set @color$, 0xFA5882;
+					set .@color$, "^FA5882";
+					goto zcustom;
+				L_10:
+					set @color$, 0x0101DF;
+					set .@color$, "^0101DF";
+					goto zcustom;
+				L_11:
+					set @color$, 0x7401DF;
+					set .@color$, "^7401DF";
+					goto zcustom;
+				L_12:
+					set @color$, 0x045FB4;
+					set .@color$, "^045FB4";
+					goto zcustom;
+				L_13:
+					set @color$, 0x2ECCFA;
+					set .@color$, "^2ECCFA";
+					goto zcustom;
+				L_14:
+					set @color$, 0xFF00FF;
+					set .@color$, "^FF00FF";
+					goto zcustom;
+				L_15:
+					set @color$, 0x0000FF;
+					set .@color$, "^0000FF";
+					goto zcustom;
+				L_16:
+					set @color$, 0x088A08;
+					set .@color$, "^088A08";
+					goto zcustom;
+				L_17:
+					set @color$, 0xFA58D0;
+					set .@color$, "^FA58D0";
+					goto zcustom;
+				L_18:
+					set @color$, 0xFA8258;
+					set .@color$, "^FA8258";
+					goto zcustom;
+				L_19:
+					set @color$, 0xD0A9F5;
+					set .@color$, "^D0A9F5";
+					goto zcustom;
+				L_20:
+					set @color$, 0x04B486;
+					set .@color$, "^04B486";
+					goto zcustom;
+				L_21:
+					set @color$, 0xC1FFC1;
+					set .@color$, "^C1FFC1";
+					goto zcustom;
+				L_22:
+					set @color$, 0x698B69;
+					set .@color$, "^698B69";
+					goto zcustom;
+				L_23:
+					set @color$, 0xFFF68F;
+					set .@color$, "^FFF68F";
+					goto zcustom;
+				L_24:
+					set @color$, 0xFF6A6A;
+					set .@color$, "^FF6A6A";
+					goto zcustom;
+				L_25:
+					set @color$, 0xFFA500;
+					set .@color$, "^FFA500";
+					goto zcustom;
+				L_26:
+					set @color$, 0xEE9A00;
+					set .@color$, "^EE9A00";
+					goto zcustom;
+				L_27:
+					set @color$, 0xCD8500;
+					set .@color$, "^CD8500";
+					goto zcustom;
+				L_28:
+					set @color$, 0xB0E2FF;
+					set .@color$, "^B0E2FF";
+					goto zcustom;
+				L_29:
+					set @color$, 0xA4D3EE;
+					set .@color$, "^A4D3EE";
+					goto zcustom;
+				L_30:
+					set @color$, 0xC6E2FF;
+					set .@color$, "^C6E2FF";
+					goto zcustom;
+				L_31:
+					set @color$, 0xDA70D6;
+					set .@color$, "^DA70D6";
+					goto zcustom;
+				L_32:
+					set @color$, 0xBA55D3;
+					set .@color$, "^BA55D3";
+					goto zcustom;
+				L_33:
+					set @color$, 0xBA55D3;
+					set .@color$, "^BA55D3";
+					goto zcustom;
+				L_34:
+					set @color$, 0xFAEBD7;
+					set .@color$, "^FAEBD7";
+					goto zcustom;
+				L_35:
+					set @color$, 0xFFEFD5;
+					set .@color$, "^FFEFD5";
+					goto zcustom;
+				L_36:
+					set @color$, 0xFFAEB9;
+					set .@color$, "^FFAEB9";
+					goto zcustom;
+				L_37:
+					set @color$, 0xEEA2AD;
+					set .@color$, "^EEA2AD";
+					goto zcustom;
+				L_38:
+					set @color$, 0xFF7256;
+					set .@color$, "^FF7256";
+					goto zcustom;
+				L_39:
+					set @color$, 0xFFA07A;
+					set .@color$, "^FFA07A";
+					goto zcustom;
+				L_40:
+					set @color$, 0xEE7621;
+					set .@color$, "^EE7621";
+					goto zcustom;
+		
+		close;
+	
+	zcustom:
+		next;
+		mes .@nameNPC$;
+		mes "=============================";
+		mes "Ingresa tu mensaje:";
+		mes "=============================";
+		input @message$;
+		next;
+		mes .@nameNPC$;
+		mes "¿Estás seguro que quieres que envie este mensaje?";
+		mes .@color$ + @message$ + .@endColor$;
+		menu "Claro", -, "No, mejor regreso luego.", cancelar;
+		next;
+		set Zeny, Zeny - .@nPrecioCustom;
+		announce "[Broad] "+.@name$+": "+@message$+" ",bc_all,@color$;
+		set .delay, gettimetick(2) + .nDelaySeg;
+		close;
+			
+	nozeny:
+		next;
+		mes .@nameNPC$;
+		mes "=============================";
+		mes "Valla, no tienes el zeny suficiente.";
+		mes "=============================";
+		close;
+
+	end;
+			
+	cancelar:
+		next;
+		mes .@nameNPC$;
+		mes "=============================";
+		mes "Será en una próxima ocasión entonces, vuelve cuando quieras.";
+		mes "=============================";
+	close;
+}

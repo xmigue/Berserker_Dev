@@ -1,0 +1,288 @@
+//===== FenixRO GoldRoom ==========================================================================
+//
+//= Script para rAthena Ragnarök
+//
+//===== By: =======================================================================================
+//
+//= Original Version : Julián Andrés Chilito
+//
+//===== Current Version: ==========================================================================
+//
+//= 0.1
+//
+//===== Additional Comments: ======================================================================
+//
+// 0.1 = Version BETA
+//
+//=================================================================================================
+// Leeme
+// Descripción
+// Este NPC permite a los usuarios ingresar a una zona de dropeo de GOLD matando porings, 
+// la única diferencia es que tiene sus limitantes (configurables), 
+// el personaje deberá pagar ya sea con un item especial o con zenys el ingreso al lugar, sin embargo, 
+// al pagar tu entrada no te dará el chance del 100% de ingreso al salón, pues existe un chance de entrada, 
+// si tuviste mala suerte, perderás el item o los zenys, puedes intentarlo las veces que quieras. 
+// Si el personaje logra entrar a la zona, solamente tendrá un tiempo de permanencia dentro de esta, 
+// el cual si relogea o se teletransporta a otro mapa, perderá su estancia. 
+// Al matar cada poring, también tendrá un rate de drop, pero tendrá la posibilidad en que cuando se acierta el drop del GOLD podrá recibir entre 1 a 10. 
+// Tambien hay una posibilidad de configurar cuantos personajes pueden entrar dentro de la zona, 
+// el NPC tiene un mensaje de chat indicando cuantos usuarios hay en el mapa, si se configura en 0 (ilimitado) mostrara otro mensaje.
+
+// Nota: Si se configura zenys y item, el usuario podrá seleccionar cual de los dos pagará para su entrada.
+//=================================================================================================
+// Configuración
+// set .npc_name$, "[^CC33CCFenix Gold Room^000000]"; //Nombre del NPC
+// set $@enter_rate, 25;// 35% de chance de entrada al room
+// set $@drop_rate, 30;// 20% de chance de dropeo del item
+// set $@price_enter, 100000;// Pago con zenys, (0: no hay cobro)
+// set $@time_on_room, 15;// tiempo en minutos dentro del room
+// set $@map_exit_fgr_map$, "prontera";// mapa donde se envia el personaje al finalizar el tiempo
+// set $@map_exit_fgr_x, 153;// coord x
+// set $@map_exit_fgr_y, 193;// coord y
+// set $@max_players_on_fgr, 10;// cuantos personajes pueden estar en la sala? (0: ilimitados)
+// set $@item_drop_fgr_map, 969;// Item que dropean los mobs (969: gold)
+// set $@item_cost_enter, 671;// Item para cobrar la entrada.
+// set $@item_cant_enter, 1;// cuantos items ?
+//=================================================================================================
+// Dentro del juego los GMs podrán whispear al NPC e indicarle una nueva configuarión.
+
+// [NPC:EvtGoldRoom] change#enter_rate#5
+// [NPC:EvtGoldRoom] change#drop_rate#2
+// [NPC:EvtGoldRoom] change#price_enter#5000
+// [NPC:EvtGoldRoom] change#time_on_room#1
+// [NPC:EvtGoldRoom] change#map_exit#"geffen"
+// [NPC:EvtGoldRoom] change#map_x_exit#150
+// [NPC:EvtGoldRoom] change#map_y_exit#23
+// [NPC:EvtGoldRoom] change#max_users#150
+// [NPC:EvtGoldRoom] change#item_drop#4545
+// [NPC:EvtGoldRoom] change#item_enter_cost#6969
+// [NPC:EvtGoldRoom] change#item_cant_enter#2
+//=================================================================================================
+
+prontera,47,186,3	script	EventGoldRoom::FeGoldRoom	857,{
+	function rateEnter;
+	function enterRoom;
+
+	mes .npc_name$;
+	mes "La sala Gold Room te permite farmear zeny de manera agil y divertida";
+	mes "Rate Ingreso: ^64B5F6"+$@enter_rate+"^000000%";
+	mes "Rate Drop: ^64B5F6"+$@drop_rate+"^000000%";
+	mes "Valor Entrada: ^004D40"+$@price_enter+"^000000z";
+	mes $@item_cost_enter != 0 ? "Item Entrada: "+getitemname($@item_cost_enter)+" ("+$@item_cant_enter+")" : "Solo cobro por zeny";
+	mes "Tiempo: "+$@time_on_room+"m";
+	next;
+
+	mes .npc_name$;
+	mes "Deseas ingresar al salon?";
+	next;
+
+	if (select("Si, intentemos", "No, luego sera") == 1) {
+		if ($@max_players_on_fgr != 0 && $@max_players_on_fgr < getmapusers("ordeal_3-2")) {
+			mes .npc_name$;
+			mes "Lo sentimos, en este momento no disponemos de cupos en la sala ^B71C1C("+getmapusers("ordeal_3-2")+"/"+$@max_players_on_fgr+")^000000";
+			close;
+		} else if ($@max_players_on_fgr == 0 || getmapusers("ordeal_3-2") < $@max_players_on_fgr) {
+			if ($@item_cost_enter != 0) {
+				set .response_select_pay, select("Pagar con "+getitemname($@item_cost_enter)+" ("+$@item_cant_enter+")", "Pagar con "+$@price_enter+"z", "Mejor no");
+				if (.response_select_pay == 1) {
+					set .enter_with_item, 1;
+				} else if (.response_select_pay == 2) {
+					set .enter_with_item, 0;
+				} else {
+					mes .npc_name$;
+					mes "Te esperamos pronto...";
+					close;
+				}
+			} else {
+				set .enter_with_item, 0;
+			}
+
+			if (Zeny < $@price_enter && .enter_with_item == 0) {
+				mes .npc_name$;
+				mes "Lo sentimos no tienes zeny suficientes, regresa cuando tengas ^DD2C00"+($@price_enter-Zeny)+"^000000z que te faltan";
+				close;
+			} else if (countitem($@item_cost_enter) < $@item_cant_enter && .enter_with_item == 1) {
+				mes .npc_name$;
+				mes "Lo sentimos no posees "+getitemname($@item_cost_enter)+" suficientes, regresa cuando tengas ^DD2C00"+($@item_cant_enter-countitem($@item_cost_enter))+"^000000 que te faltan";
+				close;
+			} else {
+				if (.enter_with_item == 1) {
+					delitem $@item_cost_enter, $@item_cant_enter;
+				} else {
+					set Zeny, Zeny - $@price_enter;
+				}
+
+				mes .npc_name$;
+				mes "Hemos efectuado el cobro... ahora sabras que tanta suerte tienes...";
+				next;
+				if (rateEnter($@enter_rate)) {
+					enterRoom;
+				} else {
+					mes .npc_name$;
+					mes "Lo sentimos, la suerte no esta de tu lado, pero puedes intentarlo la proxima vez :)";
+					close;
+				}
+			}
+		}
+	} else {
+		mes .npc_name$;
+		mes "Te esperamos pronto...";
+		close;
+	}
+
+	OnInit:
+		set .npc_name$, "[^CC33CCFenix Gold Room^000000]";
+		set $@enter_rate, 25;
+		set $@drop_rate, 20;
+		set $@price_enter, 500000;
+		set $@time_on_room, 5;
+		set $@map_exit_fgr_map$, "prontera";
+		set $@map_exit_fgr_x, 156;
+		set $@map_exit_fgr_y, 187;
+		set $@max_players_on_fgr, 5;
+		set $@item_drop_fgr_map, 969;
+		set $@item_cost_enter, 671;
+		set $@item_cant_enter, 1;
+		set .enter_with_item, 1;
+
+		function	rateEnter	{
+			return rand(0, 100) < getarg(0);
+		}
+
+		function enterRoom {
+			showdigit $@time_on_room * 60,2;
+			addtimer $@time_on_room * 60000, "EvtGoldRoom::OnPlayerFinishGR";
+			warp "ordeal_3-2",0,0;
+			set PC_ON_FGR, 1;
+		}
+
+		do {
+			delwaitingroom;
+			waitingroom "Hay "+($@max_players_on_fgr == 0 ? getmapusers("ordeal_3-2")+" usuarios" : "("+getmapusers("ordeal_3-2")+"/"+$@max_players_on_fgr+")"),0;
+			sleep 1000;
+		} while (true);
+	end;
+}
+
+-	script	EventGoldRoomEvent::EvtGoldRoom	-1,{
+	OnNPCKillEvent:
+		if (strcharinfo(3) != "ordeal_3-2") end;
+		if (killedrid != 1002) end;
+		if (rand (0, 99) < $@drop_rate) getitem $@item_drop_fgr_map, rand(1, 5);
+	end;
+
+	OnPCLoadMapEvent:
+		getmapxy(@map$, @xb, @yb, 0 );
+
+		if (@map$ == "ordeal_3-2") {
+			if (PC_ON_FGR != 1) {
+				showdigit 0,0;
+				deltimer "EvtGoldRoom::OnPlayerFinishGR";
+				warp $@map_exit_fgr_map$,$@map_exit_fgr_x,$@map_exit_fgr_y;
+			}
+		} else {
+			if (PC_ON_FGR == 1) {
+				showdigit 0,0;
+				deltimer "EvtGoldRoom::OnPlayerFinishGR";
+				set PC_ON_FGR, 0;
+			}
+		}
+	end;
+
+	OnPlayerFinishGR:
+		showdigit 0,0;
+		deltimer "EvtGoldRoom::OnPlayerFinishGR";
+		set PC_ON_FGR, 0;
+		warp $@map_exit_fgr_map$,$@map_exit_fgr_x,$@map_exit_fgr_y;
+	end;
+
+	OnPCLoginEvent:
+		getmapxy(@map$, @xb, @yb, 0 );
+		if (@map$ == "ordeal_3-2") {
+			showdigit 0,0;
+			if (PC_ON_FGR != 1) {
+				warp $@map_exit_fgr_map$,$@map_exit_fgr_x,$@map_exit_fgr_y;
+			}
+		}
+	end;
+
+	OnPCLogoutEvent:
+		set PC_ON_FGR, 0;
+	end;
+
+	OnWhisperGlobal:
+		if (getgmlevel() < 80) end;
+
+		// ex: change#enter_rate#5
+		if (@whispervar0$ == "change") {
+			if (@whispervar1$ == "enter_rate") {
+				set $@enter_rate, @whispervar2$;
+				dispbottom "[EvtGoldRoom] -> El rate de ingreso a la sala ahora es de "+$@enter_rate+"%";
+			} else if (@whispervar1$ == "drop_rate") {
+				set $@drop_rate, @whispervar2$;
+				dispbottom "[EvtGoldRoom] -> El rate de dropeo a la sala ahora es de "+$@drop_rate+"%";
+			} else if (@whispervar1$ == "price_enter") {
+				set $@price_enter, @whispervar2$;
+				dispbottom "[EvtGoldRoom] -> El valor de ingreso a la sala ahora es de "+$@price_enter+"z";
+			} else if (@whispervar1$ == "time_on_room") {
+				set $@time_on_room, @whispervar2$;
+				dispbottom "[EvtGoldRoom] -> El tiempo en la sala ahora es de "+$@time_on_room+"m";
+			} else if (@whispervar1$ == "map_exit") {
+				set $@map_exit_fgr_map, @whispervar2$;
+				dispbottom "[EvtGoldRoom] -> El mapa de salida ahora es "+$@map_exit_fgr_map;
+			} else if (@whispervar1$ == "map_x_exit") {
+				set $@map_exit_fgr_x, @whispervar2$;
+				dispbottom "[EvtGoldRoom] -> El mapa de salida en X ahora es "+$@map_exit_fgr_map+","+$@map_exit_fgr_x+","+$@map_exit_fgr_y;
+			} else if (@whispervar1$ == "map_y_exit") {
+				set $@map_exit_fgr_y, @whispervar2$;
+				dispbottom "[EvtGoldRoom] -> El mapa de salida en Y ahora es "+$@map_exit_fgr_map+","+$@map_exit_fgr_x+","+$@map_exit_fgr_y;
+			} else if (@whispervar1$ == "max_users") {
+				set $@max_players_on_fgr, @whispervar2$;
+				dispbottom "[EvtGoldRoom] -> Los usuarios maximos ahora son "+$@max_players_on_fgr;
+			} else if (@whispervar1$ == "item_drop") {
+				set $@item_drop_fgr_map, @whispervar2$;
+				dispbottom "[EvtGoldRoom] -> El item de drop ahora es "+getitemname($@item_drop_fgr_map);
+			} else if (@whispervar1$ == "item_enter_cost") {
+				set $@item_cost_enter, @whispervar2$;
+				dispbottom "[EvtGoldRoom] -> El item de entrada ahora es "+getitemname($@item_cost_enter)+" ("+$@item_cant_enter+")";
+			} else if (@whispervar1$ == "item_cant_enter") {
+				set $@item_cant_enter, @whispervar2$;
+				dispbottom "[EvtGoldRoom] -> La cantidad de "+getitemname($@item_cost_enter)+" para entrar ahora es de "+$@item_cant_enter;
+			}
+		}
+	end;
+}
+
+// Warps a prontera v1.0
+-	script	Retorno::Retorno	45,2,2,{
+end;
+OnTouch:
+warp $@map_exit_fgr_map$,$@map_exit_fgr_x,$@map_exit_fgr_y;
+end;
+} // End Script
+
+// Natural Monsters v1.0
+ordeal_3-2,0,0,0,0	monster	Poring Gold	1002,1000,0,0
+
+// Duplicados Warps v1.0
+ordeal_3-2,24,228,0	duplicate(Retorno)	Retorno#r1	45
+ordeal_3-2,25,58,0	duplicate(Retorno)	Retorno#r2	45
+ordeal_3-2,289,130,0	duplicate(Retorno)	Retorno#r3	45
+ordeal_3-2,283,230,0	duplicate(Retorno)	Retorno#r4	45
+ordeal_3-2,210,203,0	duplicate(Retorno)	Retorno#r5	45
+
+// Map Flags v1.0
+//ordeal_3-2	mapflag	nodrop
+ordeal_3-2	mapflag	nobranch
+ordeal_3-2	mapflag	nomemo
+ordeal_3-2	mapflag	nopenalty
+ordeal_3-2	mapflag	pvp_noparty
+ordeal_3-2	mapflag	noexp
+ordeal_3-2	mapflag	sakura
+ordeal_3-2	mapflag	noskill
+ordeal_3-2	mapflag	noteleport
+ordeal_3-2	mapflag	nowarp
+
+
+ordeal_3-2	mapflag	loadevent
+prontera	mapflag	loadevent

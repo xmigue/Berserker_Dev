@@ -1,0 +1,940 @@
+//===== eAthena Script ======================================= 
+//= Prontera Village - Housing for Rent
+//===== By: ================================================== 
+//= Zephyrus
+//===== Translated by:========================================
+//= Preima
+//===== Current Version: ===================================== 
+//= 1.0 10399
+//===== Compatible With: ===================================== 
+//= eAthena SVN Stable 
+//===== Description: ========================================= 
+//= Script that contains the codes for the Houses for rent
+//= in Prontera
+//===== Additional Comments: ================================= 
+//= 1.0 Initial Version
+//============================================================ 
+
+//============================================================ 
+//= Main Access Warp
+//============================================================ 
+
+rent_mb,133,21,0	warp	rentbm1	1,1,prt_fild06,54,293
+prt_fild06,56,297,0	warp	rentbm2	1,1,rent_mb,133,25
+
+//============================================================ 
+//= NPCs (Proprietor, Kafra, signboard)
+//============================================================ 
+
+prt_fild06,51,296,5	script	Villas Prontera#Rb	837,{ callfunc "rent_villas","Prontera",300000,"b",27; }
+rent_mb,128,44,5	script	Signboard#Rb	835,{ callfunc "rent_letrero","b",27; }
+rent_mb,137,120,4	script	Kafra Villas#Rb	721,{ callfunc "rent_kafra"; }
+rent_mb,130,120,5	script	Proprietor#Rb	833,{ callfunc "rent_propietario","b",300000,27; }
+
+//============================================================ 
+//= Access to Properties
+//============================================================ 
+
+rent_mb,107,42,0	script	rentbw1	45,1,1,{ callfunc "rent_entrada","b1",300000,24,6; }
+rent_mb,79,42,0	script	rentbw2	45,1,1,{ callfunc "rent_entrada","b2",300000,24,6; }
+rent_mb,161,42,0	script	rentbw3	45,1,1,{ callfunc "rent_entrada","b3",300000,24,6; }
+rent_mb,189,42,0	script	rentbw4	45,1,1,{ callfunc "rent_entrada","b4",300000,24,6; }
+rent_mb,40,48,0	script	rentbw5	45,1,1,{ callfunc "rent_entrada","b5",300000,24,6; }
+rent_mb,40,76,0	script	rentbw6	45,1,1,{ callfunc "rent_entrada","b6",300000,24,6; }
+rent_mb,40,104,0	script	rentbw7	45,1,1,{ callfunc "rent_entrada","b7",300000,24,6; }
+rent_mb,40,132,0	script	rentbw8	45,1,1,{ callfunc "rent_entrada","b8",300000,24,6; }
+rent_mb,40,160,0	script	rentbw9	45,1,1,{ callfunc "rent_entrada","b9",300000,24,6; }
+rent_mb,40,188,0	script	rentbw10	45,1,1,{ callfunc "rent_entrada","b10",300000,24,6; }
+rent_mb,225,48,0	script	rentbw11	45,1,1,{ callfunc "rent_entrada","b11",300000,24,6; }
+rent_mb,225,76,0	script	rentbw12	45,1,1,{ callfunc "rent_entrada","b12",300000,24,6; }
+rent_mb,225,104,0	script	rentbw13	45,1,1,{ callfunc "rent_entrada","b13",300000,24,6; }
+rent_mb,225,132,0	script	rentbw14	45,1,1,{ callfunc "rent_entrada","b14",300000,24,6; }
+rent_mb,225,160,0	script	rentbw15	45,1,1,{ callfunc "rent_entrada","b15",300000,24,6; }
+rent_mb,225,188,0	script	rentbw16	45,1,1,{ callfunc "rent_entrada","b16",300000,24,6; }
+rent_mb,48,225,0	script	rentbw17	45,1,1,{ callfunc "rent_entrada","b17",300000,24,6; }
+rent_mb,76,225,0	script	rentbw18	45,1,1,{ callfunc "rent_entrada","b18",300000,24,6; }
+rent_mb,104,225,0	script	rentbw19	45,1,1,{ callfunc "rent_entrada","b19",300000,24,6; }
+rent_mb,132,225,0	script	rentbw20	45,1,1,{ callfunc "rent_entrada","b20",300000,24,6; }
+rent_mb,160,225,0	script	rentbw21	45,1,1,{ callfunc "rent_entrada","b21",300000,24,6; }
+rent_mb,188,225,0	script	rentbw22	45,1,1,{ callfunc "rent_entrada","b22",300000,24,6; }
+rent_mb,216,225,0	script	rentbw23	45,1,1,{ callfunc "rent_entrada","b23",300000,24,6; }
+rent_mb,108,108,0	script	rentbw24	45,1,1,{ callfunc "rent_entrada","b24",300000,24,6; }
+rent_mb,108,159,0	script	rentbw25	45,1,1,{ callfunc "rent_entrada","b25",300000,24,6; }
+rent_mb,159,108,0	script	rentbw26	45,1,1,{ callfunc "rent_entrada","b26",300000,24,6; }
+rent_mb,159,159,0	script	rentbw27	45,1,1,{ callfunc "rent_entrada","b27",300000,24,6; }
+
+//============================================================ 
+//= House Entrances
+//============================================================ 
+
+rent_mb,102,47,0	script	House B-1#Rb	835,{ end; }
+rent_mb,74,47,0	script	House B-2#Rb	835,{ end; }
+rent_mb,166,47,0	script	House B-3#Rb	835,{ end; }
+rent_mb,194,47,0	script	House B-4#Rb	835,{ end; }
+rent_mb,45,43,0	script	House B-5#Rb	835,{ end; }
+rent_mb,45,71,0	script	House B-6#Rb	835,{ end; }
+rent_mb,45,99,0	script	House B-7#Rb	835,{ end; }
+rent_mb,45,127,0	script	House B-8#Rb	835,{ end; }
+rent_mb,45,155,0	script	House B-9#Rb	835,{ end; }
+rent_mb,45,183,0	script	House B-10#Rb	835,{ end; }
+rent_mb,220,43,0	script	House B-11#Rb	835,{ end; }
+rent_mb,220,71,0	script	House B-12#Rb	835,{ end; }
+rent_mb,220,99,0	script	House B-13#Rb	835,{ end; }
+rent_mb,220,127,0	script	House B-14#Rb	835,{ end; }
+rent_mb,220,155,0	script	House B-15#Rb	835,{ end; }
+rent_mb,220,183,0	script	House B-16#Rb	835,{ end; }
+rent_mb,43,220,0	script	House B-17#Rb	835,{ end; }
+rent_mb,71,220,0	script	House B-18#Rb	835,{ end; }
+rent_mb,99,220,0	script	House B-19#Rb	835,{ end; }
+rent_mb,127,220,0	script	House B-20#Rb	835,{ end; }
+rent_mb,155,220,0	script	House B-21#Rb	835,{ end; }
+rent_mb,183,220,0	script	House B-22#Rb	835,{ end; }
+rent_mb,211,220,0	script	House B-23#Rb	835,{ end; }
+rent_mb,108,116,0	script	House B-24#Rb	835,{ end; }
+rent_mb,116,159,0	script	House B-25#Rb	835,{ end; }
+rent_mb,151,108,0	script	House B-26#Rb	835,{ end; }
+rent_mb,159,151,0	script	House B-27#Rb	835,{ end; }
+
+//============================================================ 
+//= Warps rentb -> rent_mb (Exit to City)
+//============================================================ 
+
+rentb1,24,2,0	warp	rentb1-1	1,1,rent_mb,107,47
+rentb2,24,2,0	warp	rentb2-1	1,1,rent_mb,79,47
+rentb3,24,2,0	warp	rentb3-1	1,1,rent_mb,161,47
+rentb4,24,2,0	warp	rentb4-1	1,1,rent_mb,189,47
+rentb5,24,2,0	warp	rentb5-1	1,1,rent_mb,45,48
+rentb6,24,2,0	warp	rentb6-1	1,1,rent_mb,45,76
+rentb7,24,2,0	warp	rentb7-1	1,1,rent_mb,45,104
+rentb8,24,2,0	warp	rentb8-1	1,1,rent_mb,45,132
+rentb9,24,2,0	warp	rentb9-1	1,1,rent_mb,45,160
+rentb10,24,2,0	warp	rentb10-1	1,1,rent_mb,45,188
+rentb11,24,2,0	warp	rentb11-1	1,1,rent_mb,220,48
+rentb12,24,2,0	warp	rentb12-1	1,1,rent_mb,220,76
+rentb13,24,2,0	warp	rentb13-1	1,1,rent_mb,220,104
+rentb14,24,2,0	warp	rentb14-1	1,1,rent_mb,220,132
+rentb15,24,2,0	warp	rentb15-1	1,1,rent_mb,220,160
+rentb16,24,2,0	warp	rentb16-1	1,1,rent_mb,220,188
+rentb17,24,2,0	warp	rentb17-1	1,1,rent_mb,48,220
+rentb18,24,2,0	warp	rentb18-1	1,1,rent_mb,76,220
+rentb19,24,2,0	warp	rentb19-1	1,1,rent_mb,104,220
+rentb20,24,2,0	warp	rentb20-1	1,1,rent_mb,132,220
+rentb21,24,2,0	warp	rentb21-1	1,1,rent_mb,160,220
+rentb22,24,2,0	warp	rentb22-1	1,1,rent_mb,188,220
+rentb23,24,2,0	warp	rentb23-1	1,1,rent_mb,219,220
+rentb24,24,2,0	warp	rentb24-1	1,1,rent_mb,112,112
+rentb25,24,2,0	warp	rentb25-1	1,1,rent_mb,122,155
+rentb26,24,2,0	warp	rentb26-1	1,1,rent_mb,155,112
+rentb27,24,2,0	warp	rentb27-1	1,1,rent_mb,155,155
+
+//============================================================ 
+//= Warps rentb -> rentinb (Entrance to Houses)
+//============================================================ 
+
+rentb1,19,23,0	warp	rentb1-2	1,1,rentinb1,34,6
+rentb2,19,23,0	warp	rentb2-2	1,1,rentinb2,34,6
+rentb3,19,23,0	warp	rentb3-2	1,1,rentinb3,34,6
+rentb4,19,23,0	warp	rentb4-2	1,1,rentinb4,34,6
+rentb5,19,23,0	warp	rentb5-2	1,1,rentinb5,34,6
+rentb6,19,23,0	warp	rentb6-2	1,1,rentinb6,34,6
+rentb7,19,23,0	warp	rentb7-2	1,1,rentinb7,34,6
+rentb8,19,23,0	warp	rentb8-2	1,1,rentinb8,34,6
+rentb9,19,23,0	warp	rentb9-2	1,1,rentinb9,34,6
+rentb10,19,23,0	warp	rentb10-2	1,1,rentinb10,34,6
+rentb11,19,23,0	warp	rentb11-2	1,1,rentinb11,34,6
+rentb12,19,23,0	warp	rentb12-2	1,1,rentinb12,34,6
+rentb13,19,23,0	warp	rentb13-2	1,1,rentinb13,34,6
+rentb14,19,23,0	warp	rentb14-2	1,1,rentinb14,34,6
+rentb15,19,23,0	warp	rentb15-2	1,1,rentinb15,34,6
+rentb16,19,23,0	warp	rentb16-2	1,1,rentinb16,34,6
+rentb17,19,23,0	warp	rentb17-2	1,1,rentinb17,34,6
+rentb18,19,23,0	warp	rentb18-2	1,1,rentinb18,34,6
+rentb19,19,23,0	warp	rentb19-2	1,1,rentinb19,34,6
+rentb20,19,23,0	warp	rentb20-2	1,1,rentinb20,34,6
+rentb21,19,23,0	warp	rentb21-2	1,1,rentinb21,34,6
+rentb22,19,23,0	warp	rentb22-2	1,1,rentinb22,34,6
+rentb23,19,23,0	warp	rentb23-2	1,1,rentinb23,34,6
+rentb24,19,23,0	warp	rentb24-2	1,1,rentinb24,34,6
+rentb25,19,23,0	warp	rentb25-2	1,1,rentinb25,34,6
+rentb26,19,23,0	warp	rentb26-2	1,1,rentinb26,34,6
+rentb27,19,23,0	warp	rentb27-2	1,1,rentinb27,34,6
+
+//============================================================ 
+//= Warps rentinb -> rentb (Exit for Houses)
+//============================================================ 
+
+rentinb1,34,3,0	warp	rentb1-3	1,1,rentb1,19,18
+rentinb2,34,3,0	warp	rentb2-3	1,1,rentb2,19,18
+rentinb3,34,3,0	warp	rentb3-3	1,1,rentb3,19,18
+rentinb4,34,3,0	warp	rentb4-3	1,1,rentb4,19,18
+rentinb5,34,3,0	warp	rentb5-3	1,1,rentb5,19,18
+rentinb6,34,3,0	warp	rentb6-3	1,1,rentb6,19,18
+rentinb7,34,3,0	warp	rentb7-3	1,1,rentb7,19,18
+rentinb8,34,3,0	warp	rentb8-3	1,1,rentb8,19,18
+rentinb9,34,3,0	warp	rentb9-3	1,1,rentb9,19,18
+rentinb10,34,3,0	warp	rentb10-3	1,1,rentb10,19,18
+rentinb11,34,3,0	warp	rentb11-3	1,1,rentb11,19,18
+rentinb12,34,3,0	warp	rentb12-3	1,1,rentb12,19,18
+rentinb13,34,3,0	warp	rentb13-3	1,1,rentb13,19,18
+rentinb14,34,3,0	warp	rentb14-3	1,1,rentb14,19,18
+rentinb15,34,3,0	warp	rentb15-3	1,1,rentb15,19,18
+rentinb16,34,3,0	warp	rentb16-3	1,1,rentb16,19,18
+rentinb17,34,3,0	warp	rentb17-3	1,1,rentb17,19,18
+rentinb18,34,3,0	warp	rentb18-3	1,1,rentb18,19,18
+rentinb19,34,3,0	warp	rentb19-3	1,1,rentb19,19,18
+rentinb20,34,3,0	warp	rentb20-3	1,1,rentb20,19,18
+rentinb21,34,3,0	warp	rentb21-3	1,1,rentb21,19,18
+rentinb22,34,3,0	warp	rentb22-3	1,1,rentb22,19,18
+rentinb23,34,3,0	warp	rentb23-3	1,1,rentb23,19,18
+rentinb24,34,3,0	warp	rentb24-3	1,1,rentb24,19,18
+rentinb25,34,3,0	warp	rentb25-3	1,1,rentb25,19,18
+rentinb26,34,3,0	warp	rentb26-3	1,1,rentb26,19,18
+rentinb27,34,3,0	warp	rentb27-3	1,1,rentb27,19,18
+
+//============================================================ 
+//= MapFlags
+//============================================================ 
+
+rent_mb	mapflag	noteleport
+rent_mb	mapflag	nopenalty
+
+rentb1	mapflag	nomemo
+rentb2	mapflag	nomemo
+rentb3	mapflag	nomemo
+rentb4	mapflag	nomemo
+rentb5	mapflag	nomemo
+rentb6	mapflag	nomemo
+rentb7	mapflag	nomemo
+rentb8	mapflag	nomemo
+rentb9	mapflag	nomemo
+rentb10	mapflag	nomemo
+rentb11	mapflag	nomemo
+rentb12	mapflag	nomemo
+rentb13	mapflag	nomemo
+rentb14	mapflag	nomemo
+rentb15	mapflag	nomemo
+rentb16	mapflag	nomemo
+rentb17	mapflag	nomemo
+rentb18	mapflag	nomemo
+rentb19	mapflag	nomemo
+rentb20	mapflag	nomemo
+rentb21	mapflag	nomemo
+rentb22	mapflag	nomemo
+rentb23	mapflag	nomemo
+rentb24	mapflag	nomemo
+rentb25	mapflag	nomemo
+rentb26	mapflag	nomemo
+rentb27	mapflag	nomemo
+
+rentinb1	mapflag	nomemo
+rentinb2	mapflag	nomemo
+rentinb3	mapflag	nomemo
+rentinb4	mapflag	nomemo
+rentinb5	mapflag	nomemo
+rentinb6	mapflag	nomemo
+rentinb7	mapflag	nomemo
+rentinb8	mapflag	nomemo
+rentinb9	mapflag	nomemo
+rentinb10	mapflag	nomemo
+rentinb11	mapflag	nomemo
+rentinb12	mapflag	nomemo
+rentinb13	mapflag	nomemo
+rentinb14	mapflag	nomemo
+rentinb15	mapflag	nomemo
+rentinb16	mapflag	nomemo
+rentinb17	mapflag	nomemo
+rentinb18	mapflag	nomemo
+rentinb19	mapflag	nomemo
+rentinb20	mapflag	nomemo
+rentinb21	mapflag	nomemo
+rentinb22	mapflag	nomemo
+rentinb23	mapflag	nomemo
+rentinb24	mapflag	nomemo
+rentinb25	mapflag	nomemo
+rentinb26	mapflag	nomemo
+rentinb27	mapflag	nomemo
+
+rentb1	mapflag	pvp_noguild
+rentb2	mapflag	pvp_noguild
+rentb3	mapflag	pvp_noguild
+rentb4	mapflag	pvp_noguild
+rentb5	mapflag	pvp_noguild
+rentb6	mapflag	pvp_noguild
+rentb7	mapflag	pvp_noguild
+rentb8	mapflag	pvp_noguild
+rentb9	mapflag	pvp_noguild
+rentb10	mapflag	pvp_noguild
+rentb11	mapflag	pvp_noguild
+rentb12	mapflag	pvp_noguild
+rentb13	mapflag	pvp_noguild
+rentb14	mapflag	pvp_noguild
+rentb15	mapflag	pvp_noguild
+rentb16	mapflag	pvp_noguild
+rentb17	mapflag	pvp_noguild
+rentb18	mapflag	pvp_noguild
+rentb19	mapflag	pvp_noguild
+rentb20	mapflag	pvp_noguild
+rentb21	mapflag	pvp_noguild
+rentb22	mapflag	pvp_noguild
+rentb23	mapflag	pvp_noguild
+rentb24	mapflag	pvp_noguild
+rentb25	mapflag	pvp_noguild
+rentb26	mapflag	pvp_noguild
+rentb27	mapflag	pvp_noguild
+
+rentb1	mapflag	nopenalty
+rentb2	mapflag	nopenalty
+rentb3	mapflag	nopenalty
+rentb4	mapflag	nopenalty
+rentb5	mapflag	nopenalty
+rentb6	mapflag	nopenalty
+rentb7	mapflag	nopenalty
+rentb8	mapflag	nopenalty
+rentb9	mapflag	nopenalty
+rentb10	mapflag	nopenalty
+rentb11	mapflag	nopenalty
+rentb12	mapflag	nopenalty
+rentb13	mapflag	nopenalty
+rentb14	mapflag	nopenalty
+rentb15	mapflag	nopenalty
+rentb16	mapflag	nopenalty
+rentb17	mapflag	nopenalty
+rentb18	mapflag	nopenalty
+rentb19	mapflag	nopenalty
+rentb20	mapflag	nopenalty
+rentb21	mapflag	nopenalty
+rentb22	mapflag	nopenalty
+rentb23	mapflag	nopenalty
+rentb24	mapflag	nopenalty
+rentb25	mapflag	nopenalty
+rentb26	mapflag	nopenalty
+rentb27	mapflag	nopenalty
+
+rentinb1	mapflag	nopenalty
+rentinb2	mapflag	nopenalty
+rentinb3	mapflag	nopenalty
+rentinb4	mapflag	nopenalty
+rentinb5	mapflag	nopenalty
+rentinb6	mapflag	nopenalty
+rentinb7	mapflag	nopenalty
+rentinb8	mapflag	nopenalty
+rentinb9	mapflag	nopenalty
+rentinb10	mapflag	nopenalty
+rentinb11	mapflag	nopenalty
+rentinb12	mapflag	nopenalty
+rentinb13	mapflag	nopenalty
+rentinb14	mapflag	nopenalty
+rentinb15	mapflag	nopenalty
+rentinb16	mapflag	nopenalty
+rentinb17	mapflag	nopenalty
+rentinb18	mapflag	nopenalty
+rentinb19	mapflag	nopenalty
+rentinb20	mapflag	nopenalty
+rentinb21	mapflag	nopenalty
+rentinb22	mapflag	nopenalty
+rentinb23	mapflag	nopenalty
+rentinb24	mapflag	nopenalty
+rentinb25	mapflag	nopenalty
+rentinb26	mapflag	nopenalty
+rentinb27	mapflag	nopenalty
+
+rentb1	mapflag	noteleport
+rentb2	mapflag	noteleport
+rentb3	mapflag	noteleport
+rentb4	mapflag	noteleport
+rentb5	mapflag	noteleport
+rentb6	mapflag	noteleport
+rentb7	mapflag	noteleport
+rentb8	mapflag	noteleport
+rentb9	mapflag	noteleport
+rentb10	mapflag	noteleport
+rentb11	mapflag	noteleport
+rentb12	mapflag	noteleport
+rentb13	mapflag	noteleport
+rentb14	mapflag	noteleport
+rentb15	mapflag	noteleport
+rentb16	mapflag	noteleport
+rentb17	mapflag	noteleport
+rentb18	mapflag	noteleport
+rentb19	mapflag	noteleport
+rentb20	mapflag	noteleport
+rentb21	mapflag	noteleport
+rentb22	mapflag	noteleport
+rentb23	mapflag	noteleport
+rentb24	mapflag	noteleport
+rentb25	mapflag	noteleport
+rentb26	mapflag	noteleport
+rentb27	mapflag	noteleport
+
+rentinb1	mapflag	noteleport
+rentinb2	mapflag	noteleport
+rentinb3	mapflag	noteleport
+rentinb4	mapflag	noteleport
+rentinb5	mapflag	noteleport
+rentinb6	mapflag	noteleport
+rentinb7	mapflag	noteleport
+rentinb8	mapflag	noteleport
+rentinb9	mapflag	noteleport
+rentinb10	mapflag	noteleport
+rentinb11	mapflag	noteleport
+rentinb12	mapflag	noteleport
+rentinb13	mapflag	noteleport
+rentinb14	mapflag	noteleport
+rentinb15	mapflag	noteleport
+rentinb16	mapflag	noteleport
+rentinb17	mapflag	noteleport
+rentinb18	mapflag	noteleport
+rentinb19	mapflag	noteleport
+rentinb20	mapflag	noteleport
+rentinb21	mapflag	noteleport
+rentinb22	mapflag	noteleport
+rentinb23	mapflag	noteleport
+rentinb24	mapflag	noteleport
+rentinb25	mapflag	noteleport
+rentinb26	mapflag	noteleport
+rentinb27	mapflag	noteleport
+
+//============================================================ 
+//= NPCs Outside
+//============================================================ 
+
+//============================================================ 
+//= Apple Tree
+//============================================================ 
+
+rentb1,33,31,0	script	Apple Tree#Rb1	111,{ callfunc "rent_manzano","b1"; OnManzana: specialeffect 363; end; }
+rentb2,33,31,0	script	Apple Tree#Rb2	111,{ callfunc "rent_manzano","b2"; OnManzana: specialeffect 363; end; }
+rentb3,33,31,0	script	Apple Tree#Rb3	111,{ callfunc "rent_manzano","b3"; OnManzana: specialeffect 363; end; }
+rentb4,33,31,0	script	Apple Tree#Rb4	111,{ callfunc "rent_manzano","b4"; OnManzana: specialeffect 363; end; }
+rentb5,33,31,0	script	Apple Tree#Rb5	111,{ callfunc "rent_manzano","b5"; OnManzana: specialeffect 363; end; }
+rentb6,33,31,0	script	Apple Tree#Rb6	111,{ callfunc "rent_manzano","b6"; OnManzana: specialeffect 363; end; }
+rentb7,33,31,0	script	Apple Tree#Rb7	111,{ callfunc "rent_manzano","b7"; OnManzana: specialeffect 363; end; }
+rentb8,33,31,0	script	Apple Tree#Rb8	111,{ callfunc "rent_manzano","b8"; OnManzana: specialeffect 363; end; }
+rentb9,33,31,0	script	Apple Tree#Rb9	111,{ callfunc "rent_manzano","b9"; OnManzana: specialeffect 363; end; }
+rentb10,33,31,0	script	Apple Tree#Rb10	111,{ callfunc "rent_manzano","b10"; OnManzana: specialeffect 363; end; }
+rentb11,33,31,0	script	Apple Tree#Rb11	111,{ callfunc "rent_manzano","b11"; OnManzana: specialeffect 363; end; }
+rentb12,33,31,0	script	Apple Tree#Rb12	111,{ callfunc "rent_manzano","b12"; OnManzana: specialeffect 363; end; }
+rentb13,33,31,0	script	Apple Tree#Rb13	111,{ callfunc "rent_manzano","b13"; OnManzana: specialeffect 363; end; }
+rentb14,33,31,0	script	Apple Tree#Rb14	111,{ callfunc "rent_manzano","b14"; OnManzana: specialeffect 363; end; }
+rentb15,33,31,0	script	Apple Tree#Rb15	111,{ callfunc "rent_manzano","b15"; OnManzana: specialeffect 363; end; }
+rentb16,33,31,0	script	Apple Tree#Rb16	111,{ callfunc "rent_manzano","b16"; OnManzana: specialeffect 363; end; }
+rentb17,33,31,0	script	Apple Tree#Rb17	111,{ callfunc "rent_manzano","b17"; OnManzana: specialeffect 363; end; }
+rentb18,33,31,0	script	Apple Tree#Rb18	111,{ callfunc "rent_manzano","b18"; OnManzana: specialeffect 363; end; }
+rentb19,33,31,0	script	Apple Tree#Rb19	111,{ callfunc "rent_manzano","b19"; OnManzana: specialeffect 363; end; }
+rentb20,33,31,0	script	Apple Tree#Rb20	111,{ callfunc "rent_manzano","b20"; OnManzana: specialeffect 363; end; }
+rentb21,33,31,0	script	Apple Tree#Rb21	111,{ callfunc "rent_manzano","b21"; OnManzana: specialeffect 363; end; }
+rentb22,33,31,0	script	Apple Tree#Rb22	111,{ callfunc "rent_manzano","b22"; OnManzana: specialeffect 363; end; }
+rentb23,33,31,0	script	Apple Tree#Rb23	111,{ callfunc "rent_manzano","b23"; OnManzana: specialeffect 363; end; }
+rentb24,33,31,0	script	Apple Tree#Rb24	111,{ callfunc "rent_manzano","b24"; OnManzana: specialeffect 363; end; }
+rentb25,33,31,0	script	Apple Tree#Rb25	111,{ callfunc "rent_manzano","b25"; OnManzana: specialeffect 363; end; }
+rentb26,33,31,0	script	Apple Tree#Rb26	111,{ callfunc "rent_manzano","b26"; OnManzana: specialeffect 363; end; }
+rentb27,33,31,0	script	Apple Tree#Rb27	111,{ callfunc "rent_manzano","b27"; OnManzana: specialeffect 363; end; }
+
+//============================================================ 
+//= PVP Switch
+//============================================================ 
+
+rentb1,23,21,3	script	Switch#Rb1	837,{ callfunc "rent_pvp"; }
+rentb2,23,21,3	script	Switch#Rb2	837,{ callfunc "rent_pvp"; }
+rentb3,23,21,3	script	Switch#Rb3	837,{ callfunc "rent_pvp"; }
+rentb4,23,21,3	script	Switch#Rb4	837,{ callfunc "rent_pvp"; }
+rentb5,23,21,3	script	Switch#Rb5	837,{ callfunc "rent_pvp"; }
+rentb6,23,21,3	script	Switch#Rb6	837,{ callfunc "rent_pvp"; }
+rentb7,23,21,3	script	Switch#Rb7	837,{ callfunc "rent_pvp"; }
+rentb8,23,21,3	script	Switch#Rb8	837,{ callfunc "rent_pvp"; }
+rentb9,23,21,3	script	Switch#Rb9	837,{ callfunc "rent_pvp"; }
+rentb10,23,21,3	script	Switch#Rb10	837,{ callfunc "rent_pvp"; }
+rentb11,23,21,3	script	Switch#Rb11	837,{ callfunc "rent_pvp"; }
+rentb12,23,21,3	script	Switch#Rb12	837,{ callfunc "rent_pvp"; }
+rentb13,23,21,3	script	Switch#Rb13	837,{ callfunc "rent_pvp"; }
+rentb14,23,21,3	script	Switch#Rb14	837,{ callfunc "rent_pvp"; }
+rentb15,23,21,3	script	Switch#Rb15	837,{ callfunc "rent_pvp"; }
+rentb16,23,21,3	script	Switch#Rb16	837,{ callfunc "rent_pvp"; }
+rentb17,23,21,3	script	Switch#Rb17	837,{ callfunc "rent_pvp"; }
+rentb18,23,21,3	script	Switch#Rb18	837,{ callfunc "rent_pvp"; }
+rentb19,23,21,3	script	Switch#Rb19	837,{ callfunc "rent_pvp"; }
+rentb20,23,21,3	script	Switch#Rb20	837,{ callfunc "rent_pvp"; }
+rentb21,23,21,3	script	Switch#Rb21	837,{ callfunc "rent_pvp"; }
+rentb22,23,21,3	script	Switch#Rb22	837,{ callfunc "rent_pvp"; }
+rentb23,23,21,3	script	Switch#Rb23	837,{ callfunc "rent_pvp"; }
+rentb24,23,21,3	script	Switch#Rb24	837,{ callfunc "rent_pvp"; }
+rentb25,23,21,3	script	Switch#Rb25	837,{ callfunc "rent_pvp"; }
+rentb26,23,21,3	script	Switch#Rb26	837,{ callfunc "rent_pvp"; }
+rentb27,23,21,3	script	Switch#Rb27	837,{ callfunc "rent_pvp"; }
+
+//============================================================ 
+//= Monsters Outside
+//============================================================ 
+
+rentb1,0,0,0,0	monster	Desert Wolf Baby	1107,2,1800000,900000,0
+rentb2,0,0,0,0	monster	Desert Wolf Baby	1107,2,1800000,900000,0
+rentb3,0,0,0,0	monster	Desert Wolf Baby	1107,2,1800000,900000,0
+rentb4,0,0,0,0	monster	Desert Wolf Baby	1107,2,1800000,900000,0
+rentb5,0,0,0,0	monster	Desert Wolf Baby	1107,2,1800000,900000,0
+rentb6,0,0,0,0	monster	Desert Wolf Baby	1107,2,1800000,900000,0
+rentb7,0,0,0,0	monster	Desert Wolf Baby	1107,2,1800000,900000,0
+rentb8,0,0,0,0	monster	Desert Wolf Baby	1107,2,1800000,900000,0
+rentb9,0,0,0,0	monster	Desert Wolf Baby	1107,2,1800000,900000,0
+rentb10,0,0,0,0	monster	Desert Wolf Baby	1107,2,1800000,900000,0
+rentb11,0,0,0,0	monster	Desert Wolf Baby	1107,2,1800000,900000,0
+rentb12,0,0,0,0	monster	Desert Wolf Baby	1107,2,1800000,900000,0
+rentb13,0,0,0,0	monster	Desert Wolf Baby	1107,2,1800000,900000,0
+rentb14,0,0,0,0	monster	Desert Wolf Baby	1107,2,1800000,900000,0
+rentb15,0,0,0,0	monster	Desert Wolf Baby	1107,2,1800000,900000,0
+rentb16,0,0,0,0	monster	Desert Wolf Baby	1107,2,1800000,900000,0
+rentb17,0,0,0,0	monster	Desert Wolf Baby	1107,2,1800000,900000,0
+rentb18,0,0,0,0	monster	Desert Wolf Baby	1107,2,1800000,900000,0
+rentb19,0,0,0,0	monster	Desert Wolf Baby	1107,2,1800000,900000,0
+rentb20,0,0,0,0	monster	Desert Wolf Baby	1107,2,1800000,900000,0
+rentb21,0,0,0,0	monster	Desert Wolf Baby	1107,2,1800000,900000,0
+rentb22,0,0,0,0	monster	Desert Wolf Baby	1107,2,1800000,900000,0
+rentb23,0,0,0,0	monster	Desert Wolf Baby	1107,2,1800000,900000,0
+rentb24,0,0,0,0	monster	Desert Wolf Baby	1107,2,1800000,900000,0
+rentb25,0,0,0,0	monster	Desert Wolf Baby	1107,2,1800000,900000,0
+rentb26,0,0,0,0	monster	Desert Wolf Baby	1107,2,1800000,900000,0
+rentb27,0,0,0,0	monster	Desert Wolf Baby	1107,2,1800000,900000,0
+
+//============================================================ 
+//= Garden
+//============================================================ 
+
+rentb1,32,9,3,6	monster	Blue Plant	1079,10,3600000,600000,0
+rentb1,32,9,3,6	monster	White Plant	1082,10,3600000,600000,0
+rentb1,32,9,3,6	monster	Yellow Plant	1081,10,3600000,600000,0
+rentb1,32,9,3,6	monster	Green Plant	1080,10,3600000,600000,0
+rentb1,32,9,3,6	monster	Red Plant	1078,10,3600000,600000,0
+rentb2,32,9,3,6	monster	Blue Plant	1079,10,3600000,600000,0
+rentb2,32,9,3,6	monster	White Plant	1082,10,3600000,600000,0
+rentb2,32,9,3,6	monster	Yellow Plant	1081,10,3600000,600000,0
+rentb2,32,9,3,6	monster	Green Plant	1080,10,3600000,600000,0
+rentb2,32,9,3,6	monster	Red Plant	1078,10,3600000,600000,0
+rentb3,32,9,3,6	monster	Blue Plant	1079,10,3600000,600000,0
+rentb3,32,9,3,6	monster	White Plant	1082,10,3600000,600000,0
+rentb3,32,9,3,6	monster	Yellow Plant	1081,10,3600000,600000,0
+rentb3,32,9,3,6	monster	Green Plant	1080,10,3600000,600000,0
+rentb3,32,9,3,6	monster	Red Plant	1078,10,3600000,600000,0
+rentb4,32,9,3,6	monster	Blue Plant	1079,10,3600000,600000,0
+rentb4,32,9,3,6	monster	White Plant	1082,10,3600000,600000,0
+rentb4,32,9,3,6	monster	Yellow Plant	1081,10,3600000,600000,0
+rentb4,32,9,3,6	monster	Green Plant	1080,10,3600000,600000,0
+rentb4,32,9,3,6	monster	Red Plant	1078,10,3600000,600000,0
+rentb5,32,9,3,6	monster	Blue Plant	1079,10,3600000,600000,0
+rentb5,32,9,3,6	monster	White Plant	1082,10,3600000,600000,0
+rentb5,32,9,3,6	monster	Yellow Plant	1081,10,3600000,600000,0
+rentb5,32,9,3,6	monster	Green Plant	1080,10,3600000,600000,0
+rentb5,32,9,3,6	monster	Red Plant	1078,10,3600000,600000,0
+rentb6,32,9,3,6	monster	Blue Plant	1079,10,3600000,600000,0
+rentb6,32,9,3,6	monster	White Plant	1082,10,3600000,600000,0
+rentb6,32,9,3,6	monster	Yellow Plant	1081,10,3600000,600000,0
+rentb6,32,9,3,6	monster	Green Plant	1080,10,3600000,600000,0
+rentb6,32,9,3,6	monster	Red Plant	1078,10,3600000,600000,0
+rentb7,32,9,3,6	monster	Blue Plant	1079,10,3600000,600000,0
+rentb7,32,9,3,6	monster	White Plant	1082,10,3600000,600000,0
+rentb7,32,9,3,6	monster	Yellow Plant	1081,10,3600000,600000,0
+rentb7,32,9,3,6	monster	Green Plant	1080,10,3600000,600000,0
+rentb7,32,9,3,6	monster	Red Plant	1078,10,3600000,600000,0
+rentb8,32,9,3,6	monster	Blue Plant	1079,10,3600000,600000,0
+rentb8,32,9,3,6	monster	White Plant	1082,10,3600000,600000,0
+rentb8,32,9,3,6	monster	Yellow Plant	1081,10,3600000,600000,0
+rentb8,32,9,3,6	monster	Green Plant	1080,10,3600000,600000,0
+rentb8,32,9,3,6	monster	Red Plant	1078,10,3600000,600000,0
+rentb9,32,9,3,6	monster	Blue Plant	1079,10,3600000,600000,0
+rentb9,32,9,3,6	monster	White Plant	1082,10,3600000,600000,0
+rentb9,32,9,3,6	monster	Yellow Plant	1081,10,3600000,600000,0
+rentb9,32,9,3,6	monster	Green Plant	1080,10,3600000,600000,0
+rentb9,32,9,3,6	monster	Red Plant	1078,10,3600000,600000,0
+rentb10,32,9,3,6	monster	Blue Plant	1079,10,3600000,600000,0
+rentb10,32,9,3,6	monster	White Plant	1082,10,3600000,600000,0
+rentb10,32,9,3,6	monster	Yellow Plant	1081,10,3600000,600000,0
+rentb10,32,9,3,6	monster	Green Plant	1080,10,3600000,600000,0
+rentb10,32,9,3,6	monster	Red Plant	1078,10,3600000,600000,0
+rentb11,32,9,3,6	monster	Blue Plant	1079,10,3600000,600000,0
+rentb11,32,9,3,6	monster	White Plant	1082,10,3600000,600000,0
+rentb11,32,9,3,6	monster	Yellow Plant	1081,10,3600000,600000,0
+rentb11,32,9,3,6	monster	Green Plant	1080,10,3600000,600000,0
+rentb11,32,9,3,6	monster	Red Plant	1078,10,3600000,600000,0
+rentb12,32,9,3,6	monster	Blue Plant	1079,10,3600000,600000,0
+rentb12,32,9,3,6	monster	White Plant	1082,10,3600000,600000,0
+rentb12,32,9,3,6	monster	Yellow Plant	1081,10,3600000,600000,0
+rentb12,32,9,3,6	monster	Green Plant	1080,10,3600000,600000,0
+rentb12,32,9,3,6	monster	Red Plant	1078,10,3600000,600000,0
+rentb13,32,9,3,6	monster	Blue Plant	1079,10,3600000,600000,0
+rentb13,32,9,3,6	monster	White Plant	1082,10,3600000,600000,0
+rentb13,32,9,3,6	monster	Yellow Plant	1081,10,3600000,600000,0
+rentb13,32,9,3,6	monster	Green Plant	1080,10,3600000,600000,0
+rentb13,32,9,3,6	monster	Red Plant	1078,10,3600000,600000,0
+rentb14,32,9,3,6	monster	Blue Plant	1079,10,3600000,600000,0
+rentb14,32,9,3,6	monster	White Plant	1082,10,3600000,600000,0
+rentb14,32,9,3,6	monster	Yellow Plant	1081,10,3600000,600000,0
+rentb14,32,9,3,6	monster	Green Plant	1080,10,3600000,600000,0
+rentb14,32,9,3,6	monster	Red Plant	1078,10,3600000,600000,0
+rentb15,32,9,3,6	monster	Blue Plant	1079,10,3600000,600000,0
+rentb15,32,9,3,6	monster	White Plant	1082,10,3600000,600000,0
+rentb15,32,9,3,6	monster	Yellow Plant	1081,10,3600000,600000,0
+rentb15,32,9,3,6	monster	Green Plant	1080,10,3600000,600000,0
+rentb15,32,9,3,6	monster	Red Plant	1078,10,3600000,600000,0
+rentb16,32,9,3,6	monster	Blue Plant	1079,10,3600000,600000,0
+rentb16,32,9,3,6	monster	White Plant	1082,10,3600000,600000,0
+rentb16,32,9,3,6	monster	Yellow Plant	1081,10,3600000,600000,0
+rentb16,32,9,3,6	monster	Green Plant	1080,10,3600000,600000,0
+rentb16,32,9,3,6	monster	Red Plant	1078,10,3600000,600000,0
+rentb17,32,9,3,6	monster	Blue Plant	1079,10,3600000,600000,0
+rentb17,32,9,3,6	monster	White Plant	1082,10,3600000,600000,0
+rentb17,32,9,3,6	monster	Yellow Plant	1081,10,3600000,600000,0
+rentb17,32,9,3,6	monster	Green Plant	1080,10,3600000,600000,0
+rentb17,32,9,3,6	monster	Red Plant	1078,10,3600000,600000,0
+rentb18,32,9,3,6	monster	Blue Plant	1079,10,3600000,600000,0
+rentb18,32,9,3,6	monster	White Plant	1082,10,3600000,600000,0
+rentb18,32,9,3,6	monster	Yellow Plant	1081,10,3600000,600000,0
+rentb18,32,9,3,6	monster	Green Plant	1080,10,3600000,600000,0
+rentb18,32,9,3,6	monster	Red Plant	1078,10,3600000,600000,0
+rentb19,32,9,3,6	monster	Blue Plant	1079,10,3600000,600000,0
+rentb19,32,9,3,6	monster	White Plant	1082,10,3600000,600000,0
+rentb19,32,9,3,6	monster	Yellow Plant	1081,10,3600000,600000,0
+rentb19,32,9,3,6	monster	Green Plant	1080,10,3600000,600000,0
+rentb19,32,9,3,6	monster	Red Plant	1078,10,3600000,600000,0
+rentb20,32,9,3,6	monster	Blue Plant	1079,10,3600000,600000,0
+rentb20,32,9,3,6	monster	White Plant	1082,10,3600000,600000,0
+rentb20,32,9,3,6	monster	Yellow Plant	1081,10,3600000,600000,0
+rentb20,32,9,3,6	monster	Green Plant	1080,10,3600000,600000,0
+rentb20,32,9,3,6	monster	Red Plant	1078,10,3600000,600000,0
+rentb21,32,9,3,6	monster	Blue Plant	1079,10,3600000,600000,0
+rentb21,32,9,3,6	monster	White Plant	1082,10,3600000,600000,0
+rentb21,32,9,3,6	monster	Yellow Plant	1081,10,3600000,600000,0
+rentb21,32,9,3,6	monster	Green Plant	1080,10,3600000,600000,0
+rentb21,32,9,3,6	monster	Red Plant	1078,10,3600000,600000,0
+rentb22,32,9,3,6	monster	Blue Plant	1079,10,3600000,600000,0
+rentb22,32,9,3,6	monster	White Plant	1082,10,3600000,600000,0
+rentb22,32,9,3,6	monster	Yellow Plant	1081,10,3600000,600000,0
+rentb22,32,9,3,6	monster	Green Plant	1080,10,3600000,600000,0
+rentb22,32,9,3,6	monster	Red Plant	1078,10,3600000,600000,0
+rentb23,32,9,3,6	monster	Blue Plant	1079,10,3600000,600000,0
+rentb23,32,9,3,6	monster	White Plant	1082,10,3600000,600000,0
+rentb23,32,9,3,6	monster	Yellow Plant	1081,10,3600000,600000,0
+rentb23,32,9,3,6	monster	Green Plant	1080,10,3600000,600000,0
+rentb23,32,9,3,6	monster	Red Plant	1078,10,3600000,600000,0
+rentb24,32,9,3,6	monster	Blue Plant	1079,10,3600000,600000,0
+rentb24,32,9,3,6	monster	White Plant	1082,10,3600000,600000,0
+rentb24,32,9,3,6	monster	Yellow Plant	1081,10,3600000,600000,0
+rentb24,32,9,3,6	monster	Green Plant	1080,10,3600000,600000,0
+rentb24,32,9,3,6	monster	Red Plant	1078,10,3600000,600000,0
+rentb25,32,9,3,6	monster	Blue Plant	1079,10,3600000,600000,0
+rentb25,32,9,3,6	monster	White Plant	1082,10,3600000,600000,0
+rentb25,32,9,3,6	monster	Yellow Plant	1081,10,3600000,600000,0
+rentb25,32,9,3,6	monster	Green Plant	1080,10,3600000,600000,0
+rentb25,32,9,3,6	monster	Red Plant	1078,10,3600000,600000,0
+rentb26,32,9,3,6	monster	Blue Plant	1079,10,3600000,600000,0
+rentb26,32,9,3,6	monster	White Plant	1082,10,3600000,600000,0
+rentb26,32,9,3,6	monster	Yellow Plant	1081,10,3600000,600000,0
+rentb26,32,9,3,6	monster	Green Plant	1080,10,3600000,600000,0
+rentb26,32,9,3,6	monster	Red Plant	1078,10,3600000,600000,0
+rentb27,32,9,3,6	monster	Blue Plant	1079,10,3600000,600000,0
+rentb27,32,9,3,6	monster	White Plant	1082,10,3600000,600000,0
+rentb27,32,9,3,6	monster	Yellow Plant	1081,10,3600000,600000,0
+rentb27,32,9,3,6	monster	Green Plant	1080,10,3600000,600000,0
+rentb27,32,9,3,6	monster	Red Plant	1078,10,3600000,600000,0
+
+//============================================================ 
+//= NPCs Indoors
+//============================================================ 
+
+//============================================================ 
+//= Beds
+//============================================================ 
+
+rentinb1,5,33,0	script	Bed#Rb1a	111,{ callfunc "rent_camas","b1",7,30; }
+rentinb1,26,34,0	script	Bed#Rb1b	111,{ callfunc "rent_camas","b1",23,31; }
+rentinb1,33,34,0	script	Bed#Rb1c	111,{ callfunc "rent_camas","b1",30,31; }
+rentinb2,5,33,0	script	Bed#Rb2a	111,{ callfunc "rent_camas","b2",7,30; }
+rentinb2,26,34,0	script	Bed#Rb2b	111,{ callfunc "rent_camas","b2",23,31; }
+rentinb2,33,34,0	script	Bed#Rb2c	111,{ callfunc "rent_camas","b2",30,31; }
+rentinb3,5,33,0	script	Bed#Rb3a	111,{ callfunc "rent_camas","b3",7,30; }
+rentinb3,26,34,0	script	Bed#Rb3b	111,{ callfunc "rent_camas","b3",23,31; }
+rentinb3,33,34,0	script	Bed#Rb3c	111,{ callfunc "rent_camas","b3",30,31; }
+rentinb4,5,33,0	script	Bed#Rb4a	111,{ callfunc "rent_camas","b4",7,30; }
+rentinb4,26,34,0	script	Bed#Rb4b	111,{ callfunc "rent_camas","b4",23,31; }
+rentinb4,33,34,0	script	Bed#Rb4c	111,{ callfunc "rent_camas","b4",30,31; }
+rentinb5,5,33,0	script	Bed#Rb5a	111,{ callfunc "rent_camas","b5",7,30; }
+rentinb5,26,34,0	script	Bed#Rb5b	111,{ callfunc "rent_camas","b5",23,31; }
+rentinb5,33,34,0	script	Bed#Rb5c	111,{ callfunc "rent_camas","b5",30,31; }
+rentinb6,5,33,0	script	Bed#Rb6a	111,{ callfunc "rent_camas","b6",7,30; }
+rentinb6,26,34,0	script	Bed#Rb6b	111,{ callfunc "rent_camas","b6",23,31; }
+rentinb6,33,34,0	script	Bed#Rb6c	111,{ callfunc "rent_camas","b6",30,31; }
+rentinb7,5,33,0	script	Bed#Rb7a	111,{ callfunc "rent_camas","b7",7,30; }
+rentinb7,26,34,0	script	Bed#Rb7b	111,{ callfunc "rent_camas","b7",23,31; }
+rentinb7,33,34,0	script	Bed#Rb7c	111,{ callfunc "rent_camas","b7",30,31; }
+rentinb8,5,33,0	script	Bed#Rb8a	111,{ callfunc "rent_camas","b8",7,30; }
+rentinb8,26,34,0	script	Bed#Rb8b	111,{ callfunc "rent_camas","b8",23,31; }
+rentinb8,33,34,0	script	Bed#Rb8c	111,{ callfunc "rent_camas","b8",30,31; }
+rentinb9,5,33,0	script	Bed#Rb9a	111,{ callfunc "rent_camas","b9",7,30; }
+rentinb9,26,34,0	script	Bed#Rb9b	111,{ callfunc "rent_camas","b9",23,31; }
+rentinb9,33,34,0	script	Bed#Rb9c	111,{ callfunc "rent_camas","b9",30,31; }
+rentinb10,5,33,0	script	Bed#Rb10a	111,{ callfunc "rent_camas","b10",7,30; }
+rentinb10,26,34,0	script	Bed#Rb10b	111,{ callfunc "rent_camas","b10",23,31; }
+rentinb10,33,34,0	script	Bed#Rb10c	111,{ callfunc "rent_camas","b10",30,31; }
+rentinb11,5,33,0	script	Bed#Rb11a	111,{ callfunc "rent_camas","b11",7,30; }
+rentinb11,26,34,0	script	Bed#Rb11b	111,{ callfunc "rent_camas","b11",23,31; }
+rentinb11,33,34,0	script	Bed#Rb11c	111,{ callfunc "rent_camas","b11",30,31; }
+rentinb12,5,33,0	script	Bed#Rb12a	111,{ callfunc "rent_camas","b12",7,30; }
+rentinb12,26,34,0	script	Bed#Rb12b	111,{ callfunc "rent_camas","b12",23,31; }
+rentinb12,33,34,0	script	Bed#Rb12c	111,{ callfunc "rent_camas","b12",30,31; }
+rentinb13,5,33,0	script	Bed#Rb13a	111,{ callfunc "rent_camas","b13",7,30; }
+rentinb13,26,34,0	script	Bed#Rb13b	111,{ callfunc "rent_camas","b13",23,31; }
+rentinb13,33,34,0	script	Bed#Rb13c	111,{ callfunc "rent_camas","b13",30,31; }
+rentinb14,5,33,0	script	Bed#Rb14a	111,{ callfunc "rent_camas","b14",7,30; }
+rentinb14,26,34,0	script	Bed#Rb14b	111,{ callfunc "rent_camas","b14",23,31; }
+rentinb14,33,34,0	script	Bed#Rb14c	111,{ callfunc "rent_camas","b14",30,31; }
+rentinb15,5,33,0	script	Bed#Rb15a	111,{ callfunc "rent_camas","b15",7,30; }
+rentinb15,26,34,0	script	Bed#Rb15b	111,{ callfunc "rent_camas","b15",23,31; }
+rentinb15,33,34,0	script	Bed#Rb15c	111,{ callfunc "rent_camas","b15",30,31; }
+rentinb16,5,33,0	script	Bed#Rb16a	111,{ callfunc "rent_camas","b16",7,30; }
+rentinb16,26,34,0	script	Bed#Rb16b	111,{ callfunc "rent_camas","b16",23,31; }
+rentinb16,33,34,0	script	Bed#Rb16c	111,{ callfunc "rent_camas","b16",30,31; }
+rentinb17,5,33,0	script	Bed#Rb17a	111,{ callfunc "rent_camas","b17",7,30; }
+rentinb17,26,34,0	script	Bed#Rb17b	111,{ callfunc "rent_camas","b17",23,31; }
+rentinb17,33,34,0	script	Bed#Rb17c	111,{ callfunc "rent_camas","b17",30,31; }
+rentinb18,5,33,0	script	Bed#Rb18a	111,{ callfunc "rent_camas","b18",7,30; }
+rentinb18,26,34,0	script	Bed#Rb18b	111,{ callfunc "rent_camas","b18",23,31; }
+rentinb18,33,34,0	script	Bed#Rb18c	111,{ callfunc "rent_camas","b18",30,31; }
+rentinb19,5,33,0	script	Bed#Rb19a	111,{ callfunc "rent_camas","b19",7,30; }
+rentinb19,26,34,0	script	Bed#Rb19b	111,{ callfunc "rent_camas","b19",23,31; }
+rentinb19,33,34,0	script	Bed#Rb19c	111,{ callfunc "rent_camas","b19",30,31; }
+rentinb20,5,33,0	script	Bed#Rb20a	111,{ callfunc "rent_camas","b20",7,30; }
+rentinb20,26,34,0	script	Bed#Rb20b	111,{ callfunc "rent_camas","b20",23,31; }
+rentinb20,33,34,0	script	Bed#Rb20c	111,{ callfunc "rent_camas","b20",30,31; }
+rentinb21,5,33,0	script	Bed#Rb21a	111,{ callfunc "rent_camas","b21",7,30; }
+rentinb21,26,34,0	script	Bed#Rb21b	111,{ callfunc "rent_camas","b21",23,31; }
+rentinb21,33,34,0	script	Bed#Rb21c	111,{ callfunc "rent_camas","b21",30,31; }
+rentinb22,5,33,0	script	Bed#Rb22a	111,{ callfunc "rent_camas","b22",7,30; }
+rentinb22,26,34,0	script	Bed#Rb22b	111,{ callfunc "rent_camas","b22",23,31; }
+rentinb22,33,34,0	script	Bed#Rb22c	111,{ callfunc "rent_camas","b22",30,31; }
+rentinb23,5,33,0	script	Bed#Rb23a	111,{ callfunc "rent_camas","b23",7,30; }
+rentinb23,26,34,0	script	Bed#Rb23b	111,{ callfunc "rent_camas","b23",23,31; }
+rentinb23,33,34,0	script	Bed#Rb23c	111,{ callfunc "rent_camas","b23",30,31; }
+rentinb24,5,33,0	script	Bed#Rb24a	111,{ callfunc "rent_camas","b24",7,30; }
+rentinb24,26,34,0	script	Bed#Rb24b	111,{ callfunc "rent_camas","b24",23,31; }
+rentinb24,33,34,0	script	Bed#Rb24c	111,{ callfunc "rent_camas","b24",30,31; }
+rentinb25,5,33,0	script	Bed#Rb25a	111,{ callfunc "rent_camas","b25",7,30; }
+rentinb25,26,34,0	script	Bed#Rb25b	111,{ callfunc "rent_camas","b25",23,31; }
+rentinb25,33,34,0	script	Bed#Rb25c	111,{ callfunc "rent_camas","b25",30,31; }
+rentinb26,5,33,0	script	Bed#Rb26a	111,{ callfunc "rent_camas","b26",7,30; }
+rentinb26,26,34,0	script	Bed#Rb26b	111,{ callfunc "rent_camas","b26",23,31; }
+rentinb26,33,34,0	script	Bed#Rb26c	111,{ callfunc "rent_camas","b26",30,31; }
+rentinb27,5,33,0	script	Bed#Rb27a	111,{ callfunc "rent_camas","b27",7,30; }
+rentinb27,26,34,0	script	Bed#Rb27b	111,{ callfunc "rent_camas","b27",23,31; }
+rentinb27,33,34,0	script	Bed#Rb27c	111,{ callfunc "rent_camas","b27",30,31; }
+
+//============================================================ 
+//= Piano
+//============================================================ 
+
+rentinb1,22,16,0	script	Piano#Rb1	111,{ callfunc "rent_pianoStart","b1"; OnTimer50000: callfunc "rent_pianoStop","b1"; }
+rentinb2,22,16,0	script	Piano#Rb2	111,{ callfunc "rent_pianoStart","b2"; OnTimer50000: callfunc "rent_pianoStop","b2"; }
+rentinb3,22,16,0	script	Piano#Rb3	111,{ callfunc "rent_pianoStart","b3"; OnTimer50000: callfunc "rent_pianoStop","b3"; }
+rentinb4,22,16,0	script	Piano#Rb4	111,{ callfunc "rent_pianoStart","b4"; OnTimer50000: callfunc "rent_pianoStop","b4"; }
+rentinb5,22,16,0	script	Piano#Rb5	111,{ callfunc "rent_pianoStart","b5"; OnTimer50000: callfunc "rent_pianoStop","b5"; }
+rentinb6,22,16,0	script	Piano#Rb6	111,{ callfunc "rent_pianoStart","b6"; OnTimer50000: callfunc "rent_pianoStop","b6"; }
+rentinb7,22,16,0	script	Piano#Rb7	111,{ callfunc "rent_pianoStart","b7"; OnTimer50000: callfunc "rent_pianoStop","b7"; }
+rentinb8,22,16,0	script	Piano#Rb8	111,{ callfunc "rent_pianoStart","b8"; OnTimer50000: callfunc "rent_pianoStop","b8"; }
+rentinb9,22,16,0	script	Piano#Rb9	111,{ callfunc "rent_pianoStart","b9"; OnTimer50000: callfunc "rent_pianoStop","b9"; }
+rentinb10,22,16,0	script	Piano#Rb10	111,{ callfunc "rent_pianoStart","b10"; OnTimer50000: callfunc "rent_pianoStop","b10"; }
+rentinb11,22,16,0	script	Piano#Rb11	111,{ callfunc "rent_pianoStart","b11"; OnTimer50000: callfunc "rent_pianoStop","b11"; }
+rentinb12,22,16,0	script	Piano#Rb12	111,{ callfunc "rent_pianoStart","b12"; OnTimer50000: callfunc "rent_pianoStop","b12"; }
+rentinb13,22,16,0	script	Piano#Rb13	111,{ callfunc "rent_pianoStart","b13"; OnTimer50000: callfunc "rent_pianoStop","b13"; }
+rentinb14,22,16,0	script	Piano#Rb14	111,{ callfunc "rent_pianoStart","b14"; OnTimer50000: callfunc "rent_pianoStop","b14"; }
+rentinb15,22,16,0	script	Piano#Rb15	111,{ callfunc "rent_pianoStart","b15"; OnTimer50000: callfunc "rent_pianoStop","b15"; }
+rentinb16,22,16,0	script	Piano#Rb16	111,{ callfunc "rent_pianoStart","b16"; OnTimer50000: callfunc "rent_pianoStop","b16"; }
+rentinb17,22,16,0	script	Piano#Rb17	111,{ callfunc "rent_pianoStart","b17"; OnTimer50000: callfunc "rent_pianoStop","b17"; }
+rentinb18,22,16,0	script	Piano#Rb18	111,{ callfunc "rent_pianoStart","b18"; OnTimer50000: callfunc "rent_pianoStop","b18"; }
+rentinb19,22,16,0	script	Piano#Rb19	111,{ callfunc "rent_pianoStart","b19"; OnTimer50000: callfunc "rent_pianoStop","b19"; }
+rentinb20,22,16,0	script	Piano#Rb20	111,{ callfunc "rent_pianoStart","b20"; OnTimer50000: callfunc "rent_pianoStop","b20"; }
+rentinb21,22,16,0	script	Piano#Rb21	111,{ callfunc "rent_pianoStart","b21"; OnTimer50000: callfunc "rent_pianoStop","b21"; }
+rentinb22,22,16,0	script	Piano#Rb22	111,{ callfunc "rent_pianoStart","b22"; OnTimer50000: callfunc "rent_pianoStop","b22"; }
+rentinb23,22,16,0	script	Piano#Rb23	111,{ callfunc "rent_pianoStart","b23"; OnTimer50000: callfunc "rent_pianoStop","b23"; }
+rentinb24,22,16,0	script	Piano#Rb24	111,{ callfunc "rent_pianoStart","b24"; OnTimer50000: callfunc "rent_pianoStop","b24"; }
+rentinb25,22,16,0	script	Piano#Rb25	111,{ callfunc "rent_pianoStart","b25"; OnTimer50000: callfunc "rent_pianoStop","b25"; }
+rentinb26,22,16,0	script	Piano#Rb26	111,{ callfunc "rent_pianoStart","b26"; OnTimer50000: callfunc "rent_pianoStop","b26"; }
+rentinb27,22,16,0	script	Piano#Rb27	111,{ callfunc "rent_pianoStart","b27"; OnTimer50000: callfunc "rent_pianoStop","b27"; }
+
+//============================================================ 
+//= Cupboards (Storage Access)
+//============================================================ 
+
+rentinb1,35,24,0	script	Cupboard#Rb1a	111,{ callfunc "rent_armario"; }
+rentinb1,13,26,0	script	Cupboard#Rb1b	111,{ callfunc "rent_armario"; }
+rentinb2,35,24,0	script	Cupboard#Rb2a	111,{ callfunc "rent_armario"; }
+rentinb2,13,26,0	script	Cupboard#Rb2b	111,{ callfunc "rent_armario"; }
+rentinb3,35,24,0	script	Cupboard#Rb3a	111,{ callfunc "rent_armario"; }
+rentinb3,13,26,0	script	Cupboard#Rb3b	111,{ callfunc "rent_armario"; }
+rentinb4,35,24,0	script	Cupboard#Rb4a	111,{ callfunc "rent_armario"; }
+rentinb4,13,26,0	script	Cupboard#Rb4b	111,{ callfunc "rent_armario"; }
+rentinb5,35,24,0	script	Cupboard#Rb5a	111,{ callfunc "rent_armario"; }
+rentinb5,13,26,0	script	Cupboard#Rb5b	111,{ callfunc "rent_armario"; }
+rentinb6,35,24,0	script	Cupboard#Rb6a	111,{ callfunc "rent_armario"; }
+rentinb6,13,26,0	script	Cupboard#Rb6b	111,{ callfunc "rent_armario"; }
+rentinb7,35,24,0	script	Cupboard#Rb7a	111,{ callfunc "rent_armario"; }
+rentinb7,13,26,0	script	Cupboard#Rb7b	111,{ callfunc "rent_armario"; }
+rentinb8,35,24,0	script	Cupboard#Rb8a	111,{ callfunc "rent_armario"; }
+rentinb8,13,26,0	script	Cupboard#Rb8b	111,{ callfunc "rent_armario"; }
+rentinb9,35,24,0	script	Cupboard#Rb9a	111,{ callfunc "rent_armario"; }
+rentinb9,13,26,0	script	Cupboard#Rb9b	111,{ callfunc "rent_armario"; }
+rentinb10,35,24,0	script	Cupboard#Rb10a	111,{ callfunc "rent_armario"; }
+rentinb10,13,26,0	script	Cupboard#Rb10b	111,{ callfunc "rent_armario"; }
+rentinb11,35,24,0	script	Cupboard#Rb11a	111,{ callfunc "rent_armario"; }
+rentinb11,13,26,0	script	Cupboard#Rb11b	111,{ callfunc "rent_armario"; }
+rentinb12,35,24,0	script	Cupboard#Rb12a	111,{ callfunc "rent_armario"; }
+rentinb12,13,26,0	script	Cupboard#Rb12b	111,{ callfunc "rent_armario"; }
+rentinb13,35,24,0	script	Cupboard#Rb13a	111,{ callfunc "rent_armario"; }
+rentinb13,13,26,0	script	Cupboard#Rb13b	111,{ callfunc "rent_armario"; }
+rentinb14,35,24,0	script	Cupboard#Rb14a	111,{ callfunc "rent_armario"; }
+rentinb14,13,26,0	script	Cupboard#Rb14b	111,{ callfunc "rent_armario"; }
+rentinb15,35,24,0	script	Cupboard#Rb15a	111,{ callfunc "rent_armario"; }
+rentinb15,13,26,0	script	Cupboard#Rb15b	111,{ callfunc "rent_armario"; }
+rentinb16,35,24,0	script	Cupboard#Rb16a	111,{ callfunc "rent_armario"; }
+rentinb16,13,26,0	script	Cupboard#Rb16b	111,{ callfunc "rent_armario"; }
+rentinb17,35,24,0	script	Cupboard#Rb17a	111,{ callfunc "rent_armario"; }
+rentinb17,13,26,0	script	Cupboard#Rb17b	111,{ callfunc "rent_armario"; }
+rentinb18,35,24,0	script	Cupboard#Rb18a	111,{ callfunc "rent_armario"; }
+rentinb18,13,26,0	script	Cupboard#Rb18b	111,{ callfunc "rent_armario"; }
+rentinb19,35,24,0	script	Cupboard#Rb19a	111,{ callfunc "rent_armario"; }
+rentinb19,13,26,0	script	Cupboard#Rb19b	111,{ callfunc "rent_armario"; }
+rentinb20,35,24,0	script	Cupboard#Rb20a	111,{ callfunc "rent_armario"; }
+rentinb20,13,26,0	script	Cupboard#Rb20b	111,{ callfunc "rent_armario"; }
+rentinb21,35,24,0	script	Cupboard#Rb21a	111,{ callfunc "rent_armario"; }
+rentinb21,13,26,0	script	Cupboard#Rb21b	111,{ callfunc "rent_armario"; }
+rentinb22,35,24,0	script	Cupboard#Rb22a	111,{ callfunc "rent_armario"; }
+rentinb22,13,26,0	script	Cupboard#Rb22b	111,{ callfunc "rent_armario"; }
+rentinb23,35,24,0	script	Cupboard#Rb23a	111,{ callfunc "rent_armario"; }
+rentinb23,13,26,0	script	Cupboard#Rb23b	111,{ callfunc "rent_armario"; }
+rentinb24,35,24,0	script	Cupboard#Rb24a	111,{ callfunc "rent_armario"; }
+rentinb24,13,26,0	script	Cupboard#Rb24b	111,{ callfunc "rent_armario"; }
+rentinb25,35,24,0	script	Cupboard#Rb25a	111,{ callfunc "rent_armario"; }
+rentinb25,13,26,0	script	Cupboard#Rb25b	111,{ callfunc "rent_armario"; }
+rentinb26,35,24,0	script	Cupboard#Rb26a	111,{ callfunc "rent_armario"; }
+rentinb26,13,26,0	script	Cupboard#Rb26b	111,{ callfunc "rent_armario"; }
+rentinb27,35,24,0	script	Cupboard#Rb27a	111,{ callfunc "rent_armario"; }
+rentinb27,13,26,0	script	Cupboard#Rb27b	111,{ callfunc "rent_armario"; }
+
+//============================================================ 
+//= Cleaning Service
+//============================================================ 
+
+rentinb1,26,17,3	script	Cleaning Service#Rb1	858,{ callfunc "rent_serviceCall","b1"; OnBicho: callfunc "rent_bugkilled","b1"; OnTimer28800000: callfunc "rent_serviceFinish","b1"; OnInit: callfunc "rent_serviceInit","b1"; }
+rentinb2,26,17,3	script	Cleaning Service#Rb2	858,{ callfunc "rent_serviceCall","b2"; OnBicho: callfunc "rent_bugkilled","b2"; OnTimer28800000: callfunc "rent_serviceFinish","b2"; OnInit: callfunc "rent_serviceInit","b2"; }
+rentinb3,26,17,3	script	Cleaning Service#Rb3	858,{ callfunc "rent_serviceCall","b3"; OnBicho: callfunc "rent_bugkilled","b3"; OnTimer28800000: callfunc "rent_serviceFinish","b3"; OnInit: callfunc "rent_serviceInit","b3"; }
+rentinb4,26,17,3	script	Cleaning Service#Rb4	858,{ callfunc "rent_serviceCall","b4"; OnBicho: callfunc "rent_bugkilled","b4"; OnTimer28800000: callfunc "rent_serviceFinish","b4"; OnInit: callfunc "rent_serviceInit","b4"; }
+rentinb5,26,17,3	script	Cleaning Service#Rb5	858,{ callfunc "rent_serviceCall","b5"; OnBicho: callfunc "rent_bugkilled","b5"; OnTimer28800000: callfunc "rent_serviceFinish","b5"; OnInit: callfunc "rent_serviceInit","b5"; }
+rentinb6,26,17,3	script	Cleaning Service#Rb6	858,{ callfunc "rent_serviceCall","b6"; OnBicho: callfunc "rent_bugkilled","b6"; OnTimer28800000: callfunc "rent_serviceFinish","b6"; OnInit: callfunc "rent_serviceInit","b6"; }
+rentinb7,26,17,3	script	Cleaning Service#Rb7	858,{ callfunc "rent_serviceCall","b7"; OnBicho: callfunc "rent_bugkilled","b7"; OnTimer28800000: callfunc "rent_serviceFinish","b7"; OnInit: callfunc "rent_serviceInit","b7"; }
+rentinb8,26,17,3	script	Cleaning Service#Rb8	858,{ callfunc "rent_serviceCall","b8"; OnBicho: callfunc "rent_bugkilled","b8"; OnTimer28800000: callfunc "rent_serviceFinish","b8"; OnInit: callfunc "rent_serviceInit","b8"; }
+rentinb9,26,17,3	script	Cleaning Service#Rb9	858,{ callfunc "rent_serviceCall","b9"; OnBicho: callfunc "rent_bugkilled","b9"; OnTimer28800000: callfunc "rent_serviceFinish","b9"; OnInit: callfunc "rent_serviceInit","b9"; }
+rentinb10,26,17,3	script	Cleaning Service#Rb10	858,{ callfunc "rent_serviceCall","b10"; OnBicho: callfunc "rent_bugkilled","b10"; OnTimer28800000: callfunc "rent_serviceFinish","b10"; OnInit: callfunc "rent_serviceInit","b10"; }
+rentinb11,26,17,3	script	Cleaning Service#Rb11	858,{ callfunc "rent_serviceCall","b11"; OnBicho: callfunc "rent_bugkilled","b11"; OnTimer28800000: callfunc "rent_serviceFinish","b11"; OnInit: callfunc "rent_serviceInit","b11"; }
+rentinb12,26,17,3	script	Cleaning Service#Rb12	858,{ callfunc "rent_serviceCall","b12"; OnBicho: callfunc "rent_bugkilled","b12"; OnTimer28800000: callfunc "rent_serviceFinish","b12"; OnInit: callfunc "rent_serviceInit","b12"; }
+rentinb13,26,17,3	script	Cleaning Service#Rb13	858,{ callfunc "rent_serviceCall","b13"; OnBicho: callfunc "rent_bugkilled","b13"; OnTimer28800000: callfunc "rent_serviceFinish","b13"; OnInit: callfunc "rent_serviceInit","b13"; }
+rentinb14,26,17,3	script	Cleaning Service#Rb14	858,{ callfunc "rent_serviceCall","b14"; OnBicho: callfunc "rent_bugkilled","b14"; OnTimer28800000: callfunc "rent_serviceFinish","b14"; OnInit: callfunc "rent_serviceInit","b14"; }
+rentinb15,26,17,3	script	Cleaning Service#Rb15	858,{ callfunc "rent_serviceCall","b15"; OnBicho: callfunc "rent_bugkilled","b15"; OnTimer28800000: callfunc "rent_serviceFinish","b15"; OnInit: callfunc "rent_serviceInit","b15"; }
+rentinb16,26,17,3	script	Cleaning Service#Rb16	858,{ callfunc "rent_serviceCall","b16"; OnBicho: callfunc "rent_bugkilled","b16"; OnTimer28800000: callfunc "rent_serviceFinish","b16"; OnInit: callfunc "rent_serviceInit","b16"; }
+rentinb17,26,17,3	script	Cleaning Service#Rb17	858,{ callfunc "rent_serviceCall","b17"; OnBicho: callfunc "rent_bugkilled","b17"; OnTimer28800000: callfunc "rent_serviceFinish","b17"; OnInit: callfunc "rent_serviceInit","b17"; }
+rentinb18,26,17,3	script	Cleaning Service#Rb18	858,{ callfunc "rent_serviceCall","b18"; OnBicho: callfunc "rent_bugkilled","b18"; OnTimer28800000: callfunc "rent_serviceFinish","b18"; OnInit: callfunc "rent_serviceInit","b18"; }
+rentinb19,26,17,3	script	Cleaning Service#Rb19	858,{ callfunc "rent_serviceCall","b19"; OnBicho: callfunc "rent_bugkilled","b19"; OnTimer28800000: callfunc "rent_serviceFinish","b19"; OnInit: callfunc "rent_serviceInit","b19"; }
+rentinb20,26,17,3	script	Cleaning Service#Rb20	858,{ callfunc "rent_serviceCall","b20"; OnBicho: callfunc "rent_bugkilled","b20"; OnTimer28800000: callfunc "rent_serviceFinish","b20"; OnInit: callfunc "rent_serviceInit","b20"; }
+rentinb21,26,17,3	script	Cleaning Service#Rb21	858,{ callfunc "rent_serviceCall","b21"; OnBicho: callfunc "rent_bugkilled","b21"; OnTimer28800000: callfunc "rent_serviceFinish","b21"; OnInit: callfunc "rent_serviceInit","b21"; }
+rentinb22,26,17,3	script	Cleaning Service#Rb22	858,{ callfunc "rent_serviceCall","b22"; OnBicho: callfunc "rent_bugkilled","b22"; OnTimer28800000: callfunc "rent_serviceFinish","b22"; OnInit: callfunc "rent_serviceInit","b22"; }
+rentinb23,26,17,3	script	Cleaning Service#Rb23	858,{ callfunc "rent_serviceCall","b23"; OnBicho: callfunc "rent_bugkilled","b23"; OnTimer28800000: callfunc "rent_serviceFinish","b23"; OnInit: callfunc "rent_serviceInit","b23"; }
+rentinb24,26,17,3	script	Cleaning Service#Rb24	858,{ callfunc "rent_serviceCall","b24"; OnBicho: callfunc "rent_bugkilled","b24"; OnTimer28800000: callfunc "rent_serviceFinish","b24"; OnInit: callfunc "rent_serviceInit","b24"; }
+rentinb25,26,17,3	script	Cleaning Service#Rb25	858,{ callfunc "rent_serviceCall","b25"; OnBicho: callfunc "rent_bugkilled","b25"; OnTimer28800000: callfunc "rent_serviceFinish","b25"; OnInit: callfunc "rent_serviceInit","b25"; }
+rentinb26,26,17,3	script	Cleaning Service#Rb26	858,{ callfunc "rent_serviceCall","b26"; OnBicho: callfunc "rent_bugkilled","b26"; OnTimer28800000: callfunc "rent_serviceFinish","b26"; OnInit: callfunc "rent_serviceInit","b26"; }
+rentinb27,26,17,3	script	Cleaning Service#Rb27	858,{ callfunc "rent_serviceCall","b27"; OnBicho: callfunc "rent_bugkilled","b27"; OnTimer28800000: callfunc "rent_serviceFinish","b27"; OnInit: callfunc "rent_serviceInit","b27"; }
+
+//============================================================ 
+//= Alice Cleaning Service
+//============================================================ 
+
+rentinb1,17,20,3	script	Alice::AliceRb1	1275,{ callfunc "rent_aliceTalk","b1"; OnEmpezar: callfunc "rent_aliceStart"; OnTimer4000: callfunc "rent_aliceWalk","b1"; OnTerminar: callfunc "rent_aliceStop"; }
+rentinb2,17,20,3	script	Alice::AliceRb2	1275,{ callfunc "rent_aliceTalk","b2"; OnEmpezar: callfunc "rent_aliceStart"; OnTimer4000: callfunc "rent_aliceWalk","b2"; OnTerminar: callfunc "rent_aliceStop"; }
+rentinb3,17,20,3	script	Alice::AliceRb3	1275,{ callfunc "rent_aliceTalk","b3"; OnEmpezar: callfunc "rent_aliceStart"; OnTimer4000: callfunc "rent_aliceWalk","b3"; OnTerminar: callfunc "rent_aliceStop"; }
+rentinb4,17,20,3	script	Alice::AliceRb4	1275,{ callfunc "rent_aliceTalk","b4"; OnEmpezar: callfunc "rent_aliceStart"; OnTimer4000: callfunc "rent_aliceWalk","b4"; OnTerminar: callfunc "rent_aliceStop"; }
+rentinb5,17,20,3	script	Alice::AliceRb5	1275,{ callfunc "rent_aliceTalk","b5"; OnEmpezar: callfunc "rent_aliceStart"; OnTimer4000: callfunc "rent_aliceWalk","b5"; OnTerminar: callfunc "rent_aliceStop"; }
+rentinb6,17,20,3	script	Alice::AliceRb6	1275,{ callfunc "rent_aliceTalk","b6"; OnEmpezar: callfunc "rent_aliceStart"; OnTimer4000: callfunc "rent_aliceWalk","b6"; OnTerminar: callfunc "rent_aliceStop"; }
+rentinb7,17,20,3	script	Alice::AliceRb7	1275,{ callfunc "rent_aliceTalk","b7"; OnEmpezar: callfunc "rent_aliceStart"; OnTimer4000: callfunc "rent_aliceWalk","b7"; OnTerminar: callfunc "rent_aliceStop"; }
+rentinb8,17,20,3	script	Alice::AliceRb8	1275,{ callfunc "rent_aliceTalk","b8"; OnEmpezar: callfunc "rent_aliceStart"; OnTimer4000: callfunc "rent_aliceWalk","b8"; OnTerminar: callfunc "rent_aliceStop"; }
+rentinb9,17,20,3	script	Alice::AliceRb9	1275,{ callfunc "rent_aliceTalk","b9"; OnEmpezar: callfunc "rent_aliceStart"; OnTimer4000: callfunc "rent_aliceWalk","b9"; OnTerminar: callfunc "rent_aliceStop"; }
+rentinb10,17,20,3	script	Alice::AliceRb10	1275,{ callfunc "rent_aliceTalk","b10"; OnEmpezar: callfunc "rent_aliceStart"; OnTimer4000: callfunc "rent_aliceWalk","b10"; OnTerminar: callfunc "rent_aliceStop"; }
+rentinb11,17,20,3	script	Alice::AliceRb11	1275,{ callfunc "rent_aliceTalk","b11"; OnEmpezar: callfunc "rent_aliceStart"; OnTimer4000: callfunc "rent_aliceWalk","b11"; OnTerminar: callfunc "rent_aliceStop"; }
+rentinb12,17,20,3	script	Alice::AliceRb12	1275,{ callfunc "rent_aliceTalk","b12"; OnEmpezar: callfunc "rent_aliceStart"; OnTimer4000: callfunc "rent_aliceWalk","b12"; OnTerminar: callfunc "rent_aliceStop"; }
+rentinb13,17,20,3	script	Alice::AliceRb13	1275,{ callfunc "rent_aliceTalk","b13"; OnEmpezar: callfunc "rent_aliceStart"; OnTimer4000: callfunc "rent_aliceWalk","b13"; OnTerminar: callfunc "rent_aliceStop"; }
+rentinb14,17,20,3	script	Alice::AliceRb14	1275,{ callfunc "rent_aliceTalk","b14"; OnEmpezar: callfunc "rent_aliceStart"; OnTimer4000: callfunc "rent_aliceWalk","b14"; OnTerminar: callfunc "rent_aliceStop"; }
+rentinb15,17,20,3	script	Alice::AliceRb15	1275,{ callfunc "rent_aliceTalk","b15"; OnEmpezar: callfunc "rent_aliceStart"; OnTimer4000: callfunc "rent_aliceWalk","b15"; OnTerminar: callfunc "rent_aliceStop"; }
+rentinb16,17,20,3	script	Alice::AliceRb16	1275,{ callfunc "rent_aliceTalk","b16"; OnEmpezar: callfunc "rent_aliceStart"; OnTimer4000: callfunc "rent_aliceWalk","b16"; OnTerminar: callfunc "rent_aliceStop"; }
+rentinb17,17,20,3	script	Alice::AliceRb17	1275,{ callfunc "rent_aliceTalk","b17"; OnEmpezar: callfunc "rent_aliceStart"; OnTimer4000: callfunc "rent_aliceWalk","b17"; OnTerminar: callfunc "rent_aliceStop"; }
+rentinb18,17,20,3	script	Alice::AliceRb18	1275,{ callfunc "rent_aliceTalk","b18"; OnEmpezar: callfunc "rent_aliceStart"; OnTimer4000: callfunc "rent_aliceWalk","b18"; OnTerminar: callfunc "rent_aliceStop"; }
+rentinb19,17,20,3	script	Alice::AliceRb19	1275,{ callfunc "rent_aliceTalk","b19"; OnEmpezar: callfunc "rent_aliceStart"; OnTimer4000: callfunc "rent_aliceWalk","b19"; OnTerminar: callfunc "rent_aliceStop"; }
+rentinb20,17,20,3	script	Alice::AliceRb20	1275,{ callfunc "rent_aliceTalk","b20"; OnEmpezar: callfunc "rent_aliceStart"; OnTimer4000: callfunc "rent_aliceWalk","b20"; OnTerminar: callfunc "rent_aliceStop"; }
+rentinb21,17,20,3	script	Alice::AliceRb21	1275,{ callfunc "rent_aliceTalk","b21"; OnEmpezar: callfunc "rent_aliceStart"; OnTimer4000: callfunc "rent_aliceWalk","b21"; OnTerminar: callfunc "rent_aliceStop"; }
+rentinb22,17,20,3	script	Alice::AliceRb22	1275,{ callfunc "rent_aliceTalk","b22"; OnEmpezar: callfunc "rent_aliceStart"; OnTimer4000: callfunc "rent_aliceWalk","b22"; OnTerminar: callfunc "rent_aliceStop"; }
+rentinb23,17,20,3	script	Alice::AliceRb23	1275,{ callfunc "rent_aliceTalk","b23"; OnEmpezar: callfunc "rent_aliceStart"; OnTimer4000: callfunc "rent_aliceWalk","b23"; OnTerminar: callfunc "rent_aliceStop"; }
+rentinb24,17,20,3	script	Alice::AliceRb24	1275,{ callfunc "rent_aliceTalk","b24"; OnEmpezar: callfunc "rent_aliceStart"; OnTimer4000: callfunc "rent_aliceWalk","b24"; OnTerminar: callfunc "rent_aliceStop"; }
+rentinb25,17,20,3	script	Alice::AliceRb25	1275,{ callfunc "rent_aliceTalk","b25"; OnEmpezar: callfunc "rent_aliceStart"; OnTimer4000: callfunc "rent_aliceWalk","b25"; OnTerminar: callfunc "rent_aliceStop"; }
+rentinb26,17,20,3	script	Alice::AliceRb26	1275,{ callfunc "rent_aliceTalk","b26"; OnEmpezar: callfunc "rent_aliceStart"; OnTimer4000: callfunc "rent_aliceWalk","b26"; OnTerminar: callfunc "rent_aliceStop"; }
+rentinb27,17,20,3	script	Alice::AliceRb27	1275,{ callfunc "rent_aliceTalk","b27"; OnEmpezar: callfunc "rent_aliceStart"; OnTimer4000: callfunc "rent_aliceWalk","b27"; OnTerminar: callfunc "rent_aliceStop"; }
+
+//============================================================ 
+//= Clothes
+//============================================================ 
+
+rentinb1,29,34,0	script	Clothes#Rb1a	111,{ callfunc "rent_cambioropa"; OnInit: callfunc "rent_dobugs","b1"; }
+rentinb2,29,34,0	script	Clothes#Rb2a	111,{ callfunc "rent_cambioropa"; OnInit: callfunc "rent_dobugs","b2"; }
+rentinb3,29,34,0	script	Clothes#Rb3a	111,{ callfunc "rent_cambioropa"; OnInit: callfunc "rent_dobugs","b3"; }
+rentinb4,29,34,0	script	Clothes#Rb4a	111,{ callfunc "rent_cambioropa"; OnInit: callfunc "rent_dobugs","b4"; }
+rentinb5,29,34,0	script	Clothes#Rb5a	111,{ callfunc "rent_cambioropa"; OnInit: callfunc "rent_dobugs","b5"; }
+rentinb6,29,34,0	script	Clothes#Rb6a	111,{ callfunc "rent_cambioropa"; OnInit: callfunc "rent_dobugs","b6"; }
+rentinb7,29,34,0	script	Clothes#Rb7a	111,{ callfunc "rent_cambioropa"; OnInit: callfunc "rent_dobugs","b7"; }
+rentinb8,29,34,0	script	Clothes#Rb8a	111,{ callfunc "rent_cambioropa"; OnInit: callfunc "rent_dobugs","b8"; }
+rentinb9,29,34,0	script	Clothes#Rb9a	111,{ callfunc "rent_cambioropa"; OnInit: callfunc "rent_dobugs","b9"; }
+rentinb10,29,34,0	script	Clothes#Rb10a	111,{ callfunc "rent_cambioropa"; OnInit: callfunc "rent_dobugs","b10"; }
+rentinb11,29,34,0	script	Clothes#Rb11a	111,{ callfunc "rent_cambioropa"; OnInit: callfunc "rent_dobugs","b11"; }
+rentinb12,29,34,0	script	Clothes#Rb12a	111,{ callfunc "rent_cambioropa"; OnInit: callfunc "rent_dobugs","b12"; }
+rentinb13,29,34,0	script	Clothes#Rb13a	111,{ callfunc "rent_cambioropa"; OnInit: callfunc "rent_dobugs","b13"; }
+rentinb14,29,34,0	script	Clothes#Rb14a	111,{ callfunc "rent_cambioropa"; OnInit: callfunc "rent_dobugs","b14"; }
+rentinb15,29,34,0	script	Clothes#Rb15a	111,{ callfunc "rent_cambioropa"; OnInit: callfunc "rent_dobugs","b15"; }
+rentinb16,29,34,0	script	Clothes#Rb16a	111,{ callfunc "rent_cambioropa"; OnInit: callfunc "rent_dobugs","b16"; }
+rentinb17,29,34,0	script	Clothes#Rb17a	111,{ callfunc "rent_cambioropa"; OnInit: callfunc "rent_dobugs","b17"; }
+rentinb18,29,34,0	script	Clothes#Rb18a	111,{ callfunc "rent_cambioropa"; OnInit: callfunc "rent_dobugs","b18"; }
+rentinb19,29,34,0	script	Clothes#Rb19a	111,{ callfunc "rent_cambioropa"; OnInit: callfunc "rent_dobugs","b19"; }
+rentinb20,29,34,0	script	Clothes#Rb20a	111,{ callfunc "rent_cambioropa"; OnInit: callfunc "rent_dobugs","b20"; }
+rentinb21,29,34,0	script	Clothes#Rb21a	111,{ callfunc "rent_cambioropa"; OnInit: callfunc "rent_dobugs","b21"; }
+rentinb22,29,34,0	script	Clothes#Rb22a	111,{ callfunc "rent_cambioropa"; OnInit: callfunc "rent_dobugs","b22"; }
+rentinb23,29,34,0	script	Clothes#Rb23a	111,{ callfunc "rent_cambioropa"; OnInit: callfunc "rent_dobugs","b23"; }
+rentinb24,29,34,0	script	Clothes#Rb24a	111,{ callfunc "rent_cambioropa"; OnInit: callfunc "rent_dobugs","b24"; }
+rentinb25,29,34,0	script	Clothes#Rb25a	111,{ callfunc "rent_cambioropa"; OnInit: callfunc "rent_dobugs","b25"; }
+rentinb26,29,34,0	script	Clothes#Rb26a	111,{ callfunc "rent_cambioropa"; OnInit: callfunc "rent_dobugs","b26"; }
+rentinb27,29,34,0	script	Clothes#Rb27a	111,{ callfunc "rent_cambioropa"; OnInit: callfunc "rent_dobugs","b27"; }
+
+rentinb1,5,29,0	script	Clothes#Rb1b	111,{ callfunc "rent_cambioropa"; }
+rentinb2,5,29,0	script	Clothes#Rb2b	111,{ callfunc "rent_cambioropa"; }
+rentinb3,5,29,0	script	Clothes#Rb3b	111,{ callfunc "rent_cambioropa"; }
+rentinb4,5,29,0	script	Clothes#Rb4b	111,{ callfunc "rent_cambioropa"; }
+rentinb5,5,29,0	script	Clothes#Rb5b	111,{ callfunc "rent_cambioropa"; }
+rentinb6,5,29,0	script	Clothes#Rb6b	111,{ callfunc "rent_cambioropa"; }
+rentinb7,5,29,0	script	Clothes#Rb7b	111,{ callfunc "rent_cambioropa"; }
+rentinb8,5,29,0	script	Clothes#Rb8b	111,{ callfunc "rent_cambioropa"; }
+rentinb9,5,29,0	script	Clothes#Rb9b	111,{ callfunc "rent_cambioropa"; }
+rentinb10,5,29,0	script	Clothes#Rb10b	111,{ callfunc "rent_cambioropa"; }
+rentinb11,5,29,0	script	Clothes#Rb11b	111,{ callfunc "rent_cambioropa"; }
+rentinb12,5,29,0	script	Clothes#Rb12b	111,{ callfunc "rent_cambioropa"; }
+rentinb13,5,29,0	script	Clothes#Rb13b	111,{ callfunc "rent_cambioropa"; }
+rentinb14,5,29,0	script	Clothes#Rb14b	111,{ callfunc "rent_cambioropa"; }
+rentinb15,5,29,0	script	Clothes#Rb15b	111,{ callfunc "rent_cambioropa"; }
+rentinb16,5,29,0	script	Clothes#Rb16b	111,{ callfunc "rent_cambioropa"; }
+rentinb17,5,29,0	script	Clothes#Rb17b	111,{ callfunc "rent_cambioropa"; }
+rentinb18,5,29,0	script	Clothes#Rb18b	111,{ callfunc "rent_cambioropa"; }
+rentinb19,5,29,0	script	Clothes#Rb19b	111,{ callfunc "rent_cambioropa"; }
+rentinb20,5,29,0	script	Clothes#Rb20b	111,{ callfunc "rent_cambioropa"; }
+rentinb21,5,29,0	script	Clothes#Rb21b	111,{ callfunc "rent_cambioropa"; }
+rentinb22,5,29,0	script	Clothes#Rb22b	111,{ callfunc "rent_cambioropa"; }
+rentinb23,5,29,0	script	Clothes#Rb23b	111,{ callfunc "rent_cambioropa"; }
+rentinb24,5,29,0	script	Clothes#Rb24b	111,{ callfunc "rent_cambioropa"; }
+rentinb25,5,29,0	script	Clothes#Rb25b	111,{ callfunc "rent_cambioropa"; }
+rentinb26,5,29,0	script	Clothes#Rb26b	111,{ callfunc "rent_cambioropa"; }
+rentinb27,5,29,0	script	Clothes#Rb27b	111,{ callfunc "rent_cambioropa"; }

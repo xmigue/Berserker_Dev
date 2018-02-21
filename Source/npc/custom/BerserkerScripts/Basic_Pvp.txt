@@ -1,0 +1,42 @@
+// Basic NPC PVP
+
+prontera,163,178,3,	script	PvP	857,{
+	OnTouch:
+		set .@x,0;		set .@y,0;		
+		switch(rand(0,8)){
+			case 1: 	set .@x,65; 	set .@y,100; 	break;
+			case 2: 	set .@x,133; 	set .@y,100; 	break;
+			case 3: 	set .@x,100; 	set .@y,133; 	break;
+			case 4: 	set .@x,100; 	set .@y,65; 	break;
+			case 5: 	set .@x,87; 	set .@y,87; 	break;
+			case 6: 	set .@x,114;	set .@y,87;		break;
+			case 7: 	set .@x,114;	set .@y,112;	break;
+			case 8:		set .@x,84; 	set .@y,112;	break;
+			default:	set .@x,99; 	set .@y,100;	break;
+		}
+		warp $@map$,.@x, .@y;
+	end;
+	
+	OnInit:
+		set $@map$, "pvp_n_1-5";
+		while( 1 ){
+			delwaitingroom;
+			waitingroom "PVP : "+getmapusers($@map$)+" Users",0;
+			sleep 1000;
+		}
+		setmapflag pvp_n_1-5, mf_nowarp;
+		setmapflag pvp_n_1-5, mf_nowarpto;
+		setmapflag pvp_n_1-5, mf_nosave;
+		setmapflag pvp_n_1-5, mf_nomemo;
+		setmapflag pvp_n_1-5, mf_noteleport;
+		setmapflag pvp_n_1-5, mf_nopenalty;
+		setmapflag pvp_n_1-5, mf_noreturn;
+		setmapflag pvp_n_1-5, mf_nobranch;
+		setmapflag pvp_n_1-5, mf_nomobloot;
+		setmapflag pvp_n_1-5, mf_nomvploot;
+		setmapflag pvp_n_1-5, MF_NOZENYPENALTY;
+		setmapflag pvp_n_1-5, MF_NOTRADE;
+		setmapflag pvp_n_1-5, MF_PVP_NOGUILD;
+		setmapflag pvp_n_1-5, MF_NOPARTY;
+	end;
+}

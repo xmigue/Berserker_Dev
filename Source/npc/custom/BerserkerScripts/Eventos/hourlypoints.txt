@@ -1,0 +1,93 @@
+//===== Hourly Points Script =========================================
+//===== By: ==========================================================
+//= GorthexTiger modified by Nibi
+//===== Current Version: =============================================
+//= 1.0
+//===== Compatible With: =============================================
+//= Any eAthena Version
+//===== Description: =================================================
+//= Get Points every successful hours of gameplay, you cannot get
+//= the points even if you miss a second or a minute. A player will
+//= get a very big bonus if they played 12 hours consecutively
+//= or without logging out of the game. If the player is vending
+//= the script will then stop.
+//===== Additional Comments: =========================================
+//= You can modify the script to your liking.
+//= The default points is Kafrapoints change it anyway if you like.
+//= 1.1 = Check Chatting too
+//= 1.2 = 5 Minute Idle Check & @at/@autotrade check.
+//= 1.3 = Corrected the current balance line on 12 Hours Consecutive
+//====================================================================
+//-	script	hourlypoints	-1,{
+//    //--Start of the Script
+//    OnPCLoginEvent: 
+//		attachnpctimer "" + strcharinfo(0) + "";
+//		dispbottom "[HourlyPoints] - Se ha iniciado la generacion de Cashpoint por hora jugada.";
+//		initnpctimer;
+//    end;
+//
+//    OnTimer30000:
+//        //Check if Vending (normal or @at)
+//        if (checkvending() >= 1 || checkchatting() == 1) {
+//            dispbottom "[HourlyPoints] - La acumulación de Cashpoint por hora ha sido deshabilitado, para reiniciar el conteo reloguea.";
+//            stopnpctimer;
+//            end;
+//        }
+//		//Check if Idle
+//		getmapxy(.@map$, .@x, .@y, 0);
+//		if (@map$ == .@map$ && @x == .@x && @y == .@y) {
+//			set @afk, @afk + 1;
+//			if(@afk == 4)
+//				dispbottom "[HourlyPoints] - En aproximadamente 1 min. se detendra la generacion de Cashpoint por hora jugada.";
+//		}
+//		//If move timer resets
+//		else {
+//			set @afk, 0;
+//		}
+//		set @map$, .@map$;
+//		set @x,.@x;
+//		set @y,.@y;
+//		//Idle Check for 5 Minutes
+//		if (@afk == 5) {
+//			dispbottom "[HourlyPoints] - Se ha detenido la generacion de Cashpoint por hora porque estuviste ausente por 5 minutos, para reiniciar es necesario reloguear.";
+//			stopnpctimer;
+//			end;
+//		}
+//    end;
+//    
+//	OnTimer60000: 
+//		set @minute,
+//		@minute + 1;
+//		//Check for 1 Minute
+//		if (@minute == 60) {
+//			set @minute, 0;
+//			set #CASHPOINTS, #CASHPOINTS + .nPuntoxHora;
+//			dispbottom "[HourlyPoints] - Recibiste " + .nPuntoxHora + " Cashpoint por permanecer una hora activo.";
+//			set @consecutive_hour, @consecutive_hour + 1;
+//		}
+//		
+//		if (@consecutive_hour == 6) { // Check for 6 hours consecutive
+//			set #CASHPOINTS, #CASHPOINTS + .nPuntox6Horas;
+//			dispbottom "[HourlyPoints] - Bonus de " + .nPuntox6Horas + " Cashpoint por permanecer 6 horas activo.";
+//		}
+//		else		
+//			if (@consecutive_hour == 12) { // Check for 12 hours consecutive
+//				set @consecutive_hour, 0;
+//				set #CASHPOINTS, #CASHPOINTS + .nPuntox12Horas;
+//				dispbottom "[HourlyPoints] - Bonus de " + .nPuntox12Horas + " Cashpoint por permanecer 12 horas activo.";
+//			}
+//		stopnpctimer;
+//		initnpctimer;
+//    end;
+//	
+//	OnPCLogOutEvent:
+//		stopnpctimer;
+//	end;
+//	
+//	OnInit:
+//		.nPuntoxHora = 1;
+//		.nPuntox6Horas = 4;
+//		.nPuntox12Horas = 10;
+//	end;
+//}
+////--End of the Script

@@ -1,0 +1,177 @@
+// Cash Shop System GaiaRO
+// ==============================================================================
+
+// MapFlags
+// *********************************************************************
+
+itemmall	mapflag	nomemo
+itemmall	mapflag	nosave	SavePoint
+itemmall	mapflag	noicewall
+itemmall	mapflag	nobranch
+itemmall	mapflag	noteleport
+
+// Warps ItemMall Auctions
+// *********************************************************************
+
+itemmall,179,49,0	script	imall01	45,1,1,{
+	switch( @TerraGirl_out )
+	{
+		case 2: warp "morocc",166,87; break;
+		case 3: warp "geffen",128,65; break;
+		case 4: warp "payon",168,103; break;
+		case 5: warp "pay_arche",58,147; break;
+		case 6: warp "alberta",115,67; break;
+		case 7: warp "izlude",123,97; break;
+		case 8: warp "aldebaran",135,112; break;
+		case 9: warp "xmas",139,134; break;
+		case 10: warp "comodo",216,136; break;
+		case 11: warp "yuno",167,185; break;
+		case 12: warp "amatsu",194,99; break;
+		case 13: warp "gonryun",164,115; break;
+		case 14: warp "umbala",119,135; break;
+		case 15: warp "niflheim",214,184; break;
+		case 16: warp "louyang",231,98; break;
+		case 17: warp "jawaii",248,137; break;
+		case 18: warp "ayothaya",197,173; break;
+		case 19: warp "einbroch",57,201; break;
+		case 20: warp "lighthalzen",155,87; break;
+		case 21: warp "einbech",195,127; break;
+		case 22: warp "hugel",109,150; break;
+		case 23: warp "rachel",133,115; break;
+		case 24: warp "veins",208,106; break;
+		case 25: warp "moscovia",233,192; break;
+		case 26: warp "mid_camp",202,289; break;
+		case 27: warp "brasilis",193,221; break;
+		case 28: warp "manuk",279,208; break;
+		case 29: warp "splendide",194,174;
+		default: warp "prontera",156,188; break;
+	}
+	end;
+}
+
+
+//arena_4,117,112,0	warp	imall02#2	2,2,itemmall,180,56
+quiz_00,27,111,0	warp	imall02#3	1,1,itemmall,180,56
+quiz_00,27,119,0	warp	imall02#4	1,1,prontera,163,167
+//prontera,165,167,0	warp	imall02#5	1,1,quiz_00,15,114
+itemmall,21,37,0	duplicate(imall01)	imall02	45,1,1
+
+
+// Cash Shops - Tiendas
+// *********************************************************************
+//5465:400,
+itemmall,181,84,4	cashshop	Head Gear Shop A	115,5557:400,5466:400,5500:400,5554:400,5308:400,5477:400,5512:400,5513:400,5514:400,5515:400,5545:400,5546:400,5549:400,5550:400,5569:400,5570:400,5581:400,5582:400,5598:400,5599:400:5148:400,5180:400,5190:400,5200:400,5209:400,5302:400,5336:400,5337:400,5338:400,5339:650,5346:400,5352:400,5412:400,5438:400,5439:400,5440:400,5441:400,5203:400,5422:400,5426:400,5427:400,5107:400,5191:400,5497:400,5256:400,5359:400
+itemmall,178,84,4	cashshop	Head Gear Shop B	116,5376:5990,5374:7600,5518:7600,5225:3300,5594:4500,5574:4500,5597:4500,5596:4500,5192:600,5462:4500,5463:4500,5490:5300,5423:6200,5564:3700,5483:4500,5325:4500,5480:2500,5383:2500,5506:2000,5507:2000,5137:3800,5377:4000,5171:2100,5453:4800,5452:5500,18506:5400
+itemmall,175,84,4	cashshop	Head Gear Shop C	115,5464:900,5181:900,5132:900,5273:900,5187:900,5274:900,5275:900,5276:900,5567:900,5593:900,5283:950,5292:1000,5312:900,5358:900,5565:2300,5417:900,5138:900,5226:900,5277:3000,5324:900,5362:900,5372:900,5373:900,5313:900,5378:900,5467:900,5547:900,5142:1300,5278:3000,5364:900,5393:2500
+itemmall,172,84,4	cashshop	Head Gear Shop D	115,5211:900,5340:2000,5341:2000,5342:2000,5343:2000,5344:2000,5345:2000,5421:1000,5357:1000,5420:1500,5375:1000,5503:1000,5585:1000,5822:1000,5210:1000,5430:1500,5389:1500
+itemmall,170,86,4	cashshop	Head Gear Shop F	115,5213:600,5214:600,5319:600,5334:600,5230:600,5231:600,5232:600,5233:600,5234:600,5421:1000,5252:600,5253:600,5263:600,5270:800,5294:600,5365:600,5385:600,5409:1250,5495:950,5361:1100,5491:900,5288:900,5401:1250,5539:1000,5314:950,5471:1000,5293:1350,5311:1100,5489:400
+
+
+itemmall,194,76,3,7539	cashshop	Poring Armor Pet Shop	909,10022:150,10023:150,10024:150,10025:150,10026:150,10027:150,10028:150,10029:150,10030:150,10031:150,10032:150,10033:150,10034:150,10035:150,10036:150,10037:150,10038:150
+itemmall,194,74,3,7539	cashshop	Poring Pets Shop A	909,9039:1000,9038:500,9028:1000,9037:500,9036:500,9035:500,9034:500,9033:500,9032:500,9031:500,9030:500,9029:500
+itemmall,194,72,3,7539	cashshop	Poring Pets Shop B	909,9056:500,9055:500,9054:500,9053:500,9052:500,9051:500,9050:500,9049:500,9048:500,9047:500,9046:500,9045:500,9044:500,9043:500,9042:500,9041:500,9040:500
+itemmall,194,70,3,7539	cashshop	Poring Pets Shop C	909,6115:1,7821:1,7822:1,7823:1,7824:1,6111:1,6098:1,6108:1,6100:1,6104:1,6113:1,6110:1,6112:1,6099:1,6105:1,6106:1,6109:1,6107:1,6097:1,6096:1,6114:1
+
+
+
+-	cashshop	CashShop_Potions	-1,12118:20,12119:20,12120:20,12121:20,12257:20,12274:20,12275:20,12298:100,12299:50,13830:30,13831:30,13832:30,13833:30,14536:50,14538:100,13995:10,13989:10,14004:10,13759:100,13760:100,13761:100,13762:100
+
+itemmall,174,66,3	script	Potions Shop::PremiumShopPotions	749,{
+	mes "[^FFA500Potions Shop^000000]";
+	mes "La sección de Alquimia contiene una buena variedad de pociones.";
+	mes "Cierra esta ventana para accesar la tienda, Suerte!!";
+	close2;
+	callshop "CashShop_Potions",0;
+	end;
+}
+
+//-	shop	CashShop_Foods	-1,682:300000,683:300000,684:500000,12122:300000,12123:300000,12124:400000,12198:200000,12205:400000,12203:400000,12202:400000,12204:400000,12206:400000,12207:400000,12247:400000,12706:1000000,12707:1000000,12708:1000000
+//
+//itemmall,185,66,5	script	Food Shop::PremiumShopFood	886,{
+//	mes "[^FFA500Food Shop^000000]";
+//	mes "Disfruta de estos platillos especiales que aumentaran tus cualidades en la batalla.";
+//	mes "Cierra esta ventana para accesar la tienda, Suerte!!";
+//	close2;
+//	callshop "CashShop_Foods",0;
+//	end;
+//}
+
+-	cashshop	CashShop_GiftBox	-1,644:20,664:20,665:20,666:20,667:20,12025:20,12026:20,12104:75,12105:320,12106:500,12107:320,12108:15,12110:20,12111:40
+
+
+itemmall,185,77,7	script	Gift Shop::PremiumShopGift	803,{
+	mes "[^FFA500Gift Shop^000000]";
+	mes "Una sección buena para comprar regalos para toda ocación.";
+	mes "Cierra esta ventana para accesar la tienda, Suerte!!";
+	close2;
+	callshop "CashShop_GiftBox",0;
+	end;
+}
+
+-	cashshop	CashShop_Accesory	-1,2765:300,2766:300,2767:300,2768:300,2769:300,2770:300,2771:300,2638:200,2639:200,2663:900,2664:500,2665:300,2666:300,2667:500,2673:400,2682:1000,2683:1000,2684:1000,2685:1000,2640:400,2708:300
+
+itemmall,174,77,1	script	Accesory Shop::PremiumShopAccesory	828,{
+	mes "[^FFA500Accesory Shop^000000]";
+	mes "Ah!, te gustan los accesorios y joyería. Que Bien.";
+	mes "Cierra esta ventana para accesar la tienda, Suerte!!";
+	close2;
+	callshop "CashShop_Accesory",0;
+	end;
+}
+
+-	cashshop	CashShop_Scrolls	-1,12114:20,12115:20,12116:20,12117:20
+
+itemmall,180,63,4	script	Scroll Shop::PremiumShopScroll	64,{
+	mes "[^FFA500Scroll Shop^000000]";
+	mes "Amante de la Magia, estos scrolls te ayudarán en la batalla.";
+	mes "Cierra esta ventana para accesar la tienda, Suerte!!";
+	close2;
+	callshop "CashShop_Scrolls",0;
+	end;
+}
+
+-	cashshop	CashShop_Special	-1,13758:300,12210:150,7776:600,7621:100,12209:100,12211:100,12212:50,12214:200,14527:30,14582:30,14583:30,14584:30,14585:30
+
+itemmall,170,71,2	script	Special Shop::PremiumShopSpecial	861,{
+	mes "[^FFA500Special Shop^000000]";
+	mes "Esta es la lista de artículos especiales, herramientas muy utiles para todo momento.";
+	mes "Cierra esta ventana para accesar la tienda, Suerte!!";
+	close2;
+	callshop "CashShop_Special",0;
+	end;
+}
+
+-	cashshop	CashShop_Equipment	-1,2356:1500,2415:1500,2511:1500,1725:1500,1244:1500,2546:1500,2441:1500,2358:1500
+
+itemmall,189,72,6	script	Equipment Shop::PremiumShopEquipment	734,{
+	mes "[^FFA500Equipment Shop^000000]";
+	mes "Esta sección contiene equipamiento para tus personajes.";
+	mes "Cierra esta ventana para accesar la tienda, Suerte!!";
+	close2;
+	callshop "CashShop_Equipment",0;
+	end;
+}
+/*
+-	cashshop	CashShop_WoE	-1,8936:2000,8937:2000,8938:2000,8939:2000,8940:2000,8941:2000,8942:2000,8943:2000,8944:2000,8945:2000,8946:2000,8947:2000,8948:2000
+
+itemmall,192,59,2	script	WoE Shop::PremiumShopWoE	884,{
+	mes "[^FFA500WoE Shop^000000]";
+	mes "Esta sección contiene recursos que puedes utilizar en WoE o mapas GvG solamente.";
+	mes "Cierra esta ventana para accesar la tienda, Suerte!!";
+	close2;
+	callshop "CashShop_WoE",0;
+	end;
+}
+*/
+/*
+-	cashshop	CashShop_FreyaSet	-1,5306:20000,2533:20000,2369:25000,2428:20000
+
+itemmall,167,59,6	script	Freya Shop::PremiumShopFreya	752,{
+	mes "[^FFA500Freya Shop^000000]";
+	mes "El Set Freya, todas sus partes están disponibles para cualquier mapa ^FF0000EXCEPTO la armadura que no se permite en mapas GVG o PVP incluyendo WoE^000000.";
+	mes "Cierra esta ventana para accesar la tienda, Suerte!!";
+	close2;
+	callshop "CashShop_FreyaSet",0;
+	end;
+}
+*/

@@ -1,0 +1,4 @@
+//@loadnpc npc/custom/BerserkerScripts/Revision/checkNPC.txt
+prt_in,170,91,3	script	NPC test	476,{
+	
+}

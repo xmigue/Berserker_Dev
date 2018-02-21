@@ -1,0 +1,257 @@
+-	script	announce_nvz	-1,{
+
+OnClock1820:
+	goto StartEvent;
+end;
+
+StartEvent:
+	//setmapflag .map_name$,mf_nocommand;
+	setmapflag .map_name$,mf_loadevent;
+	announce "El evento Novice Vs. Zombie comenzara en 3 minutos",0;
+	killmonsterall .map_name$;
+	set .numzom, 0;
+	sleep 5000; //5 s
+
+	announce "En Prontera a aparecido el Npc ' Novice Vs. Zombie '!",0;
+	enablenpc "Novice vs. Zombie";
+	sleep 55000; //55 s
+
+	announce "El evento Novice Vs. Zombie comenzara en 2 minutos!",0;
+	sleep 60000; //60 s
+
+	announce "El evento Novice Vs. Zombie comenzara en 1 minuto!",0;
+	sleep 30000; //30 s
+
+	mapannounce .map_name$,"El evento comenzara en 30 segundos!",0;
+	sleep 25000; //25 s
+
+	announce "El evento Novice Vs. Zombie comenzara en ~5~",0;
+	sleep 1000; //1 s
+
+	announce "El evento Novice Vs. Zombie comenzara en ~4~",0;
+	sleep 1000; //1 s
+
+	announce "El evento Novice Vs. Zombie comenzara en ~3~",0;
+	sleep 1000;// 1 s
+
+	announce "El evento Novice Vs. Zombie comenzara en ~2~",0;
+	sleep 1000; //1 s
+
+	announce "El evento Novice Vs. Zombie comenzara en ~1~",0;
+	sleep 1000; //1 s
+	
+	disablenpc "Novice vs. Zombie";
+	announce "El evento Novice Vs. Zombie ya comenzo!!",0,0x00FF00;
+	if(getmapusers(.map_name$) < 2){
+		.bEventoInicio = 0;
+		mapannounce .map_name$, "Lo sentimos, el evento fue cancelado, debe haber al menos 2 usuarios en el evento.",0;				
+		//removemapflag .map_name$,mf_nocommand;
+		sleep 1000; //1 s
+		mapannounce .map_name$, "Se han habilitado los comandos para que vuelvas a la ciudad.",0;
+	}
+	else{
+		.bEventoInicio = 1;
+		monster .map_name$,53,369,"Zombie",1015,1;
+		monster .map_name$,31,369,"Zombie",1015,1;
+		sleep 10000;
+
+		monster .map_name$,53,369,"Zombie",1015,1;
+		monster .map_name$,31,369,"Zombie",1015,1;
+		sleep 10000;
+
+		monster .map_name$,53,369,"Zombie",1015,1;
+		monster .map_name$,31,369,"Zombie",1015,1;
+		sleep 10000;
+
+		monster .map_name$,53,369,"Zombie",1015,1;
+		monster .map_name$,31,369,"Zombie",1015,1;
+		initnpctimer;
+	}
+end;
+
+OnTimer10000:
+	if(.bEventoInicio){
+		if ( getmapusers(.map_name$) == 0 ) {
+			killmonsterall .map_name$;
+			sleep 1000;
+			announce "El evento Novice Vs. Zombie a terminado, todos los Novice murieron",0;
+			disablenpc "Prize";
+			stopnpctimer;
+			.bEventoInicio = 0;
+			end;
+		} else if ( getmapusers(.map_name$) > 1 ) {
+			mapannounce .map_name$,"Aun hay "+getmapusers(.map_name$) +" usuarios en el evento.",0,0x00FF00;;
+			set .numzom, .numzom + 1;
+			areamonster .map_name$,40,371,44,367,"Zombie",1015,.numzom;
+			//initnpctimer;
+			end;
+		}
+		//initnpctimer;
+	}
+end;
+
+OnPCDieEvent:
+	getmapxy .@mapnvz$,.@xnvz,.@ynvz,0;
+	if ( .@mapnvz$ == .map_name$) {
+		sleep2 1;
+		warp "prontera",156,223;
+		//atcommand "@alive "+ strcharinfo(0);
+		dispbottom "Perdiste...";
+	}
+	sleep2 1000;
+	if ( .@mapnvz$ == .map_name$ && getmapusers(.map_name$) == 1 ) {
+		killmonsterall .map_name$;
+		mapannounce .map_name$,"Ganastes, acercate al Npc Prize.",0;
+		enablenpc "Prize";
+		stopnpctimer;
+		.bEventoInicio = 0;
+		end;
+	}
+end;
+
+OnPCLoadMapEvent:
+	if(strcharinfo(3) == .map_name$){
+		nude;
+		atcommand "@storeall "+ strcharinfo(0);
+		dispbottom "Todos los items de tu inventario fueron movidos al storage.";
+	}
+end;
+
+OnStartGMEvent:
+	if(getgroupid() >= .GM_Min_Access) goto StartEvent;
+	else{ 
+		.@nAdvertencias = #AdvertenciaNovice;
+		set #AdvertenciaNovice, #AdvertenciaNovice + 1;
+		.@aMensaje$ = "[Commad Security]: ";
+		switch(.@nAdvertencias){
+			case 0:
+				set .@aMensaje$, .@aMensaje$ + " No tienes acceso a este comando.";
+			break;
+			case 1:
+				set .@aMensaje$, .@aMensaje$ + " Si intentas nuevamente usar este comando, tendras un castigo.";
+			break;
+			case 2:
+				set .@aMensaje$, .@aMensaje$ + " Fuiste advertido, 1 hora de mute.";
+				set #LastMuteNovicevsZombie, #LastMuteNovicevsZombie + 60;
+				atcommand "@mute 60 " + strcharinfo(0);
+			break;
+			default:
+				set #LastMuteNovicevsZombie, #LastMuteNovicevsZombie + 60;
+				.nLastMuteNovicevsZombie = #LastMuteNovicevsZombie;
+				set .@aMensaje$, .@aMensaje$ + " Fuiste advertido, " + (.nLastMuteNovicevsZombie/60) + " hora(s) de mute.";				
+				atcommand "@mute " + .nLastMuteNovicevsZombie + " " + strcharinfo(0);
+			break;
+		}
+		dispbottom ""+ .@aMensaje$;
+	}
+end;
+
+OnInit:	
+	.bEventoInicio = 0;
+	.map_name$ = "quiz_01";
+	.GM_Min_Access = 6;
+	bindatcmd "enovice","announce_nvz::OnStartGMEvent";
+	initnpctimer;
+end;
+
+}
+
+//===========================================================
+quiz_01,42,369,3	script	Prize	72,{
+	announce " " + strcharinfo (0) + " a ganado el evento Novice vs. Zombie, Felicidades!",0;
+	//announce " " + strcharinfo (0) + " won the Novice Vs. Zombie event, Congratulations!",0;
+	//getitem 7227,1;
+	set #CASHPOINTS, #CASHPOINTS + 10;
+	callfunc "SQL_Log_EventReward", "Novice_vs_Zombies", 10, getcharid(3), strcharinfo(0);
+	dispbottom "[Cashpoint] Balance actual: " + #CASHPOINTS + " Cashpoints.";
+	warp "prontera",156,223;
+	sleep2 250;
+	disablenpc "Prize";
+	end;
+}
+
+//===========================================================
+prontera,160,180,3	script	Novice vs. Zombie	1015,{
+
+OnTouch:
+	callfunc "zombie_esp";
+	end;
+end;
+//if(lengua == 0) {
+//	callfunc "zombie_esp";
+//	end;
+//} else {
+//	callfunc "zombie_eng";
+//	end;
+//}
+OnInit:
+	disablenpc "Novice vs. Zombie";
+	disablenpc "Prize";
+end;
+}
+
+
+function	script	zombie_esp	{
+	if (BaseLevel > 1) goto NO;
+	if (class == 0) goto event;
+	if (class > 0) goto NO;
+	event:
+		mes "[^0000FFZombie Vs. Novice^000000]";
+		mes "Quieres entrar en el evento Novice Vs. Zombie?";
+		next;
+		menu "Si",enter,"No",noenter;
+
+	enter:
+		sc_end SC_ALL;
+		sc_start SC_DECREASEAGI,300000,10;
+		percentheal 100,100;
+		warp "quiz_01",42,369;
+	end;
+
+	noenter:
+		mes "[^0000FFZombie Vs. Novice^000000]";
+		mes "Esta bien, vuelve cuando quieras.";
+	close;
+
+	NO:
+		mes "[^0000FFZombie Vs. Novice^000000]";
+		mes "Tu no eres un Novice lvl 1";
+		close;
+}
+
+function	script	zombie_eng	{
+	if (BaseLevel > 1) goto NO;
+	if (class == 0) goto event;
+	if (class > 0) goto NO;
+	nude;
+
+	event:
+		mes "[^0000FFZombie Vs. Novice^000000]";
+		mes "Do you want go to the Novice Vs. Zombie event?";
+		next;
+		menu "Yes",enter,"No",noenter;
+
+	enter:
+		sc_end SC_ALL;
+		sc_start SC_DECREASEAGI,300000,10;
+		percentheal 100,100;
+		warp "quiz_01",42,369;
+	end;
+
+	noenter:
+		mes "[^0000FFZombie Vs. Novice^000000]";
+		mes "Ok, returns when you want.";
+	close;
+
+	NO:
+		mes "[^0000FFZombie Vs. Novice^000000]";
+		mes "You are not a Novice lvl 1";
+	close;
+}
+
+ordeal_1-1	mapflag	nocommand	5
+quiz_01	mapflag	nosave
+quiz_01	mapflag	nowarpto
+quiz_01	mapflag	restricted	5
+quiz_01	mapflag	noitemconsumption
+quiz_01	mapflag	nocostume

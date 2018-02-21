@@ -1,0 +1,494 @@
+//===== Hercules Script ======================================
+//= Invasion Event
+//===== By: ==================================================
+//= [ZelosAvalon]
+//= [Cretino]
+//===== Current Version: =====================================
+//= 1.6
+//===== Description: =========================================
+//= 1.0	Automatic invasion by random MVPs and Monsters in a random town with reward drop by MVP 
+//	and points earn by each Event Monster killed by you. [ZelosAvalon]
+//===== Additional Comments: =================================
+//= 1.1 Now you can choose which MVP, Monster will spawned and what Reward 
+//=	the Event will give you, and which map you want to start the Invasion Event.
+//=	GM can stop the event any time, normal player can teleport to the map where's events running. [ZelosAvalon]
+//= 1.2 Now you have two options by start Invasion Event:
+//=	Standard Invasion (where you have some options of Invasions pre-defined)
+//=	Custom Invasion (where you can choose which MVP, Monster and Reward the Event will give you, 
+//=	and which map you want to start the event). [ZelosAvalon]
+//= 1.3 Now the event has added a limit for spawning monsters on each map, to prevent LAG.
+//=     Maximum monster can be spawned is 500 and the minimum is 20. [ZelosAvalon]
+//= 1.4 Now you have more two options in the event:
+//=	Current Configuration (where you can set in the Invasion Event the configuration for the next event)
+//=	Reset Configuration (where you can reset the Invasion Configuration set by you). [ZelosAvalon]
+//= 1.5 Now we merge the event_points previously saved in a variable in the account (Ex:. #Event_Points) for a SQL table
+//=	Along with the SQL table added a new NPC: [Event Helper], where you can check how many Event Points you have, 
+//=	exchange them for items and check their position in the ranking of the event.[ZelosAvalon]
+//= 1.6 Rewrite all npc script. [Cretino]
+//=	Added emotion "/hlp" in all "Event Invasion NPC" around the world, while invasion is running.[ZelosAvalon]
+//============================================================
+
+/* Use this SQL table
+CREATE TABLE IF NOT EXISTS `event_rank` (
+  `id` INT(11) UNSIGNED NOT NULL DEFAULT '0',
+  `name` VARCHAR(30) NOT NULL DEFAULT '',
+  `event_points` INT(11) UNSIGNED NOT NULL DEFAULT '0',
+  `t_event_points` INT(11) UNSIGNED NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM;
+*/
+
+job3_rune01,73,62,5	script	Event Invasion	8W_SOLDIER,{ 
+	function	ShowEventConfiguration;
+
+	// If a player clicks the NPC, it displays:
+	if (getgroupid() < .gm_access)
+	{
+		if ($invasion_event_flag == false)
+		{
+			mes "[Event Invasion]";
+			mes "We haven't monster invasion at the moment";
+			mes "All the Cities in Rune Midgard are safe!";
+			close;
+		}
+
+		mes "[Event Invasion]";
+		mes "Help us!!! " + .invasion_mobs_left + " " + getmonsterinfo(.invasion_mob_id, MOB_NAME) + " have invaded " + .invasion_map$ + "!";
+		next;
+		mes "You want, I teleport you to " + .invasion_map$ + "?";
+
+		if (select("Yes:No") == 2)
+			close;
+
+		next;
+		mes "[Event Invasion]";
+		mes "Teleporting ...";
+
+		// Little countdown to player see what npc talk.
+		sleep2 400;
+
+		for(.@i = 0; .@i < getarraysize(.map_list$); .@i++)
+		{
+			if (.invasion_map$ == .map_list$[.@i])
+			{
+				warp .map_list$[.@i], .map_list_x[.@i], .map_list_y[.@i];
+				break;
+			}
+		}
+
+		// Map not found
+		if (.@i == getarraysize(.map_list$))
+		{
+			next;
+			mes "[Event Invasion]";
+			mes "One problem occurred.";
+			mes "Please contact the support.";
+		}
+
+		close;
+	}
+	else
+	{
+		// GM menu
+		if ($invasion_event_flag == true)
+		{
+			if (.invasion_mobs_left > 0)
+			{
+				mes "[Event Invasion]";
+				mes "An invasion is in progress..";
+				mes "Location: " + .invasion_map$;
+				mes "^FF0000" + .invasion_mobs_left + " : ^000000" + getmonsterinfo(.invasion_mob_id, MOB_NAME) + " left.";
+				mes " ";
+				mes "^FF0000Stop invasion?^000000";
+
+				if (select("No:Yes") == 1)
+					close;
+
+				// Little countdown to wait event close automatic.
+				sleep2 1000;
+				donpcevent strnpcinfo(3) + "::OnEventEnd";
+
+				next;
+				mes "[Event Invasion]";
+				mes "^FF0000Invasion has been stopped^000000";
+				announce "The Invasion has been stopped by " + strcharinfo(0), bc_all;
+				close;
+			}
+			else
+			{
+				// Little countdown to wait event close automatic.
+				sleep2 1000;
+				donpcevent strnpcinfo(3) + "::OnEventEnd";
+				goto Main;
+			}
+		}
+		else
+		{
+Main:
+			mes "[Event Invasion]";
+			mes "Please customize the Invasion event before starting it.";
+			mes "^FF0000Note - The MVP drops an event item.^000000";
+			switch(select("^3355FFStandard Invasion^000000:^3355FFCustom Invasion^000000:^3355FFCurrent Configuration^000000:^3355FFStart Invasion^000000:^FF0000Nothing now^000000"))
+			{
+				case 1:
+					next;
+					mes "[Event Invasion]";
+					mes "Please choose the type of Invasion Event you want to start.";
+					mes "^FF0000Note - The MVP drops an event item.^000000";
+					mes "Choose an option:";
+
+					.@menu$ = "";
+
+					for(.@i = 0; .@i < getarraysize(.mvp_id); .@i++)
+					{
+						.@menu$ += "^3355FF" + .mvp_count[.@i] + "^000000 - ^FF0000" + getmonsterinfo(.mvp_id[.@i], MOB_NAME) + "^000000" + ":";
+
+						if (.@i + 1 == getarraysize(.mvp_id))
+							.@menu$ += "^3355FFBack to Menu^000000";
+					}
+
+					.@selected = select(.@menu$);
+
+					next;
+
+					if (.@selected == getarraysize(.mvp_id) + 1)
+						goto Main;
+					else
+					{
+						.invasion_mvp_id = .mvp_id[.@selected - 1];
+						.invasion_item_id = .item_id[.@selected - 1];
+						.invasion_mob_id = .mob_id[.@selected - 1];
+						.invasion_mobs_count = .mob_count[.@selected - 1];
+						.invasion_mvp_count = .mvp_count[.@selected - 1];
+						.invasion_item_count = .item_count[.@selected - 1];
+
+						goto Select_Town;
+					}
+				break;
+
+				case 2:
+					next;
+					mes "[Event Invasion]";
+					mes "Please customize the Invasion event before starting it.";
+					mes "Note - The MVP drops an event item.";
+					switch(select("^3355FFMap^000000 [^3CB371" + .invasion_map$ + "^000000]:^3355FFMVP^000000 [^3CB371" + getmonsterinfo(.invasion_mvp_id, MOB_NAME) + "^000000]:^3355FFMVP Reward^000000 [^3CB371" + getitemname(.invasion_item_id) + "^000000]:^3355FFMonster^000000 [^3CB371" + getmonsterinfo(.invasion_mob_id, MOB_NAME) + "^000000]:^3355FFAmount of Monsters^000000 [^3CB371" + .invasion_mobs_count + "^000000]:^FF0000Start Event^000000:^3355FFBack to Menu^000000"))
+					{
+						case 1:
+							next;
+Select_Town:
+							mes "[Event Invasion]";
+							mes "Map for Invasion?";
+							mes "Please choose the map for the Event:";
+
+							.@menu$ = "";
+
+							for(.@i = 0; .@i < getarraysize(.map_list$); .@i++)
+							{
+								.@menu$ += "^FF0000" + .map_list$[.@i] + "^000000" + ":";
+
+								if (.@i + 1 == getarraysize(.map_list$))
+									.@menu$ += "^3355FFBack to Menu^000000";
+							}
+
+							.@selected = select(.@menu$);
+
+							next;
+
+							if (.@selected == getarraysize(.map_list$) + 1)
+								goto Main;
+							else
+							{
+								.invasion_map$ = .map_list$[.@selected - 1];
+								goto Main;
+							}
+						break;
+
+						case 2:
+							next;
+							mes "[Event Invasion]";
+							mes "What MvP would you like to summom?";
+							mes "Please input the MvP ID:";
+							input .@invasion_mvp_id;
+							next;
+
+							if (strmobinfo(1, .@invasion_mvp_id) == "")
+							{
+								mes "[Event Invasion]";
+								mes "Invalid MvP ID.";
+								next;
+								goto Main;
+							}
+							else
+							{
+								.invasion_mvp_id = .@invasion_mvp_id;
+								goto Main;
+							}
+						break;
+
+						case 3:
+							next;
+							mes "[Event Invasion]";
+							mes "Which item would you like the MVP to drop?";
+							mes "Please input the item ID:";
+							input .@invasion_item_id;
+							next;
+
+							if (getitemname(.@invasion_item_id) == "null")
+							{
+								mes "[Event Invasion]";
+								mes "Invalid item ID.";
+								next;
+								goto Main;
+							}
+							else
+							{
+								.invasion_item_id = .@invasion_item_id;
+								goto Main;
+							}
+						break;
+
+						case 4:
+							next;
+							mes "[Event Invasion]";
+							mes "What monster would you like to summom ?";
+							mes "Please input the monster ID:";
+							input .@invasion_mob_id;
+							next;
+
+							if (strmobinfo(1, .@invasion_mob_id) == "")
+							{
+								mes "[Event Invasion]";
+								mes "Invalid monster ID.";
+								next;
+								goto Main;
+							}
+							else
+							{
+								.invasion_mob_id = .@invasion_mob_id;
+								goto Main;
+							}
+						break;
+
+						case 5:
+							next;
+							mes "[Event Invasion]";
+							mes "Who many monster would you like to summom ?";
+							mes "Please input the amount:";
+							input .@invasion_mobs;
+							next;
+
+							if (.@invasion_mobs <= 0)
+							{
+								mes "[Event Invasion]";
+								mes "Invalid monster ID.";
+								next;
+								goto Main;
+							}
+							else
+							{
+								.invasion_mobs_count = .@invasion_mobs;
+								goto Main;
+							}
+						break;
+						
+						case 6:
+							next;
+							mes "[Event Invasion]";
+							mes "Starting the event now...";
+							close2;
+							goto OnEventStart;
+						break;
+
+						case 8:
+							next;
+							ShowEventConfiguration();
+							goto Main;
+						break;
+					}
+
+				case 3:
+					next;
+					ShowEventConfiguration();
+					goto Main;
+				break;
+
+				case 4:
+					next;
+					mes "[Event Invasion]";
+					mes "Starting the event now...";
+					close2;
+					goto OnEventStart;
+				break;
+
+				case 5:
+					close;
+				break;
+			}
+		}
+	}
+
+OnInit:
+	// GM Level to access the GM Menu.
+	.gm_access = 50;
+
+	// Map list array
+	setarray .map_list$[0], "prontera", "alberta", "aldebaran", "amatsu", "ayothaya", "brasilis", "comodo", "dewata", "ecl_in01",
+							"einbech", "einbroch", "dicastes01", "geffen", "gonryun", "hugel", "izlude", "jawaii", "lighthalzen", "louyang", "xmas",
+							"malangdo", "malaya", "manuk", "mid_camp", "mora", "morocc", "moscovia", "nameless_n", "niflheim", "payon", "rachel", "splendide",
+							"thor_camp", "umbala", "veins", "yuno";
+							
+	// Coord x array
+	setarray .map_list_x[0], 155, 28, 140, 198, 208, 196, 209, 200, 48, 63, 64, 198, 119, 160, 96, 128, 251, 158, 217, 147, 140,
+							212, 282, 210, 55, 156, 223, 256, 202, 179, 130, 201, 246, 97, 216, 157;
+							
+	// Coord y array
+	setarray .map_list_y[0], 183, 234, 131, 84, 166, 217, 143, 180, 53, 35, 200, 187, 59, 120, 145, 114, 132, 92, 100, 134, 114,
+							206, 138, 288, 146, 93, 184, 215, 174, 100, 110, 147, 68, 153, 123, 51;
+
+	// MvPs and Monster List
+	// Baphomet: 1039 || Baphomet Jr.: 1431
+	// Doppelganger: 1046 || Nightmare: 1427
+	// Eddga: 1115 || Bigfoot: 1603
+	// Garm(Hatii): 1252 || Garm Baby: 1606
+	// Orc Hero: 1087 || High Orc: 1439
+	// Osiris: 1038 || Ancient Mummy: 1522
+	// Turtle General: 1312 || Freezer: 1594
+	
+	// Ids of MvPs
+	
+	setarray .mvp_id[0], 1039, 1046, 1115, 1252, 1087, 1038, 1312;
+	setarray .mvp_count[0], 1, 1, 1, 1, 1, 1, 1;
+
+	// Ids of Items
+	setarray .item_id[0], 5474, 5151, 5497, 5505, 5597, 5132, 5361;
+	setarray .item_count[0], 1, 1, 1, 1, 1, 1, 1;
+
+	// Ids of Monsters
+	setarray .mob_id[0], 1431, 1427, 1603, 1606, 1439, 1522, 1594;
+	setarray .mob_count[0], 50, 50, 50, 50, 50, 50, 50;
+
+	// ONLY CHANGE IF YOU KNOW WHAT YOU'RE DOING!!
+	if (!.invasion_mvp_id || !.invasion_item_id || !.invasion_mob_id || !.invasion_mobs_count
+		|| !.invasion_mvp_count || !.invasion_item_count || .invasion_map$ == "")
+	{
+		.invasion_mvp_id = .mvp_id[0];
+		.invasion_item_id = .item_id[0];
+		.invasion_mob_id = .mob_id[0];
+		.invasion_mobs_count = .mob_count[0];
+		.invasion_mvp_count = .mvp_count[0];
+		.invasion_item_count = .item_count[0];
+		.invasion_map$ = .map_list$[0];
+	}
+
+	if ($invasion_event_flag == true)
+		goto OnEventEnd;
+
+	end;
+
+// Times to Start Event
+//OnClock0000:
+//	// Will star on 00:00 of Monday.
+//    if (gettime(GETTIME_WEEKDAY) == MONDAY && $invasion_event_flag == false)
+//		goto OnEventStart;
+//	end;
+
+//OnClock0800:
+//OnClock1130:
+//OnClock1600:
+//    // GETTIME_WEEKDAY = Week day (0 for Sunday, 6 is Saturday)
+//    // Additional: SUNDAY=0, MONDAY=1, TUESDAY=2, WEDNESDAY=3, THURSDAY=4, FRIDAY=5, SATURDAY=6
+//
+//	// Will start on 08:00, 11:30 and 16:00 of Sunday.
+//    if (gettime(GETTIME_WEEKDAY) == SUNDAY && $invasion_event_flag == false)
+//		goto OnEventStart;
+//	end;
+
+// Times to End Event
+//OnClock0030:
+//OnClock0830:
+//OnClock1200:
+//OnClock1630:
+//	if ($invasion_event_flag == true)
+//		goto OnEventEnd;
+//
+//	end;
+	
+OnEventStart:
+	.invasion_mobs_left = .invasion_mobs_count;
+	$invasion_event_flag = true;
+	sleep2 1000;
+	announce "[ Rune-Midgard Guard ]: We have trouble here in the town " + .invasion_map$ + "!", bc_all;
+	sleep2 5000;
+	announce "[ Rune-Midgard Guard ]: Everyone, we need your help to get rid of these " + getmonsterinfo(.invasion_mob_id, MOB_NAME) + "!", bc_all;
+	monster .invasion_map$, 0, 0, "[Event] " + getmonsterinfo(.invasion_mob_id, MOB_NAME), .invasion_mob_id, .invasion_mobs_left, strnpcinfo(3) + "::OnMyMobDead";
+	while ($invasion_event_flag == true) {
+				sleep 2000;
+				
+			}
+	end;
+	
+OnEventEnd:
+	// 30 minutes later, kills all the mobs.
+	announce "[ Rune-Midgard Guard ]: The invasion was ended in the town " + .invasion_map$ + "!", bc_all;
+	killmonster .invasion_map$, "Event Invasion::OnMyMobDead";
+	killmonster .invasion_map$, strnpcinfo(3) + "::OnSpecialMobDead";
+	.invasion_mobs_left = 0;
+	$invasion_event_flag = false;
+    sleep 2000;
+	
+	end;
+
+OnEventStop:
+	// When the event is stopped by a GM, or all monsters dead.
+	killmonster .invasion_map$, strnpcinfo(3) + "::OnMyMobDead";
+	killmonster .invasion_map$, strnpcinfo(3) + "::OnSpecialMobDead";
+	announce "It seems that " + strcharinfo(0) + " has ended the Invasion!", bc_all;
+	.invasion_mobs_left = 0;
+	$invasion_event_flag = false;
+    sleep 2000;
+	                       
+	end;
+
+OnMyMobDead:
+	// When a Monster is killed
+	.invasion_mobs_left -= 1;
+
+	query_sql "INSERT INTO `event_rank`(`id`, `name`, `event_points`, `t_event_points`) VALUES ('" + getcharid(0) + "','" + strcharinfo(0) + "','1','1') ON DUPLICATE KEY UPDATE `event_points` = `event_points` + '1', `t_event_points` = `t_event_points` + '1'";
+
+	if (.invasion_mobs_left <= 0)
+	{
+		.invasion_mvp_left = .invasion_mvp_count;
+		announce "[ Rune-Midgard Guard ]: " + getmonsterinfo(.invasion_mvp_id, MOB_NAME) + " has spawned in " + .invasion_map$ + "!", bc_all;
+		monster .invasion_map$, 0, 0, "[Event] " + getmonsterinfo(.invasion_mvp_id, MOB_NAME), .invasion_mvp_id, .invasion_mvp_left, "Event Invasion::OnSpecialMobDead";
+	}
+	else
+		announce "[" + .invasion_mobs_left + "/" + .invasion_mobs_count + "] Monsters left.", bc_map;
+
+	end;
+
+OnSpecialMobDead:
+	// When a MvP is killed
+	.invasion_mvp_left -= 1;
+
+	query_sql "INSERT INTO `event_rank`(`id`, `name`, `event_points`, `t_event_points`) VALUES ('" + getcharid(0) + "','" + strcharinfo(0) + "','1','1') ON DUPLICATE KEY UPDATE `event_points` = `event_points` + '10', `t_event_points` = `t_event_points` + '10'";
+	announce strcharinfo(0) + " has fought off the " + getmonsterinfo(.invasion_mob_id, MOB_NAME) + " Invasion and has been awarded a worthy prize!", bc_all;
+	getitem .invasion_item_id, .invasion_item_count;
+
+	if (.invasion_mvp_left <= 0)
+		goto OnEventStop;
+	else
+		announce "[" + .invasion_mvp_left + "/" + .invasion_mvp_count + "] MvPs left.", bc_map;
+
+	end;
+
+	function	ShowEventConfiguration	{
+		mes "^7733ff[Event Configuration]^000000";
+		mes "^3355FFMap:^000000 [^3CB371" + .invasion_map$ + "^000000]";
+		mes "^3355FFMVP:^000000 [^3CB371" + getmonsterinfo(.invasion_mvp_id, MOB_NAME) + "^000000]";
+		mes "^3355FFMVP Reward:^000000 [^3CB371" + getitemname(.invasion_item_id) + "^000000]";
+		mes "^3355FFMonster:^000000 [^3CB371" + getmonsterinfo(.invasion_mob_id, MOB_NAME) + "^000000]";
+		mes "^3355FFAmount of Monsters:^000000 [^3CB371" + .invasion_mobs_count + "^000000]";
+		next;
+		return;
+	}
+}

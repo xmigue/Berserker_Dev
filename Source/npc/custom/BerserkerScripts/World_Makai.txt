@@ -1,0 +1,77 @@
+prontera,96,255,5	script	Dark Makai	792,{
+
+OnTouch:
+	set .@nameNPC$, "[^FF0000 Dark Sidious ^000000]";	// Nombre NPC
+	set .@nMinBaseLevel, 150;
+	set .@partyid, getcharid(1);
+	
+	mes .@nameNPC$;
+	mes "Hola aventurero, yo te puedo ayudar a entrar a un mapa infestado de poderosas criaturas que otorgan una ^08088AGran Bonificacion de Experiencia^000000 y un ^08088ABuen Botin^000000.";
+	next;
+	mes .@nameNPC$;
+	mes "Requisitos:";
+	mes "^FF0000-^000000 ^08088ADebes ir en party^000000";
+	mes "^FF0000-^000000 ^08088AMinimo 2 miembros online^000000";
+	mes "^FF0000-^000000 ^08088ATodos con nivel igual o mayor a 150.^000000";
+	next;
+	mes .@nameNPC$;
+	mes "Todos estan listos?";
+	menu "Si",-, "No, espera", Goto_Exit;
+	next;
+	
+	if (getcharid(1) == 0) {
+		mes .@nameNPC$;
+		mes "Te lo adverti, no puedes ir solo, crea una party con al menos 1 miembro mas que este online.";
+		close;
+	}
+	
+	//if( !getcharid(1) || getcharid(3) != getpartyleader( getcharid(1),1 ) ){
+	//	mes "Solo el lider de la party puede hablar conmigo.";
+	//	close;
+	//}
+
+	getpartymember( getcharid(1),2 );
+	getpartymember( getcharid(1),1 );
+	set .@PlayerOnline, 0;
+	set .@nNoCumpleRequisitoLevel, 0;
+	
+	for( set .@i, 0; .@i < $@partymembercount; set .@i, .@i+1 ) {
+		//dispbottom "" + attachrid($@partymemberaid[.@i]); 	// is online member? 1: yes || 0: no
+		//dispbottom "" + $@partymemberaid[.@i];			// id account member
+		//dispbottom "" + $@partymembercid[.@i];	//character id
+		//dispbottom "" + $@partymembercid[.@i] + ", is online: " + isloggedin( $@partymemberaid[ .@i ],$@partymembercid[ .@i ]);
+		if(isloggedin( $@partymemberaid[ .@i ],$@partymembercid[ .@i ]) == 1) {
+			set .@PlayerOnline, .@PlayerOnline + 1;
+			set .@nBaselvl, 0;
+			query_sql( "SELECT `base_level` FROM `char` WHERE `char_id` = " + $@partymembercid[.@i], .@nBaselvl);
+			//dispbottom $@partymemberaid[.@i] + " - " + .@nBaselvl;
+			if(.@nBaselvl < .@nMinBaseLevel)
+				set .@nNoCumpleRequisitoLevel, .@nNoCumpleRequisitoLevel + 1;
+		}		
+	}
+		
+	if(.@PlayerOnline < 2){
+		mes .@nameNPC$;
+		mes "No puedes ir solo, en tu party debe estar al menos 1 miembro mas online.";
+		close;
+	}
+		
+	if(.@nNoCumpleRequisitoLevel >= 1){
+		mes .@nameNPC$;
+		mes "Lo siento para entrar a este mapa todos los miembros de la party deben de tener al menos " + .@nMinBaseLevel + " de nivel Base.";
+		close;
+	}
+	
+	mes .@nameNPC$;
+	mes "Mucha suerte!!";
+	next;
+	warpparty "maka_fild01", 80, 88, .@partyid;
+	end;
+	
+	Goto_Exit:
+		next;
+		mes .@nameNPC$;
+		mes "De acuerdo, hasta pronto!!";
+		close;
+end;
+}

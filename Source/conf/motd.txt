@@ -1,0 +1,8 @@
+// Internal default is limited to 128 lines.  If you need more, you will need to modify the MOTD_LINE_SIZE definition in pc.c
+Bienvenido a Berserker Ro, Disfruta tu estadia! Recuerda reportar cualquier Bug que encuentres. 
+Comandos que podrian interesarte:
+1) @security, establece una contrasena adicional, que se te pedira cada vez que inicies sesion.
+2) @store, abre tu storage desde cualquier lugar.
+3) @gstore, abre tu Guild storage (Puedes restringir el acceso desde la Kafra de Prontera).
+4) Usa el comando /loginout para ver las noticias de tu Guild
+Siguenos en facebook [https://www.facebook.com/BerserkerRO/]

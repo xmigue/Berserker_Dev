@@ -1,0 +1,571 @@
+//Bueno, estaba aburrido y me puse ha hacer una mansion GM.
+// - Situada en sec_in01 y 02
+// - Libros con normas en la biblioteca
+// - Una interfaz de Warpers Interiores
+// - Un cocinero que da comida gratis (este lo puse por llenar hueco)
+// - Se entra whispeando a npc:mansionGM  y  diciendole: mansiongm  o  MansionGM
+// - Libro de Sugerencias
+
+-	script	mansionGM	-1,{	
+
+OnWhisperGlobal:
+	if ((@whispervar0$ == "mansiongm") || (@whispervar0$ == "MansionGM"))  {
+	goto mgmwarp;
+} 
+
+
+mgmwarp:
+	warp "sec_in01.gat",85,16;
+	end; 
+}
+	
+-	script	Warper#1::warpgm	739,{
+	if (GetGMLevel()<50) goto nogm;
+	mes "[Warper]";
+	mes "....";
+	mes "Selecciona a donde quieres ir ^0000A0 " + strcharinfo(0) + " ^000000 :";
+	next;
+	menu "Entrada",entrada,"Cafeteria",cafe,"Sala de Combates",comb,"Biblioteca",biblio,"Torturas",torturas,"Habitacion de los admins",admins,"A ningun sitio",nada,"R&C",cont;
+
+entrada:
+	warp "sec_in01.gat",85,16;
+	end;
+	
+cafe:
+	warp "sec_in01.gat",119,87;
+	end;
+	
+comb:
+	warp "sec_in02.gat",19,45;
+	end;
+	
+biblio:
+	warp "sec_in01.gat",168,99;
+	end;
+
+torturas:
+	warp "sec_in01.gat",34,87;
+	end;
+	
+admins:
+	if (GetGMLevel()<99) goto nogm;
+	warp "sec_in01.gat",176,37;
+	end;
+	
+cont:
+	warp "sec_in01.gat",86,146;
+	end;
+	
+nada:
+	mes "[Warper]";
+	mes "....";
+	mes "Como quieras.";
+	close;
+	
+nogm:
+	mes "[Warper]";
+	mes "....";
+	mes "Lo lamento ^0000A0 " + strcharinfo(0) + " ^000000 pero solamente transporto a los gms";
+	close;
+
+}
+
+sec_in01.gat,117,87,6	duplicate(warpgm)	Warper#02	739
+sec_in01.gat,149,97,3	duplicate(warpgm)	Warper#03	739
+sec_in01.gat,135,116,4	duplicate(warpgm)	Warper#04	739
+sec_in01.gat,135,70,8	duplicate(warpgm)	Warper#05	739
+sec_in01.gat,85,14,8	duplicate(warpgm)	Warper#07	739
+sec_in01.gat,86,45,4	duplicate(warpgm)	Warper#08	739
+sec_in01.gat,166,99,7	duplicate(warpgm)	Warper#09	739
+sec_in01.gat,176,39,4	duplicate(warpgm)	Warper#10	739
+sec_in01.gat,86,144,8	duplicate(warpgm)	Warper#11	739
+sec_in02.gat,19,49,4	duplicate(warpgm)	Warper#12	739
+sec_in01.gat,39,88,2	duplicate(warpgm)	Warper#13	739
+
+sec_in01.gat,127,94,4	script	Dependiente de la cafeteria	952,{
+	mes "[Dependiente de la cafeteria]";
+	mes "Hola ^0000A0 " + strcharinfo(0) + " ^000000 ^^";
+	mes "Quieres comer algo?";
+	next;
+	menu "Frutas y verduras",fruta,"Golosinas",golosinas,"Nada gracias^^",nada;
+//Aqui están todas las frutas, con menu desplegable tipo warp\\	
+	fruta:
+	mes "[Dependiente de la cafeteria]";
+	mes "Que fruta o verdura quieres?";
+	next;
+	menu "Manzana",manzana,"Plátano",platano,"Zanahoria",zanahoria,"Uvas",uvas,"Limón",limon,"Fruta mastela",mastela,"Naranja",naranja,"Patata",patata,"Fruta prikly",prikly,"Calabaza",calabaza,"Fresas",fresas;
+	manzana:
+	mes "[Dependiente de la cafeteria]";
+	mes "Aqui tienes";
+	close2;
+	getitem 512,1;
+	end;
+	platano:
+	mes "[Dependiente de la cafeteria]";
+	mes "Aqui tienes";
+	close2;
+	getitem 513,1;
+	end;
+	zanahoria:
+	mes "[Dependiente de la cafeteria]";
+	mes "Aqui tienes";
+	close2;
+	getitem 515,1;
+	end;
+	uvas:
+	mes "[Dependiente de la cafeteria]";
+	mes "Aqui tienes";
+	close2;
+	getitem 514,5;
+	end;
+	limon:
+	mes "[Dependiente de la cafeteria]";
+	mes "Aqui tienes";
+	close2;
+	getitem 568,1;
+	end;
+	mastela:
+	mes "[Dependiente de la cafeteria]";
+	mes "Aqui tienes";
+	close2;
+	getitem 522,1;
+	end;
+	naranja:
+	mes "[Dependiente de la cafeteria]";
+	mes "Aqui tienes";
+	close2;
+	getitem 582,1;
+	end;
+	patata:
+	mes "[Dependiente de la cafeteria]";
+	mes "Aqui tienes";
+	close2;
+	getitem 516,1;
+	end;
+	prikly:
+	mes "[Dependiente de la cafeteria]";
+	mes "Aqui tienes";
+	close2;
+	getitem 576,1;
+	end;
+	calabaza:
+	mes "[Dependiente de la cafeteria]";
+	mes "Aqui tienes";
+	close2;
+	getitem 535,1;
+	end;
+	fresas:
+	mes "[Dependiente de la cafeteria]";
+	mes "Aqui tienes";
+	close2;
+	getitem 578,5;
+	end;
+//---- Final de las frutas ----\\
+	golosinas:
+	mes "[Dependiente de la cafeteria]";
+	mes "Que golosina o dulce quieres?";
+	next;
+	menu "Caramelo",caramelo,"Barra de caramelo",b_caramelo,"Chocolate",chocolate,"Corazón de Chocolate",c_choco,"Chocolate blanco",chocolate_blanco,"Helado",helado,"Bolsa de dulces",mochi,"Tarta",tarta;
+	caramelo:
+	mes "[Dependiente de la cafeteria]";
+	mes "Aqui tienes";
+	close2;
+	getitem 529,1;
+	end;
+	b_caramelo:
+	mes "[Dependiente de la cafeteria]";
+	mes "Aqui tienes";
+	close2;
+	getitem 530,1;
+	end;
+	chocolate:
+	mes "[Dependiente de la cafeteria]";
+	mes "Aqui tienes";
+	close2;
+	getitem 558,1;
+	end;
+	c_choco:
+	mes "[Dependiente de la cafeteria]";
+	mes "Aqui tienes";
+	close2;
+	getitem 559,1;
+	end;
+	chocolate_blanco:
+	mes "[Dependiente de la cafeteria]";
+	mes "Aqui tienes";
+	close2;
+	getitem 560,1;
+	end;
+	helado:
+	mes "[Dependiente de la cafeteria]";
+	mes "Aqui tienes";
+	close2;
+	getitem 536,1;
+	end;
+	mochi:
+	mes "[Dependiente de la cafeteria]";
+	mes "Aqui tienes";
+	close2;
+	getitem 557,1;
+	end;
+	tarta:
+	mes "[Dependiente de la cafeteria]";
+	mes "Aqui tienes";
+	close2;
+	getitem 539,1;
+	end;
+//Fin de golosinas\\
+	nada:
+	mes "[Dependiente de la cafeteria]";
+	mes "Como quieras^^";
+	mes "Vuelve si tienes hambre " + strcharinfo(0) + " ^^";
+	close;
+}
+
+// ===============================================================================================================
+// --------------------------------------------------- Libros ----------------------------------------------------
+// ===============================================================================================================
+
+sec_in01.gat,188,97,0	script	Normas de Merchs	111,{
+	set $@name$,"[^FF0000Normas de Merchs^000000]";
+	mes $@name$;
+	mes "-Las tiendas, generalmente se podran poner en la ciudad de Alberta y donde esta el centro comercial aunque si esta lleno se podra ir a otras ciudades siempre y cuando no incumplan ninguna norma. (Por el momento y mientras Prontera no alcance más users, podeis estar en Prontera si seguiis todas las normas que aparecen a continuación)";
+	next;
+	mes $@name$;
+	mes "-Se puede usar el comando @autotrade pero con moderación, maximo seran 2 cuentas (1 en autotrade y una in game, o 2 en autotrade), pero MAXIMO";
+	mes "-Este donde este la tienda, no podrá tapar NINGÚN npc";
+	next;
+	mes $@name$;
+	mes "-Se pueden poner tiendas en dungeons siempre y cuando no incumplan la norma anterior ni impidan tarjetear monstruos.";
+	mes "-No pueden ponerse en donde molesten: en medio de caminos, por ejemplo.";
+	close;
+}
+
+sec_in01.gat,188,99,0	script	Normas del Servidor	111,{
+	set $@name$,"[^FF0000Normas del Servidor^000000]";
+	mes $@name$;
+	mes "-Esta prohibido hablar mal sobre los GMs o el server";
+	mes "-No se puede hacer publicidad de otro serve";
+	mes "-Ni chats ni tiendas pueden tapar ningun NPC (Mute de 30minutos si es la primera vez)";
+	next;
+	mes $@name$;
+	mes "-NADA de bots, sera castigado con Ban de IP";
+	mes "-No se puede utilizar ningun bug del juego en beneficio propio (indicar en el apartado BUGS cualquier tipo de fallo en el juego)";
+	next;
+	mes $@name$;
+	mes "-Un cliente modificado o un programa externo es castigado con Ban de Cuenta";
+	mes "-Prohibido floodear";
+	mes "-Nada de jameo (robar monstruos/darle a un monstruo al que esta atacando otro) ESTO NO SE APLICA A LOS MVPS (si a los MiniBoss)";
+	next;
+	mes $@name$;
+	mes "-No se puede dar Heal ni dope a un monstruo al que este atacando otro usuario.";
+	mes "-Prohibido molestar a CUALQUIER Pj en evento, hacerlo supondra Kick y si la actitud permanece, mute (tiempo indeterminado)";
+	next;
+	mes $@name$;
+	mes "-Prohibido insultar, faltar al respeto, molestar o cualquier acto que sea considerado una falta de este tipo a cualquier usuario (Mute, tiempo indefinido. Depende de la gravedad de lo que hayan hecho)";
+	mes "-Hacerse pasar por miembro del Staff o usar nicks ofensivos, supondran BAN DE IP";
+	next;
+	mes $@name$;
+	mes "-No se puede usar habilidades que creen lag en lugares concurridos (para mejor jugabilidad de todos)";
+	mes "-No se pueden tirar ramas en sitios muy concurridos por novatos (Ej: Ant Hell, Prontera Field, Payon Dungeon...)";
+	next;
+	mes $@name$;
+	mes "-No se puede matar las plantas de los Alchemist/Creators, ni jamear los hongos de los Creators.";
+	mes "-Los GMs no regalan, venden, compran, llevan a lugares ,prestan y/o intercambian items, pets,guilds, levels, stats, exp, etc..";
+	next;
+	mes $@name$;
+	mes "Los GMs NO dan propiedades (dopar) ni tampoco ayudan a subir niveles, están únicamente para resolver dudas, fallos, u otros problemas ya sea con los usuarios o con el servidor.";
+	next;
+	mes $@name$;
+	mes "El incumplimiento de estas normas sera castigado segun los GMs crean que es conveniente. Habra un sistema de avisos y al 5to aviso LEVE, jail de una semana.";
+	close;
+}
+
+sec_in01.gat,188,103,0	script	Normas de Homunculos	111,{
+	set $@name$,"[^FF0000Libro de Historia^000000]";
+	mes $@name$;
+	mes "-Los users que tengan Homunculos (Alchemist o Creators) es OBLIGATORIO que tengan la AI instalada.";
+	mes "-El homunculo forma parte del usuario y por lo tanto JAMEARLE o que te JAMEE sera penalizado.";
+	next;
+	mes $name$;
+	mes "-Estar AFK con el homunculo más de 15 minutos supondra Mute del usuario, ya que el homunculo es considerado BOT.";
+	close;
+}
+
+sec_in01.gat,188,103,0	script	Historia RO	111,{
+	set $@name$,"[^FF0000Libro de Historia^000000]";
+	mes $@name$;
+	mes "Una larga y penosa guerra santa se libró durante muchos años.";
+	mes "Una guerra entre los dioses, los humanos y los demonios que causó un gran daño a todos los involucrados.";
+	next;
+	mes $@name$;
+	mes "Tras la guerra, los humanos pactaron una tregua con los dioses y los demonios.";
+	mes "Este incómodo periodo de paz duraría 1000 años. En la época de paz, en el Midgard, los humanos se";
+	next;
+	mes $@name$;
+	mes "olvidaron de las miserias y penurias de la guerra.";
+	mes "Se convirtieron en presumidos egoistas que tenian poco conocimiento de su participación en la guerra del pasado.";
+	next;
+	mes $@name$;
+	mes "Extraños casos empezaban a romper el equilibrio de la paz en varios lugares del Midgard. Un clamor que bloqueaba";
+	mes "las voces de los dioses, apareció derrepente en los humanos y los demonios.";
+	next;
+	mes $@name$;
+	mes "Ataques no provocados por animales salvajes junto con los terremotos y maremotos enfurecieron a los habitantes del Midgard.";
+	mes "Como la paz empezaba a romperse, leyendas de misteriosos demonios empezaron a ser contadas por varios aventureros.";
+	next;
+	mes $@name$;
+	mes "Historias sobre Ymir, que ha sido responsable de mantener la paz por tanto tiempo, empezaron a circular por el mundo.";
+	mes "Los aventureros, motivados por estas historias empezaron a buscar sus restos.";
+	next;
+	mes $@name$;
+	mes "Algunos por riquezas, otros para hacerse un nombre y algunos por sus metas personales.";
+	mes "La búsqueda empezo sin que nadie conociera la verdadera esencia de los restos de Ymir....";
+	close;
+}
+
+sec_in01.gat,79,36,5	script	Oficina	100,{
+	set @name$,"^FF0000[Oficinista]^000000";
+	goto L_START;
+L_START:
+	mes @name$;
+	mes "Saludos, yo me encargo de los cambios en tu cuenta, deseas hacer algun cambio?";
+	next;
+	menu "Cambiar Password",L_PASSWORD,"Nada",despedida;
+
+L_PASSWORD:
+	mes @name$;
+	mes "Seguro que deseas cambiar tu pass?";
+	next;
+	menu "Si",L_si,"No",L_no;
+L_si:
+	mes @name$;
+	mes "Porfavor, introduce tu contraseña actual";
+	next;
+	input .@oldpassword$;
+	switch($md5){
+	case 0:
+		query_sql "SELECT (SELECT `user_pass` FROM `login` WHERE `account_id` = "+getcharid(3)+") = '"+escape_sql(.@oldpassword$)+"'", .@passcheck;
+		break;
+	case 1:
+		query_sql "SELECT (SELECT `user_pass` FROM `login` WHERE `account_id` = "+getcharid(3)+") = MD5('"+escape_sql(.@oldpassword$)+"')", .@passcheck;
+		break;
+	}
+	if(!.@passcheck){
+	mes "Password incorrecta.";
+	next;
+	goto L_START;
+	}
+	mes "Porfavor, introduce tu nueva contraseña:";
+	next;
+	input .@newpassword1$;
+	if(getstrlen(.@newpassword1$)<4 || getstrlen(.@newpassword1$)>32){
+	mes "Tu contraseña debe tener  4-32 caracteres de largo!";
+	next;
+	goto L_START;
+	}
+	if(.@oldpassword$ == .@newpassword1$){
+	mes "Tu contraseña no necesita ningun cambio!";
+	next;
+	goto L_START;
+	}
+	mes "Please re-enter your new password.";
+	input .@newpassword2$;
+	if(.@newpassword1$ != .@newpassword2$){
+	mes "La contraseña no coincide, porfavor vuelvalo a intentar";
+	next;
+	goto L_START;
+	}
+	switch($md5){
+	case 0:
+		query_sql "UPDATE `login` SET `user_pass` = '"+escape_sql(.@newpassword1$)+"' WHERE `account_id` = "+getcharid(3);
+		break;
+	case 1:
+		query_sql "UPDATE `login` SET `user_pass` = MD5('"+escape_sql(.@newpassword1$)+"') WHERE `account_id` = "+getcharid(3);
+		break;
+	}
+	logmes "Password cambiada con exito";
+	mes "Password cambiada con exito";
+	next;
+	goto L_START;
+	
+L_no:
+	goto L_START;
+
+despedida:
+	mes @name$;
+	switch (rand (2)){
+	case 0:
+			mes "Que pases un buen día^^";
+			close;
+			
+	case 1:
+			mes "Vuelve si necesitas algo más";
+			close;
+	case 2:
+			 mes "Hasta pronto^^";
+			 close;
+			 
+	}
+}
+
+sec_in01.gat,93,36,5	script	Sugerencias	100,{
+	set .name$,"^FF0000[Sugerencias]^000000";
+	mes .name$;
+	mes "Saludos, "+strcharinfo(0)+".";
+	next;
+	goto in;
+in:
+	mes .name$;
+	mes "Que deseas hacer?";
+	next;
+	switch(select("Ver Mensajes","Escribir mensajes","Salir")) {
+	
+	case 1:
+			goto mensajes;
+			end;
+	case 2:
+			goto write;
+			end;
+	case 3:
+			close;	
+	}	
+			
+write:
+	if ($ESMF == 80)	goto e5;
+	mes .name$;
+	mes "Dime tu mensaje.";
+	next;
+	input @messaje$;
+	mes .name$;
+	mes "Dime si es así:";
+	next;
+	mes .name$;
+	mes @messaje$;
+	next;
+	menu "Correcto",publicar,"No, está mal",pr_1;
+	
+pr_1:
+	goto write;
+	
+publicar:
+	set $ESMF,$ESMF +1;
+	set $ESMFname$[$ESMF],"[^0000FF"+strcharinfo(0)+"^000000]";
+	set $ESMFmess$[$ESMF],""+@messaje$+"";
+	mes .name$;
+	mes "Mensaje publicado con éxito";
+	next;
+	goto in;
+	
+mensajes:
+	if ($ESMF == 0)	goto e7;
+	mes .name$;
+	mes "Que mensaje deseas ver? (hay "+$ESMF+" mensajes en el foro)";
+	next;
+	input .@nu;
+	if (.@nu == 0)	goto e6;
+	if (.@nu > $ESMF)	goto e6;
+	goto mensajes2;
+	
+mensajes2:
+
+	mes $ESMFname$[.@nu];
+	mes "^0000FF"+$ESMFmess$[.@nu]+"^000000";
+	mes "                      Pag ["+.@nu+" / "+$ESMF+"]";
+	next;
+	switch(select("Ant:Sig:Salir")){
+	case 1:
+			if (.@nu == 1)	goto e3;
+			set .@nu,.@nu-1;
+			goto mensajes2;
+			
+	case 2:
+			if (.@nu == 80)	goto e4;
+			if (.@nu > $ESFM)	goto e2;
+			set .@nu,.@nu+1;
+			goto mensajes2;
+			
+	case 3:
+			goto in;
+			
+	
+	}
+	
+	
+	
+
+	
+e2:
+	mes .name$;
+	mes "Lo lamento, pero no hay tantos mensajes en el foro";
+	goto mensajes;
+	
+e3:
+	mes .name$;
+	mes "Estas en el primer mensaje, no hay nada antes";
+	goto mensajes;
+	
+e4:
+	mes "No hay más mensajes";
+	goto in;
+	
+e5:
+	mes .name$;
+	mes "El foro está lleno, porfavor comunicaselo a un gm";
+	close;
+	
+e6:
+	mes .name$;
+	mes "Lo lamento, pero ese mensaje no existe";
+	next;
+	goto in;
+	
+e7:
+	mes .name$;
+	mes "Lo lamento, pero no hay ningun mensaje publicado";
+	next;
+	goto in;
+}
+
+
+sec_in01.gat,98,28,3	script	Niña	703,{
+	set .name$,"^FF0000[Borradora]^000000";
+	if (getgmlevel() >= 60)	goto delete;
+
+	mes "^FF0000[Niña]^000000";
+	mes "Me encanta este sitio, es precioso^^";
+	close;
+delete:
+	mes .name$;
+	mes "Deseas borrar todo el contenido del foro?";
+	next;
+	menu "Si",s_d,"No",n_d;
+	
+s_d:
+	set @numero,rand(30000,99999);
+	mes "Introduce "+@numero+" para borrar";
+	next;
+	input .n;
+	if (.n != @numero)	goto e1;
+	mes .name$;
+	mes "Borrando....";
+	cleararray $ESMFmess$,null,80;
+	cleararray $ESMFname$,null,80;
+	set $ESMF,0;
+	next;
+	mes .name$;
+	mes "Borrado finalizado con éxito.";
+	close;
+	
+n_d:
+	close;
+	
+	
+e1:
+	mes .name$;
+	mes "El número que ha introducido no es igual al mostrado en la pantalla.";
+	mes "Por favor, vuelva a intentarlo.";
+	goto delete;
+
+
+}

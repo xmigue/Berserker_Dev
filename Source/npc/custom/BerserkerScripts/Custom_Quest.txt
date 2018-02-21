@@ -1,0 +1,620 @@
+//quiz_02,288,264,5	script	Lady Rampsey [Auras]	882,{
+new_5-2,84,115,3	script	Lady Rampsey [Auras]	882,{
+
+	set .@nameNPC$, "[^045FB4 Lady Rampsey ^000000]";
+	//setarray @look[0], getlook(LOOK_HEAD_BOTTOM), getlook(LOOK_HEAD_TOP), getlook(LOOK_HEAD_MID);
+	set @look, getlook(LOOK_HEAD_MID);
+	
+	mes .@nameNPC$;
+	mes "Hola! sabes que he tenido que estudiar muchisimo para poder crear este tipo de equipo, ¿Te gustaria que te creará uno?";
+	menu "Quisiera saber mas", next_step, "No gracias", no;
+	close;
+	
+	next_step:
+	callfunc "ClearData_Custom";
+	setarray @custom_items[0],33001,33016,33027,33039,33042,33069;
+	changelook LOOK_HEAD_MID, @look;
+	next;
+	mes .@nameNPC$;
+	mes "Dime de cual aura quieres saber que bonificaciones te otorga.";
+	menu 	"Acient Sisters", Acient_Sisters,
+			"Cresent Moon Aura", Cresent_moon_aura,
+			"Fire Dragon", Fire_Dragon,
+			"Holy Angel", Holy_Angel,
+			"Ice Hyo", Ice_Hyo,
+			"Tribal Rings", Tribal_Rings;
+	end;
+	
+	Acient_Sisters:
+		next;		
+		set .custom_selected, @custom_items[0];
+		mes .@nameNPC$;
+		mes "Esta Aura te otorgara la siguiente bonificacion:";
+		mes "+4 Str";
+		menu "Regresar", next_step, "Vista previa", preview,"¿Que necesito?",-;
+		next;
+		setarray @items_req[0], 979,7445,7298,7198,996,7263;
+		setarray @items_cant[0], 10,80,80,80,80,80;
+		goto mostrar_receta;
+	end;
+	
+	Cresent_moon_aura:
+		next;
+		set .custom_selected, @custom_items[1];
+		mes .@nameNPC$;
+		mes "Esta Aura te otorgara la siguiente bonificacion:";
+		mes "+4 Int";
+		menu "Regresar", next_step, "Vista previa", preview,"¿Que necesito?",-;
+		next;
+		setarray @items_req[0],982,978,720,746,7294,7291;
+		setarray @items_cant[0],5,5,100,100,10,10;
+		goto mostrar_receta;
+	end;
+	
+	Fire_Dragon:
+		next;
+		set .custom_selected, @custom_items[2];
+		mes .@nameNPC$;
+		mes "Esta Aura te otorgara la siguiente bonificacion:";
+		mes "+4 Dex";
+		menu "Regresar", next_step, "Vista previa", preview,"¿Que necesito?",-;
+		next;
+		setarray @items_req[0],975,980,7097,7096,7098,12040;
+		setarray @items_cant[0],5,5,100,100,100,30;
+		goto mostrar_receta;
+	end;
+	
+	Holy_Angel:
+		next;
+		set .custom_selected, @custom_items[3];
+		mes .@nameNPC$;
+		mes "Esta Aura te otorgara la siguiente bonificacion:";
+		mes "+4 Vit";
+		menu "Regresar", next_step, "Vista previa", preview,"¿Que necesito?",-;
+		next;
+		setarray @items_req[0],978,980,12040,7435,722,7441,7172;
+		setarray @items_cant[0],5,5,40,40,100,100,100;
+		goto mostrar_receta;
+	end;
+	
+	Ice_Hyo:
+		next;
+		set .custom_selected, @custom_items[4];
+		mes .@nameNPC$;
+		mes "Esta Aura te otorgara la siguiente bonificacion:";
+		mes "+4 Agi";
+		menu "Regresar", next_step, "Vista previa", preview,"¿Que necesito?",-;
+		next;		
+		setarray @items_req[0],978,982,7561,995,7562;
+		setarray @items_cant[0],5,5,100,100,1;
+		goto mostrar_receta;
+	end;
+		
+	Tribal_Rings:
+		next;
+		set .custom_selected, @custom_items[5];
+		mes .@nameNPC$;
+		mes "Esta Aura te otorgara la siguiente bonificacion:";
+		mes "+4 Luk";
+		menu "Regresar", next_step, "Vista previa", preview,"¿Que necesito?",-;
+		next;		
+		setarray @items_req[0],980,982,7054,7063,725,7292;
+		setarray @items_cant[0],5,5,100,100,100,20;
+		goto mostrar_receta;
+	end;
+	
+	preview:
+		next;
+		changelook LOOK_HEAD_MID, @look;
+		deltimer strnpcinfo(0)+"::OnEnd";
+		@view = getiteminfo(.custom_selected, 11);
+		changelook LOOK_HEAD_MID, @view;
+		addtimer 5000, strnpcinfo(0)+"::OnEnd";
+		mes .@nameNPC$;
+		mes "Y.... que te parece, te gusta?";
+		switch(.custom_selected){
+			case 33001:
+				goto Acient_Sisters;
+				end;
+			case 33016:
+				goto Cresent_moon_aura;
+				end;
+			case 33027:
+				goto Fire_Dragon;
+				end;
+			case 33039:
+				goto Holy_Angel;
+				end;
+			case 33042:
+				goto Ice_Hyo;
+				end;
+			case 33069:
+				goto Tribal_Rings;
+				end;
+		}
+		end;
+		
+	OnEnd:
+		changelook LOOK_HEAD_MID, @look;
+	end;
+	
+	mostrar_receta:
+		changelook LOOK_HEAD_MID, @look;
+		set .nMakeItem, 1;
+		mes .@nameNPC$;
+		mes "Necesitare que me traigas los siguientes items:";
+		mes " ";
+		for(set .@i, 0; .@i < getarraysize(@items_req); .@i++) {
+			set .nInventario, countitem(@items_req[.@i]);
+			if(.nInventario < @items_cant[.@i])
+				set .nMakeItem, 0;
+			
+			if(.nMakeItem == 0)
+				mes "- " + getitemname(@items_req[.@i]) + " [" + @items_req[.@i] + "] - [^FF0000" + .nInventario + " de " + @items_cant[.@i] + "^000000]";
+			else
+				mes "- " + getitemname(@items_req[.@i]) + " [" + @items_req[.@i] + "] - [^088A08" + .nInventario + " de " + @items_cant[.@i] + "^000000]";
+		}		
+		if (getgmlevel() < 80) {
+			if(.nMakeItem == 0)
+				menu "Regresar", next_step, "Salir", no;
+			else
+				menu "Obtener aura", make_aura, "Regresar", next_step, "Salir", no;
+		}
+		else{
+			if(.nMakeItem == 0) {
+				menu "Obtener items",-, "Regresar", next_step, "Salir", no;
+				next;
+				for(set .@i, 0; .@i < getarraysize(@items_req); .@i++) {
+					getitem @items_req[.@i], @items_cant[.@i];
+				}
+				goto mostrar_receta;
+			}
+			else
+				menu "Obtener aura", make_aura, "Regresar", next_step, "Salir", no;
+		}
+	end;
+		
+	make_aura:
+		next;
+		mes .@nameNPC$;
+		mes "Valla parece que si lograste conseguir todo, bueno manos a la obra, que para eso estudie.";
+		next;
+		// SAVE LOG
+		set .lastInserId, 0;
+		query_sql("INSERT INTO log_custom_entregado (id_custom, char_id, account_id, dfecha, entregado) VALUES (" + .custom_selected + ", " + getcharid(0) + ", " + getcharid(3) + ", '" + gettimestr("%Y-%m-%d %H:%M:%S",21) + "', 0);");
+		query_sql("SELECT LAST_INSERT_ID();", .lastInserId);
+
+		mes .@nameNPC$;
+		mes "Listo!! alli lo tienes, ahora ve y enseñales quien tiene mas poder.";
+		for(set .@i, 0; .@i < getarraysize(@items_req); .@i++) {
+			query_sql("INSERT INTO log_custom_quest (id_logcustom, id_item, cantidad_item, dfecha) VALUES ("+.lastInserId+", "+@items_req[.@i]+", "+@items_cant[.@i]+", '" + gettimestr("%Y-%m-%d %H:%M:%S",21) + "')");
+			delitem @items_req[.@i], @items_cant[.@i];
+		}
+		getitem .custom_selected, 1;
+		query_sql("UPDATE log_custom_entregado SET entregado = 1 WHERE id_logcustom = " + .lastInserId);
+		callfunc "ClearData_Custom";
+		close;
+	end;
+	
+	get_items:
+		next;
+		for(set .@i, 0; .@i < getarraysize(@items_req); .@i++) {
+			getitem @items_req[.@i], @items_cant[.@i];
+		}
+		menu "Obtener aura", make_aura, "Regresar", next_step, "Salir", no;
+	end;
+	no:
+		next;
+		callfunc "ClearData_Custom";
+		mes .@nameNPC$;
+		mes "Nos vemos pronto, buena suerte!";
+		close2;
+		deltimer strnpcinfo(0)+"::OnEnd";
+	end;
+}
+
+function	script	ClearData_Custom	{
+	set .custom_selected, -1;
+	deletearray @custom_items[0],getarraysize( @custom_items );
+	deletearray @items_cant[0],getarraysize( @items_cant );
+	deletearray @items_req[0],getarraysize( @items_req );
+	return;
+}
+
+//quiz_02,288,259,5	script	Miss Kelly [Hats]	894,{
+new_5-2,99,113,3	script	Miss Kelly [Hats]	894,{
+
+	set .@nameNPC$, "[^045FB4 Miss Kelly ^000000]";
+	set @look, getlook(LOOK_HEAD_TOP);
+	
+	mes .@nameNPC$;
+	mes "Hola! Yo te puedo ayudar a mejorar incrementar tus habilidades con un fantastico hat, ¿Te gustaria que te creará uno?";
+	menu "Quisiera saber mas", next_step, "No gracias", no;
+	close;
+	
+	next_step:
+	callfunc "ClearData_Custom";
+	setarray @custom_items[0],33503,33504,33506,33510,33511,33512;
+	changelook LOOK_HEAD_TOP, @look;
+	next;
+	mes .@nameNPC$;
+	mes "Dime de cual hat quieres saber que bonificaciones te otorga.";
+	menu 	"Brown Valkyrie Helm", _Brown_Valkyrie_Helm, 
+			"Cyan Valkyrie Helm", _Cyan_Valkyrie_Helm, 
+			"Green Valkyrie Helm", _Green_Valkyrie_Helm,
+			"Red Valkyrie Helm",  _Red_Valkyrie_Helm, 
+			"Silver Valkyrie Helm",  _Silver_Valkyrie_Helm, 
+			"White Valkyrie Helm",  _White_Valkyrie_Helm;
+	
+	_Brown_Valkyrie_Helm:
+		next;
+		set .custom_selected, @custom_items[0];
+		mes .@nameNPC$;
+		mes "Esta Casco te otorgara la siguiente bonificacion:";
+		mes "+4 Luk";
+		menu "Regresar", next_step, "Vista previa", preview,"¿Que necesito?",-;
+		next;
+		setarray @items_req[0],980,983,2229,7510,1039,969;
+		setarray @items_cant[0],5,5,10,20,150,50;
+		goto mostrar_receta;
+	
+	_Cyan_Valkyrie_Helm:
+		next;
+		set .custom_selected, @custom_items[1];
+		mes .@nameNPC$;
+		mes "Esta Casco te otorgara la siguiente bonificacion:";
+		mes "+4 Agi";
+		menu "Regresar", next_step, "Vista previa", preview,"¿Que necesito?",-;
+		next;
+		setarray @items_req[0],978,976,2229,7510,1039,969;
+		setarray @items_cant[0],5,5,10,20,150,50;
+		goto mostrar_receta;
+		
+	_Green_Valkyrie_Helm:
+		next;
+		set .custom_selected, @custom_items[2];
+		mes .@nameNPC$;
+		mes "Esta Casco te otorgara la siguiente bonificacion:";
+		mes "+4 Dex";
+		menu "Regresar", next_step, "Vista previa", preview,"¿Que necesito?",-;
+		next;		
+		setarray @items_req[0],979,976,2229,7510,1039,969;
+		setarray @items_cant[0],7,3,10,20,150,50;
+		goto mostrar_receta;
+	
+	_Red_Valkyrie_Helm:
+		next;
+		set .custom_selected, @custom_items[3];
+		mes .@nameNPC$;
+		mes "Esta Casco te otorgara la siguiente bonificacion:";
+		mes "+4 Str";
+		menu "Regresar", next_step, "Vista previa", preview,"¿Que necesito?",-;
+		next;		
+		setarray @items_req[0],975,2229,7510,1039,969,2610;
+		setarray @items_cant[0],10,10,20,150,50,50;
+		goto mostrar_receta;
+	
+	_Silver_Valkyrie_Helm:
+		next;
+		set .custom_selected, @custom_items[4];
+		mes .@nameNPC$;
+		mes "Esta Casco te otorgara la siguiente bonificacion:";
+		mes "+4 Vit";
+		menu "Regresar", next_step, "Vista previa", preview,"¿Que necesito?",-;
+		next;		
+		setarray @items_req[0],982,983,2229,7510,1039,969;
+		setarray @items_cant[0],6,4,10,20,150,50;
+		goto mostrar_receta;
+	
+	_White_Valkyrie_Helm:
+		next;
+		set .custom_selected, @custom_items[5];
+		mes .@nameNPC$;
+		mes "Esta Casco te otorgara la siguiente bonificacion:";
+		mes "+4 Int";
+		menu "Regresar", next_step, "Vista previa", preview,"¿Que necesito?",-;
+		next;		
+		setarray @items_req[0],982,2229,7510,1039,969,2610;
+		setarray @items_cant[0],10,10,20,150,50,50;
+		goto mostrar_receta;
+		
+	preview:
+		next;
+		changelook LOOK_HEAD_TOP, @look;
+		deltimer strnpcinfo(0)+"::OnEnd";
+		@view = getiteminfo(.custom_selected, 11);
+		changelook LOOK_HEAD_TOP, @view;
+		addtimer 5000, strnpcinfo(0)+"::OnEnd";
+		mes .@nameNPC$;
+		mes "Y.... que te parece, te gusta?";
+		switch(.custom_selected){
+			case 33503:
+				goto _Brown_Valkyrie_Helm;
+				end;
+			case 33504:
+				goto _Cyan_Valkyrie_Helm;
+				end;
+			case 33506:
+				goto _Green_Valkyrie_Helm;
+				end;
+			case 33510:
+				goto _Red_Valkyrie_Helm;
+				end;
+			case 33511:
+				goto _Silver_Valkyrie_Helm;
+				end;
+			case 33512:
+				goto _White_Valkyrie_Helm;
+				end;
+		}
+		end;
+		
+	OnEnd:
+		changelook LOOK_HEAD_TOP, @look;
+	end;
+	
+	mostrar_receta:
+		changelook LOOK_HEAD_TOP, @look;
+		set .nMakeItem, 1;
+		mes .@nameNPC$;
+		mes "Necesitare que me traigas los siguientes items:";
+		mes " ";
+		for(set .@i, 0; .@i < getarraysize(@items_req); .@i++) {
+			set .nInventario, countitem(@items_req[.@i]);
+			if(.nInventario < @items_cant[.@i])
+				set .nMakeItem, 0;
+			
+			if(.nMakeItem == 0)
+				mes "- " + getitemname(@items_req[.@i]) + " [" + @items_req[.@i] + "] - [^FF0000" + .nInventario + " de " + @items_cant[.@i] + "^000000]";
+			else
+				mes "- " + getitemname(@items_req[.@i]) + " [" + @items_req[.@i] + "] - [^088A08" + .nInventario + " de " + @items_cant[.@i] + "^000000]";
+		}		
+		if (getgmlevel() < 80) {
+			if(.nMakeItem == 0)
+				menu "Regresar", next_step, "Salir", no;
+			else
+				menu "Obtener aura", make_hat, "Regresar", next_step, "Salir", no;
+		}
+		else{
+			if(.nMakeItem == 0) {
+				menu "Obtener items",-, "Regresar", next_step, "Salir", no;
+				next;
+				for(set .@i, 0; .@i < getarraysize(@items_req); .@i++) {
+					getitem @items_req[.@i], @items_cant[.@i];
+				}
+				goto mostrar_receta;
+			}
+			else
+				menu "Obtener Hat", make_hat, "Regresar", next_step, "Salir", no;
+		}
+		
+	make_hat:
+		next;
+		mes .@nameNPC$;
+		mes "Valla parece que si lograste conseguir todo, let's do it.";
+		next;
+		// SAVE LOG
+		set .lastInserId, 0;
+		query_sql("INSERT INTO log_custom_entregado (id_custom, char_id, account_id, dfecha, entregado) VALUES (" + .custom_selected + ", " + getcharid(0) + ", " + getcharid(3) + ", '" + gettimestr("%Y-%m-%d %H:%M:%S",21) + "', 0);");
+		query_sql("SELECT LAST_INSERT_ID();", .lastInserId);
+
+		mes .@nameNPC$;
+		mes "Listo!! alli lo tienes, ahora ve y enseñales quien tiene mas poder.";
+		for(set .@i, 0; .@i < getarraysize(@items_req); .@i++) {
+			query_sql("INSERT INTO log_custom_quest (id_logcustom, id_item, cantidad_item, dfecha) VALUES ("+.lastInserId+", "+@items_req[.@i]+", "+@items_cant[.@i]+", '" + gettimestr("%Y-%m-%d %H:%M:%S",21) + "')");
+			delitem @items_req[.@i], @items_cant[.@i];
+		}
+		getitem .custom_selected, 1;
+		query_sql("UPDATE log_custom_entregado SET entregado = 1 WHERE id_logcustom = " + .lastInserId);
+		callfunc "ClearData_Custom";
+		close;
+		
+	no:
+		next;
+		callfunc "ClearData_Custom";
+		mes .@nameNPC$;
+		mes "Nos vemos pronto, buena suerte!";
+		close2;
+		deltimer strnpcinfo(0)+"::OnEnd";
+	end;
+}
+
+
+//quiz_02,288,254,5	script	Sir Rasword [Wings]	934,{
+new_5-2,115,115,3	script	Sir Rasword [Wings]	934,{
+
+	set .@nameNPC$, "[^045FB4 Sir Rasword ^000000]";
+	set @look, getlook(LOOK_HEAD_BOTTOM);
+	
+	mes .@nameNPC$;
+	mes "Hola! Yo te puedo ayudar a mejorar incrementar tus habilidades con unas geniales Alas, ¿Te gustaria que te creará uno?";
+	menu "Quisiera saber mas", next_step, "No gracias", no;
+	
+	next_step:
+	callfunc "ClearData_Custom";
+	setarray @custom_items[0],34000,34001,34011,34012,34014,34035,34040,34050,34051,34056,34057,34058;
+	changelook LOOK_HEAD_BOTTOM, @look;
+	next;
+	mes .@nameNPC$;
+	mes "Dime de que Alas quieres saber que bonificaciones te otorga.";
+	
+	menu "Angel Wings", Angel_Wings, 
+		"Dark Butterfly Wings", Dark_Butterfly_Wings, 
+		"Red Angel Wings",  Red_Angel_Wings, 
+		"Tribal Wings",  Tribal_Wings, 
+		"Wings of Goddes",  Wings_of_Goddes, 
+		"Nature Wings", Nature_Wings;
+		
+	Angel_Wings:
+		next;
+		set .custom_selected, @custom_items[1];
+		mes .@nameNPC$;
+		mes "Estas Alas te otorgaran la siguiente bonificacion:";
+		mes "+4 int";
+		menu "Regresar", next_step, "Vista previa", preview,"¿Que necesito?",-;
+		next;
+		setarray @items_req[0],7168,924,7063,982,7291,722;
+		setarray @items_cant[0],100,100,100,10,10,100;
+		goto mostrar_receta;
+	
+	Dark_Butterfly_Wings:
+		next;
+		set .custom_selected, @custom_items[2];
+		mes .@nameNPC$;
+		mes "Estas Alas te otorgaran la siguiente bonificacion:";
+		mes "+4 Agi";
+		menu "Regresar", next_step, "Vista previa", preview,"¿Que necesito?",-;
+		next;
+		setarray @items_req[0],7168,924,983,7296,7315,6089;
+		setarray @items_cant[0],150,150,10,10,100,100;
+		goto mostrar_receta;
+	
+	Red_Angel_Wings:
+		next;
+		set .custom_selected, @custom_items[6];
+		mes .@nameNPC$;
+		mes "Estas Alas te otorgaran la siguiente bonificacion:";
+		mes "+4 Str";
+		menu "Regresar", next_step, "Vista previa", preview,"¿Que necesito?",-;
+		next;		
+		setarray @items_req[0],7168,7063,975,7097,990,7006;
+		setarray @items_cant[0],100,100,10,100,100,100;
+		goto mostrar_receta;
+	
+	Tribal_Wings:
+		next;
+		set .custom_selected, @custom_items[7];
+		mes .@nameNPC$;
+		mes "Estas Alas te otorgaran la siguiente bonificacion:";
+		mes "+4 Luk";
+		menu "Regresar", next_step, "Vista previa", preview,"¿Que necesito?",-;
+		next;		
+		setarray @items_req[0],7168,924,1012,1003,7296,983;
+		setarray @items_cant[0],100,100,100,100,10,10;
+		goto mostrar_receta;
+	
+	Wings_of_Goddes:
+		next;
+		set .custom_selected, @custom_items[9];
+		mes .@nameNPC$;
+		mes "Estas Alas te otorgaran la siguiente bonificacion:";
+		mes "+4 Vit";
+		menu "Regresar", next_step, "Vista previa", preview,"¿Que necesito?",-;
+		next;		
+		setarray @items_req[0],7168,924,7063,2254,7291,982;
+		setarray @items_cant[0],100,100,100,10,10,10;
+		goto mostrar_receta;
+	
+	Nature_Wings:
+		next;
+		set .custom_selected, @custom_items[11];
+		mes .@nameNPC$;
+		mes "Estas Alas te otorgaran la siguiente bonificacion:";
+		mes "+4 Dex";
+		menu "Regresar", next_step, "Vista previa", preview,"¿Que necesito?",-;
+		next;		
+		setarray @items_req[0],7168,7063,721,940,979,982;
+		setarray @items_cant[0],100,100,100,100,5,5;
+		goto mostrar_receta;
+				
+	preview:
+		next;
+		changelook LOOK_HEAD_BOTTOM, @look;
+		deltimer strnpcinfo(0)+"::OnEnd";
+		@view = getiteminfo(.custom_selected, 11);
+		changelook LOOK_HEAD_BOTTOM, @view;
+		addtimer 5000, strnpcinfo(0)+"::OnEnd";
+		mes .@nameNPC$;
+		mes "Y.... que te parece, te gusta?";
+		switch(.custom_selected){
+			case 34001:
+				goto Angel_Wings;
+				end;
+			case 34011:
+				goto Dark_Butterfly_Wings;
+				end;
+			case 34040:
+				goto Red_Angel_Wings;
+				end;
+			case 34050:
+				goto Tribal_Wings;
+				end;
+			case 34056:
+				goto Wings_of_Goddes;
+				end;
+			case 34057:
+				goto Nature_Wings;
+				end;
+		}
+		end;
+		
+	OnEnd:
+		changelook LOOK_HEAD_BOTTOM, @look;
+	end;
+	
+	mostrar_receta:
+		changelook LOOK_HEAD_BOTTOM, @look;
+		set .nMakeItem, 1;
+		mes .@nameNPC$;
+		mes "Necesitare que me traigas los siguientes items:";
+		mes " ";
+		for(set .@i, 0; .@i < getarraysize(@items_req); .@i++) {
+			set .nInventario, countitem(@items_req[.@i]);
+			if(.nInventario < @items_cant[.@i])
+				set .nMakeItem, 0;
+			
+			if(.nMakeItem == 0)
+				mes "- " + getitemname(@items_req[.@i]) + " [" + @items_req[.@i] + "] - [^FF0000" + .nInventario + " de " + @items_cant[.@i] + "^000000]";
+			else
+				mes "- " + getitemname(@items_req[.@i]) + " [" + @items_req[.@i] + "] - [^088A08" + .nInventario + " de " + @items_cant[.@i] + "^000000]";
+		}		
+		if (getgmlevel() < 80) {
+			if(.nMakeItem == 0)
+				menu "Regresar", next_step, "Salir", no;
+			else
+				menu "Obtener alas", make_alas, "Regresar", next_step, "Salir", no;
+		}
+		else{
+			if(.nMakeItem == 0) {
+				menu "Obtener items",-, "Regresar", next_step, "Salir", no;
+				next;
+				for(set .@i, 0; .@i < getarraysize(@items_req); .@i++) {
+					getitem @items_req[.@i], @items_cant[.@i];
+				}
+				goto mostrar_receta;
+			}
+			else
+				menu "Obtener alas", make_alas, "Regresar", next_step, "Salir", no;
+		}
+		
+	make_alas:
+		next;
+		mes .@nameNPC$;
+		mes "Valla parece que si lograste conseguir todo, bueno manos a la obra.";
+		mes "Te mencione que hay una probabilidad de que falle al crear el item?.";
+		next;
+		// SAVE LOG
+		set .lastInserId, 0;
+		query_sql("INSERT INTO log_custom_entregado (id_custom, char_id, account_id, dfecha, entregado) VALUES (" + .custom_selected + ", " + getcharid(0) + ", " + getcharid(3) + ", '" + gettimestr("%Y-%m-%d %H:%M:%S",21) + "', 0);");
+		query_sql("SELECT LAST_INSERT_ID();", .lastInserId);
+
+		mes .@nameNPC$;
+		mes "Wow que suerte jeje!! aqui lo tienes, ahora ve y enseñales quien tiene mas poder.";
+		for(set .@i, 0; .@i < getarraysize(@items_req); .@i++) {
+			query_sql("INSERT INTO log_custom_quest (id_logcustom, id_item, cantidad_item, dfecha) VALUES ("+.lastInserId+", "+@items_req[.@i]+", "+@items_cant[.@i]+", '" + gettimestr("%Y-%m-%d %H:%M:%S",21) + "')");
+			delitem @items_req[.@i], @items_cant[.@i];
+		}
+		getitem .custom_selected, 1;
+		query_sql("UPDATE log_custom_entregado SET entregado = 1 WHERE id_logcustom = " + .lastInserId);
+		callfunc "ClearData_Custom";
+		close;
+		
+	no:
+		next;
+		callfunc "ClearData_Custom";
+		mes .@nameNPC$;
+		mes "Nos vemos pronto, buena suerte!";
+		close2;
+		deltimer strnpcinfo(0)+"::OnEnd";
+	end;
+}

@@ -1,0 +1,157 @@
+sec_in01,179,24,3	script	Anuncios Globales	96,{
+
+	start:
+		if(.Gm == getgmlevel()){
+			//dispbottom "" + .@nAnuncios$[0];
+			mes $@npcName$;
+			mes "Buen dia GM, que puedo hacer por ti? Recuerda que los mensajes son mostrados al minuto 0, 20 y 40";
+			menu "Ver anuncios disponibles", view_announce, 
+					"Agregar anuncio", add_announce, 
+					"Deshabilitar anuncio", disable_announce, 
+					"Ver siguiente anuncio", check_announce,
+					"Nada", exit;
+			end;
+		}
+		else{
+			mes $@npcName$;
+			mes "Que tengas buen día";
+			close;
+		}
+	
+	view_announce:
+		// Revisamos anuncios
+		query_sql("SELECT c_anuncio FROM anuncios WHERE available = 1", .@nAnuncios$);
+		set .@nAnuncios, getarraysize(.@nAnuncios$); 
+		next;
+		mes $@npcName$;
+		mes "Hay " + .@nAnuncios + " anuncio" + ((.@nAnuncios == 0 || .@nAnuncios >= 2) ? "s" : "") + " registrados.";
+		if(.@nAnuncios == 0){
+			menu "Agregar anuncio", add_announce, "Nada", exit;
+		}
+		else{
+			for( set .@i, 1; .@i <= .@nAnuncios; set .@i, .@i + 1)
+				mes "[^045FB4" +.@i + "^000000]- " + .@nAnuncios$[.@i - 1];
+			menu "Agregar anuncio", add_announce, "Deshabilitar anuncio", disable_announce, "Nada", exit;
+		}
+	end;
+	
+	add_announce:
+		next;		
+		mes $@npcName$;
+		mes "Ingresa el mensaje a mostrar en el servidor, para cancelar ingresa 0: ";
+		input .@msj$;
+		if(.@msj$ != " " && .@msj$ != "0" ){
+			next;
+			mes $@npcName$;
+			mes "Estas seguro de registrar el siguiente mensaje?";
+			mes .@msj$;
+			menu "No",exit,"Si",-;
+			query_sql "INSERT INTO anuncios (c_anuncio) VALUES (" + .@msj$ + ")";
+			next;
+			mes $@npcName$;
+			mes "El anuncio ha sido registrado. que tengas un buen dia.";
+			close;
+		}
+		else{
+			goto exit;
+			end;
+		}
+	end;
+	
+	disable_announce:
+		next;
+		query_sql("SELECT id_anuncio, c_anuncio FROM anuncios WHERE available = 1", .@idAnuncios, .@cAnuncios$);
+		set .@nAnuncios, getarraysize(.@cAnuncios$); 
+		mes $@npcName$;
+		if(.@nAnuncios > 0){
+			mostrar_anuncios:
+			mes "Ingresa el id del anuncio a deshabilitar (valor númerico, marcado entre corchetes): ";
+			for( set .@i, 1; .@i <= .@nAnuncios; set .@i, .@i + 1)
+				mes "[^045FB4" + .@i + "^000000]- " + .@cAnuncios$[.@i - 1];
+			input .@msj;
+			if(.@msj > .@nAnuncios){
+				next;
+				mes $@npcName$;
+				mes "Id incorrecto, ingrese uno valido.";
+				next;
+				goto mostrar_anuncios;
+				end;
+			}
+			next;
+			mes $@npcName$;
+			mes "Estas seguro que quieres deshabilitar el mensaje: ";
+			mes .@cAnuncios$[.@msj - 1];
+			menu "No",exit,"Si",-;
+			next;
+			query_sql "UPDATE anuncios SET available = 0 WHERE id_anuncio = " + .@idAnuncios[.@msj - 1];
+			next;
+			mes $@npcName$;
+			mes "El mensaje ha sido deshabilitado, que tengas buen dia.";
+			close;
+		}
+		else{
+			mes "No hay anuncios registrados.";
+			close;
+		}
+	end;
+	
+	check_announce:
+		query_sql("SELECT c_anuncio FROM anuncios WHERE available = 1", .@cAnuncios$);
+		next;
+		mes $@npcName$;
+		mes "El siguiente mensaje por mostrarse es: ";
+		mes "[" + .nIndexAnuncio + "] - " + .@cAnuncios$[.nIndexAnuncio];
+		menu "Actualizar indice", update_announce, "Salir", exit;
+	end;
+	
+	update_announce:
+		query_sql("SELECT c_anuncio FROM anuncios WHERE available = 1", .@cAnuncios$);
+		set .@nAnuncios, getarraysize(.@cAnuncios$); 
+		next;
+		mes $@npcName$;
+		mes "Cual mensaje quieres que se muestre la proxima vez?";
+		for( set .@i, 1; .@i <= .@nAnuncios; set .@i, .@i + 1)
+				mes "[^045FB4" + .@i + "^000000]- " + .@cAnuncios$[.@i - 1];
+		input .@index;
+		if(.@index > 0 && .@index <= .@nAnuncios){
+			set .nIndexAnuncio, .@index - 1;
+			next;
+			mes $@npcName$;
+			mes "Ha sido actualizado, recuerda que los mensajes se muestran cada 20 min.";
+			close;
+		}
+		else{
+			next;
+			mes $@npcName$;
+			mes "Id no disponible, ingresa uno valido";
+			goto update_announce;
+		}
+	end;
+	
+	exit:
+		next;
+		mes $@npcName$;
+		mes "Hasta pronto GM, que tengas un excelente dia.";
+		close;
+	end;
+	
+	OnMinute00:
+	OnMinute20:
+	OnMinute40:
+		query_sql("SELECT c_anuncio FROM anuncios WHERE available = 1", .@nAnuncios$);
+		if(getarraysize(.@nAnuncios$) > 0){				
+			announce .@nAnuncios$[.nIndexAnuncio],bc_all,0xFFFF00;
+			
+			if(.nIndexAnuncio == getarraysize(.@nAnuncios$) - 1)
+				set .nIndexAnuncio, 0;
+			else
+				set .nIndexAnuncio, .nIndexAnuncio + 1;
+		}
+	end;
+	
+	OnInit:
+		set $@npcName$, "[^045FB4Anuncionadora Berseker RO^000000]";
+		set .Gm,99;	
+		set .nIndexAnuncio, 0;
+	end;
+}

@@ -1,0 +1,152 @@
+//**********************************************************************************
+// ____                    _                                            _   _  ____
+//|  _ \ ___   ___   ____ | |  ___   ____   ___   ___   __  ___   _  _ | |_| |/ __ |
+//| |__// _ \ / _ \ |  _ \| | / _ \ |  _ \ / _ \ /  _| / _)/ _ \ | \| ||___  |\__  |
+//| |  |  __/ ||_|| | |__/| ||  __/ | |__/|  __/ | |  _\ \ ||_|| | \\ |    | |   | |
+//|_|___\___|_\___/_| |___|_|_\___|_| |____\___|_|_|_(___/ \___/_|_|\_|____|_|___|_|
+//------------------|_|-------------|_|---------------------------------------------
+//**********************************************************************************
+//===== rAthena Script =============================================================
+//= Security Manager
+//===== By: ========================================================================
+//= Peopleperson49 (Eddie)
+//===== Start Date: ================================================================
+//= 07MAR2010
+//===== Current Version: ===========================================================
+//= 1.4
+//===== Compatible With: ===========================================================
+//= rAthena SVN
+//===== Description: ===============================================================
+//= Allows a player to set up a password to help protect their account. It uses a
+//=     simple OnWhisperGlobal function.
+//===== Version Control: ===========================================================
+//= 1.0 First Version.
+//= 1.1 Added option to change the current password.
+//= 1.2 Optomized script to remove #PWCheck and just use the #AccountPW$. Thanks to
+//=     Joseph on rAthena.org.
+//= 1.3 Replaced the last #PWCheck that I missed before.
+//= 1.4 Replaced the whisper command with bindatcmd function.
+//===== Additional Comments:========================================================
+//=
+//==================================================================================
+ 
+-	script	SecurityManager	-1,{
+ 
+//OnInit:
+    //bindatcmd("security","SecurityManager::OnAtcommand");
+    //end;
+ 
+OnAtcommand:
+	switch(prompt("Change Current Password:Set New Password:Delete Current Password:Why Passwords Are Important?")) {
+		case 1:
+				if(#PWCheck==0) { mes "You do not currently have a password set."; close; }
+				mes "Please enter your current personal account password.";
+				input .@AccountPW$;
+				if(.@AccountPW$!=#AccountPW$) { next; mes "That password does not match your original one."; close; }
+				next;
+				mes "What would you like to change your current password to?";
+				input .@AccountPW$;
+				next;
+				set .@RandomFinalize,rand(100,999);
+				mes "Are you sure you want to change your password to ^FF0000"+.@AccountPW$+"^000000? If your 100% sure type the number ^0000FF"+.@RandomFinalize+"^000000.";
+				input .@Finalize;
+				if(.@Finalize!=.@RandomFinalize) { next; mes "It is probably for the best that you keep your current password!"; close; }
+				set #AccountPW$,.@AccountPW$;
+				set #PWCheck,1;
+				next;
+				mes "You password has been set as ^FF0000"+#AccountPW$+"^000000.";
+				close;
+		case 2:
+				if(#PWCheck!=0) { 
+					mes "You already have a personal account password."; 
+					close; 
+				}
+				mes "What would you like your new password to be?";
+				input .@AccountPW$;
+				next;
+				set .@RandomFinalize,rand(100,999);
+				mes "Are you sure you want to set your password to ^FF0000"+.@AccountPW$+"^000000? If your 100% sure type the number ^0000FF"+.@RandomFinalize+"^000000.";
+				input .@Finalize;
+				if(.@Finalize!=.@RandomFinalize) { 
+					next; 
+					mes "You really should set up a personal account password."; 
+					close; 
+				}
+				set #AccountPW$, .@AccountPW$;
+				set #PWCheck,1;
+				next;
+				mes "Your password has been set as ^FF0000"+#AccountPW$+"^000000.";
+				close;
+		case 3:
+				if(#PWCheck == 0) { 
+					mes "You do not currently have a personal account password set."; 
+					close; 
+				}
+				mes "Please enter your current personal account password.";
+				input .@AccountPW$;
+				if(.@AccountPW$!=#AccountPW$) { 
+					next; 
+					mes "That password does not match your original one."; 
+					close; 
+				}
+				next;
+				set .@RandomFinalize,rand(100,999);
+				mes "Are you sure you want to clear your current password? If your 100% sure type the number ^0000FF"+.@RandomFinalize+"^000000.";
+				input .@Finalize;
+				if(.@Finalize!=.@RandomFinalize) { 
+					next; 
+					mes "It is probably for the best that you keep your current password!"; 
+					close;				
+				}
+				set #AccountPW$,"";
+				set #PWCheck,0;
+				mes "Your password has been deleted.";
+				close;
+		case 4:
+				mes "- Setting a personal account password adds an additional layer of defense to protecting your account.";
+				mes "- It cannot be accessed by GameMaster's or other players without direct access to the RoUG database.";
+				mes "- The downside is that if you forget your password it cannot be easily retrieved!";
+				mes "- Passwords must be from 4 to 16 characters long and are CASE SENSITIVE!";
+				close;
+		case 255:
+				mes "Your security is our business!";
+				close;
+	}
+	 
+OnPCLoginEvent:
+	if(#AccountPW$!="") { 
+	//	next; 
+		query_sql("SELECT `group_id` FROM `login` WHERE `account_id` = " + getcharid(3), .@glvl );
+		atcommand "@adjgroup 7";
+		sc_start SC_Freeze,(((24*60)*60)*1000),0; // [(24 = Hrs * 60 Min * 60 Seg * 1000 ms)] = 24 hrs a ms
+		attachnpctimer;
+		initnpctimer;
+		
+		mes "[Security Manager]"; 
+		mes "Enter your personal account password."; 
+		mes "You have 20 seconds to enter password.";
+		input .@AccountPW$; 
+		if(.@AccountPW$!=#AccountPW$) { 
+			next;
+			mes "[Security Manager]"; 
+			mes "Invalid password entry."; 
+			close2; 
+			atcommand "@kick "+strcharinfo(0); 
+			end; 
+		} 
+		next; 
+		sc_end SC_Freeze;
+		atcommand "@adjgroup " + .@glvl;
+		stopnpctimer;
+		detachnpctimer;
+		atcommand "@refresh";
+		mes "[Security Manager]"; 
+		mes "You password has been accepted.";  
+		close;
+	}
+	end;
+	
+OnTimer20000:	
+	atcommand "@kick "+strcharinfo(0); 
+end;
+}

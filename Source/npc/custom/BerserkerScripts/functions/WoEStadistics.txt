@@ -1,0 +1,90 @@
+
+-	script	CountKillsWoe	-1,{
+	
+	OnPCKillEvent:
+		.@char_id = getcharid(0);
+		.@mapname$ = strcharinfo(3);
+		if( agitcheck() || agitcheck2() ){
+			.@query$ = "SELECT COUNT(*) FROM castle WHERE mapname = '" + .@mapname$ + "'";
+			query_sql(.@query$, .bContinuar);
+			if(.bContinuar){
+				.@query$ = "SELECT COUNT(*) FROM woe_stadistics WHERE char_id = " + .@char_id + " AND map_name = '" + .@mapname$ + "'";	
+				query_sql(.@query$, .SqlRecord);
+				if(.SqlRecord)
+					set .@query$, "UPDATE woe_stadistics SET nkills = nkills + 1, date_lastkill = '" + gettimestr("%Y-%m/%d %H:%M:%S",21) + "' WHERE char_id = " + .@char_id + " AND  map_name = '" + .@mapname$ + "'";
+				else
+					set .@query$, "INSERT INTO woe_stadistics (char_id, map_name, nkills, date_firstkill) VALUES (" + .@char_id + ", '" + .@mapname$ + "', 1, '" + gettimestr("%Y-%m/%d %H:%M:%S",21) + "')";
+        
+				query_sql(.@query$, .SqlRecord);
+			}
+		}
+		//dispbottom ""+rid2name(killerrid);
+	end;
+	
+	OnPCDieEvent:
+		.@char_id = getcharid(0);
+		.@mapname$ = strcharinfo(3);
+		.@nNombreAsesino$ = rid2name(killerrid);
+		.@nNombreAsesinado$ = strcharinfo(0);
+		//getmapxy( @mapname$, @mapx, @mapy, 0, strcharinfo(0));
+		
+		if( agitcheck() || agitcheck2() ){
+			.@query$ = "SELECT COUNT(*) FROM castle WHERE mapname = '" + .@mapname$ + "'";
+			query_sql(.@query$, .bContinuar);
+			if(.bContinuar){
+				// ESTADISTICA GENERAL
+				.@query$ = "SELECT COUNT(*) FROM woe_stadistics WHERE char_id = " + .@char_id + " AND map_name = '" + .@mapname$ + "'";	
+				query_sql(.@query$, .SqlRecord);
+				if(.SqlRecord){
+					set .@query$, "UPDATE woe_stadistics SET ndeaths = ndeaths + 1, date_lastdeath = '" + gettimestr("%Y-%m/%d %H:%M:%S",21) + "' WHERE char_id = " + .@char_id + " AND  map_name = '" + .@mapname$ + "'";
+				}
+				else {
+					set .@query$, "INSERT INTO woe_stadistics (char_id, map_name, ndeaths, date_firstdeath) VALUES (" + .@char_id + ", '" + .@mapname$ + "', 1, '" + gettimestr("%Y-%m/%d %H:%M:%S",21) + "')";
+				}				
+				query_sql(.@query$, .SqlRecord);
+				
+				// ESTADISTICA PARTICULAR
+				.@query$ = "SELECT COUNT(*) FROM woe_stadistics_player WHERE player_asesino = '" + .@nNombreAsesino$ + "' AND player_asesinado = '" + .@nNombreAsesinado$ + "' AND map_name = '" + .@mapname$ + "'";	
+				query_sql(.@query$, .SqlRecord);
+				if(.SqlRecord){
+					set .@query_player$, "UPDATE woe_stadistics_player SET nveces_asesinado = nveces_asesinado + 1, date_ultimoasesinato = '" + gettimestr("%Y-%m/%d %H:%M:%S",21) + "'  WHERE player_asesino = '" + .@nNombreAsesino$ + "' AND player_asesinado = '" + .@nNombreAsesinado$ + "' AND map_name = '" + .@mapname$ + "' AND available = 1";
+				}
+				else{
+					set .@query_player$, "INSERT INTO woe_stadistics_player (player_asesino, player_asesinado, nveces_asesinado, date_primerasesinato, map_name) VALUES ('" + .@nNombreAsesino$ + "', '" + .@nNombreAsesinado$ + "', 1, '" + gettimestr("%Y-%m/%d %H:%M:%S",21) + "', '" + .@mapname$ + "')";
+				}
+				query_sql(.@query_player$, .SqlRecord);
+				
+				announce "[WoE] " + .@nNombreAsesino$ + " ha matado a " + .@nNombreAsesinado$,bc_woe,0xFF7256;
+			}
+		}
+	end;
+	
+}
+
+//============= woe_stadistics ================
+//DROP TABLE IF EXISTS `woe_stadistics`;
+//CREATE TABLE `woe_stadistics` (
+//  `char_id` int(11) NOT NULL,
+//  `map_name` varchar(255) DEFAULT NULL,
+//  `nkills` int(11) DEFAULT NULL,
+//  `ndeaths` int(11) DEFAULT NULL,
+//  `date_firstkill` datetime DEFAULT NULL,
+//  `date_lastkill` datetime DEFAULT NULL,
+//  `date_firstdeath` datetime DEFAULT NULL,
+//  `date_lastdeath` datetime DEFAULT NULL,
+//  `available` tinyint(4) DEFAULT '1'
+//) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+//====================================================
+//
+//============= woe_stadistics_player ================
+//DROP TABLE IF EXISTS `woe_stadistics_player`;
+//CREATE TABLE `woe_stadistics_player` (
+//  `player_asesino` varchar(255) DEFAULT NULL,
+//  `player_asesinado` varchar(255) DEFAULT NULL,
+//  `nveces_asesinado` varchar(255) DEFAULT NULL,
+//  `date_primerasesinato` datetime DEFAULT NULL,
+//  `date_ultimoasesinato` datetime DEFAULT NULL,
+//  `map_name` varchar(255) DEFAULT NULL,
+//  `available` tinyint(4) DEFAULT '1' COMMENT '1'
+//) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+//====================================================

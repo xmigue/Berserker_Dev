@@ -1,0 +1,166 @@
+///	================================================================================================
+/// [Como configurar el comando @storageinfo]
+///	================================================================================================
+/// En el codigo fuente, clase atcommand.c, se agrega el siguiente metodo para invocar el script
+///		Buscar la siguiente linea
+///		ACMD_DEF(storage), 
+///		[en la siguiente linea agregar]
+///		ACMD_DEF(storageinfo), 
+/// 
+/// Buscar el siguiente metodo y comentarlo
+///	ACMD_FUNC(storage)
+/// Ya que lo vamos a reemplazar por los siguientes metodos
+/// ACMD_FUNC(storage)
+/// {
+/// 	int value, password;
+/// 	if (sd->npc_id || sd->state.vending || sd->state.buyingstore || sd->state.trading || sd->state.storage_flag)
+/// 		return -1;
+/// 	value = pc_readaccountreg(sd, add_str("#kafra_code"));	// Al grabar sobre esta variable, nos aseguramos que cuando usen las kafras tambien les pida la contraseña
+/// 	if (!value) {
+/// 		storage_storageopen(sd);
+/// 		clif_displaymessage(fd, "Storage opened.");
+/// 		clif_displaymessage(fd, "For more security, please use @storageinfo to set a password");
+/// 		return 0;
+/// 	}
+/// 	else {
+/// 		if (!message || !*message || sscanf(message, "%d", &password) < 1) {
+/// 			clif_displaymessage(fd, "@storage <Password>");
+/// 			clif_displaymessage(fd, "If you forgot your password you can use @storageinfo");
+/// 			return -1;
+/// 		}
+/// 		if (password != value) {
+/// 			clif_displaymessage(fd, "Incorrect Password ");
+/// 			clif_displaymessage(fd, "If you forgot your password you can use @storageinfo");
+/// 			return -1;
+/// 		}
+/// 		storage_storageopen(sd);
+/// 		clif_displaymessage(fd, "Storage opened.");
+/// 		return 0;
+/// 	}
+/// }
+/// 
+/// ACMD_FUNC(storageinfo)
+/// {
+/// 	if (sd->npc_id || sd->state.vending || sd->state.buyingstore || sd->state.trading)
+/// 		return -1;
+/// 	npc_event(sd, "StorageInfo::OnSettings", 0);
+/// 	return 0;
+/// }
+///	================================================================================================
+///	[Configuraciones en el conf del emulador]
+///	================================================================================================
+/// Para agregarlo para uso de los usuarios, realizar las siguientes modificaciones
+///
+///	conf/groups.conf [Agregar al grupo]
+///	storageinfo: true
+///
+/// conf/help [Agregar al final del archivo]
+/// storageinfo: "Puedes establecer una contraseña de seguridad para abrir tu storage"
+///
+///	conf/atcommand_athena.conf [Dentro de las llaves de aliases]
+///	storageinfo: ["storageinfo", "stginfo"]
+///
+/// doc/atcommands [Agregar la descripcion de los comandos al final del archivo]
+/// @storageinfo
+/// Puedes establecer una contraseña a tu storage.
+/// 
+/// ================================================================================================
+
+-	script	StorageInfo	-1,{
+
+OnSettings:
+mes "[Storage Security Info]";
+mes "Select an option";
+next;
+	if(#kafra_code > 1) {
+		switch(select("Change Password:Forgot Password:Close")) {
+			case 1:
+				mes "[Storage Security Info]";
+				mes "Input current password";
+				next;
+				input .@pass;
+				if (.@pass != #kafra_code) {
+					mes "Invalid password, please try again."; 
+					close;
+				}
+				mes "[Storage Security Info]";
+				mes "Input New Password";
+				next;
+				input .@passn;
+				if (.@passn < 1000 || .@pass > 9999) {
+					mes "Invalid password, please try again ^FF0000(1000 - 9999)^000000."; 
+					close;
+				}
+				mes "[Storage Security Info]";
+				mes "Confirm New Password";
+				next;
+				input .@passnc;
+				if (.@passnc != .@passn) {
+					mes "Please try again."; close;
+				}
+				set #kafra_code, .@passn;			
+
+			case 2:
+				mes "[Storage Security Info]";
+				mes "Please input your account email.";
+				next;
+				input .@email$;
+				query_sql "SELECT email FROM login WHERE account_id = "+ getcharid(3) +";",.@emaill$[0];
+				if (.@email$ != .@emaill$[0]) {
+					mes "Invalid email, please try again"; 
+					close;
+				}
+				
+				mes "[Storage Security Info]";
+				mes "Input New Password";
+				next;
+				input .@passn;
+				if (.@passn < 1000 || .@pass > 9999) {
+					mes "Invalid password, please try again ^FF0000(1000 - 9999)^000000."; 
+					close;
+				}
+				mes "[Storage Security Info]";
+				mes "Confirm New Password";
+				next;
+				input .@passnc;
+				if (.@passnc != .@passn) {
+					mes "Please try again."; 
+					close;
+				}
+				set #kafra_code, .@passn;
+
+			case 3:
+				close;
+
+		}
+	}
+	else {
+		if (!#kafra_code) {
+			switch(select("Set Password:Close")) {
+
+				case 1:
+					mes "[Storage Security Info]";
+					mes "Input New Password";
+					next;
+					input .@passn;
+					if (.@passn < 1000 || .@pass > 9999) {
+						mes "Invalid password, please try again ^FF0000(1000 - 9999)^000000."; 
+						close;
+					}
+					mes "[Storage Security Info]";
+					mes "Confirm New Password";
+					next;
+					input .@passnc;
+					if (.@passnc != .@passn) {
+						mes "Please try again."; 
+						close;
+					}
+					set #kafra_code, .@passn;					
+
+				case 2:
+					close;
+
+			}
+		}
+	}
+}

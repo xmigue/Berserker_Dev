@@ -1,0 +1,67 @@
+
+function	script	RebirthJob	{
+	//emotion e_lv2;
+	jobchange 4001;		// Change a RebirthJob
+	getitem 14545, 2;	// Get 2 Field Manual 300%
+	getitem 12210, 1;	// Get 1 Bubble gum
+	getitem 2202, 1;	// Get SunGlasses [1]
+	getitem 5361, 1;	// Gangster Scarf
+}
+
+//======================================================================
+//	Tabla de registro de recompensas entregadas en eventos automaticos
+//======================================================================
+//CREATE TABLE `events_rewards` (
+//  `id_event_reward` int(11) NOT NULL AUTO_INCREMENT,
+//  `name_event` varchar(255) DEFAULT NULL,
+//  `ncash_reward` int(11) DEFAULT NULL,
+//  `account_id` int(11) DEFAULT NULL,
+//  `name_player_won` varchar(255) DEFAULT NULL,
+//  `date_reward` datetime DEFAULT NULL,
+//  `date` datetime DEFAULT NULL,
+//  PRIMARY KEY (`id_event_reward`)
+//) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+//======================================================================
+
+function	script	SQL_Log_EventReward	{
+	//dispbottom "" + gettimestr("%Y-%m/%d %H:%M:%S",21);
+	.@query$ = "INSERT INTO events_rewards (name_event, ncash_reward, account_id, name_player_won, date_reward, date) VALUES ('" +getarg(0)+ "', " +getarg(1)+ ", " +getarg(2)+ ", '" +getarg(3)+ "', '" +gettimestr("%Y-%m/%d %H:%M:%S",21)+ "', NOW())";
+	query_sql(.@query$, .SqlRecord);
+	return;
+}
+
+//====================================================================
+//CREATE TABLE `woe_breaks_records` (
+//  `id_castle` varchar(10) NOT NULL DEFAULT '0',
+//  `castle_name` varchar(60) NOT NULL,
+//  `char_id` int(11) DEFAULT NULL,
+//  `char_name` varchar(255) DEFAULT NULL,
+//  `breaks` int(10) unsigned NOT NULL DEFAULT '0',
+//  `date_first_break` datetime DEFAULT NULL,
+//  `date_last_break` datetime DEFAULT NULL
+//) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+//====================================================================
+// strnpcinfo(2), id_castle == prtg_cas01
+// getcastlename(strnpcinfo(2)), castle_name
+// getcharid(0), char_id
+// getcharid(3), account_id
+// strcharinfo(0), char_name -- breaks
+// callfunc "SQL_Log_EmpeBreak",getcharid(0),strcharinfo(0);
+//====================================================================
+function	script	SQL_Log_EmpeBreak	{
+	.@charid = getarg(0);
+	.@char_name$ = getarg(1);
+	.@castleid$ = getarg(2);
+	.@castlename$ = getarg(3);
+	
+	.@query$ = "SELECT COUNT(*) FROM woe_breaks_records WHERE char_id = " + .@charid + " AND id_castle = '" + .@castleid$ + "'";
+	
+	query_sql(.@query$, .SqlRecord);
+	if(.SqlRecord)
+		set .@query$, "UPDATE woe_breaks_records SET breaks = breaks + 1, date_last_break = '"+gettimestr("%Y-%m/%d %H:%M:%S",21)+"' WHERE char_id = " + .@charid + " AND id_castle = '" + .@castleid$ + "'";
+	else
+		set .@query$, "INSERT INTO woe_breaks_records (id_castle, castle_name, char_id, char_name, breaks, date_first_break) VALUES ('"+.@castleid$+"', '"+.@castlename$+"', "+.@charid+", '"+.@char_name$+"', 1, '"+gettimestr("%Y-%m/%d %H:%M:%S",21)+"')";
+	//announce "" + .@query$ ,bc_all|bc_woe;
+	query_sql(.@query$, .SqlRecord);
+	return;
+}
