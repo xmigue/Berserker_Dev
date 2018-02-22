@@ -653,7 +653,7 @@ configure:5848: $? = 0
 configure:5848: result: yes
 configure:6038: checking for library containing inflateEnd
 configure:6069: g++ -o conftest -g -O2 -std=c++11  -DMAXCONN=16384 -I../common -DHAS_TLS -fno-strict-aliasing -DHAVE_SETRLIMIT -DHAVE_STRNLEN  -I/usr/include  -L/usr/lib conftest.cpp  >&5
-/tmp/cc3Z8HoN.o: In function `main':
+/tmp/ccnrxpCa.o: In function `main':
 /home/B3rZ3rkeRR0_2018/ragnarok/conftest.cpp:39: undefined reference to `inflateEnd'
 collect2: error: ld returned 1 exit status
 configure:6069: $? = 1
@@ -716,7 +716,7 @@ configure:6144: $? = 0
 configure:6161: result: none required
 configure:6176: checking for library containing clock_gettime
 configure:6207: g++ -o conftest -g -O2 -std=c++11  -DMAXCONN=16384 -I../common -DHAS_TLS -fno-strict-aliasing -DHAVE_SETRLIMIT -DHAVE_STRNLEN  -I/usr/include  -L/usr/lib conftest.cpp -lz  >&5
-/tmp/ccTkLR2o.o: In function `main':
+/tmp/ccsZkF9H.o: In function `main':
 /home/B3rZ3rkeRR0_2018/ragnarok/conftest.cpp:39: undefined reference to `clock_gettime'
 collect2: error: ld returned 1 exit status
 configure:6207: $? = 1
@@ -774,7 +774,7 @@ configure:6266: $? = 0
 configure:6268: result: yes
 configure:6290: checking for library containing pthread_create
 configure:6321: g++ -o conftest -g -O2 -std=c++11  -DMAXCONN=16384 -I../common -DHAS_TLS -fno-strict-aliasing -DHAVE_SETRLIMIT -DHAVE_STRNLEN  -I/usr/include -DHAVE_MONOTONIC_CLOCK  -L/usr/lib conftest.cpp -lrt -lz  >&5
-/opt/rh/devtoolset-7/root/usr/libexec/gcc/x86_64-redhat-linux/7/ld: /tmp/ccmnnEVT.o: undefined reference to symbol 'pthread_create@@GLIBC_2.2.5'
+/opt/rh/devtoolset-7/root/usr/libexec/gcc/x86_64-redhat-linux/7/ld: /tmp/ccEamSN9.o: undefined reference to symbol 'pthread_create@@GLIBC_2.2.5'
 //lib64/libpthread.so.0: error adding symbols: DSO missing from command line
 collect2: error: ld returned 1 exit status
 configure:6321: $? = 1
@@ -869,7 +869,7 @@ configure:6811: checking MySQL library (required)
 configure:6814: result: yes (5.1.73)
 configure:6843: checking for library containing pcre_study
 configure:6874: g++ -o conftest -g -O2 -std=c++11  -DMAXCONN=16384 -I../common -DHAS_TLS -fno-strict-aliasing -DHAVE_SETRLIMIT -DHAVE_STRNLEN  -I/usr/include -DHAVE_MONOTONIC_CLOCK  -L/usr/lib conftest.cpp -lpthread -lrt -lz  >&5
-/tmp/ccKCkFg3.o: In function `main':
+/tmp/ccGWZ3Qb.o: In function `main':
 /home/B3rZ3rkeRR0_2018/ragnarok/conftest.cpp:39: undefined reference to `pcre_study'
 collect2: error: ld returned 1 exit status
 configure:6874: $? = 1

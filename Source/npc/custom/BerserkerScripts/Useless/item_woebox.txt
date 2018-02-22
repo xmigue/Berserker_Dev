@@ -1,0 +1,30 @@
+// autor: GM Luke
+// funcion llamada en item 12256 { callfunc "GetItem"; }
+// Por definir
+
+//function	script	GetItem	{
+//	//:Random Custom
+//	switch(select("Random Items:Random Custom Set")) {
+//		case 1:
+//			// calculo de 2% probabilidad de dar Bloody Branch
+//			if(rand(100) <= 2) {
+//				getitem 12103, 2;
+//			}
+//			getitem 12210,2;	// Bubble gum
+//			getitem 12214,2;	// Convex Mirror
+//			//getitem 12028,10;	// Box of Thunder
+//			//getitem 12033,20;	// Box of Sunlight
+//			break;
+//		case 2: 
+//			setarray .@item, 34001, 34011, 34040, 34050, 34056, 34058, 33503, 33504, 33506, 33507, 33510, 33511, 33512, 33001, 33016, 33027, 33039, 33042, 33059, 33069;
+//			.@index = rand( getarraysize( .@item ) );
+//			getitem .@item[.@index], 1;
+//			break;
+//		//case 3: 
+//			//setarray .@item, 34057, 33501, 33502, 33505, 33507, 33508, 33509, 33513;
+//			//.@index = rand( getarraysize( .@item ) );
+//			//getitem .@item[.@index], 1;
+//			//close;
+//	}
+//	return;
+//}

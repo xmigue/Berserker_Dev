@@ -4774,7 +4774,7 @@
 12207,Vit_Dish10_,Stew Of Immortality,0,2,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ sc_start SC_FOOD_VIT_CASH,1800000,10; percentheal 15,5; },{},{}
 12208,Battle_Manual,Battle Manual,2,2,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ sc_start SC_EXPBOOST,1800000,50; },{},{}
 12209,Insurance,Life Insurance,2,2,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ sc_start SC_LIFEINSURANCE,1800000,0; },{},{}
-12210,Bubble_Gum,Bubble Gum,2,2,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ sc_start SC_ITEMBOOST,1800000,200; },{},{}
+12210,Bubble_Gum,Bubble Gum,2,2,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ sc_start SC_ITEMBOOST,1800000,280; },{},{}
 12211,Kafra_Card,Kafra Card,2,2,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ callfunc "F_CashStore"; },{},{}
 12212,Giant_Fly_Wing,Giant Fly Wing,2,2,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ callfunc "F_CashPartyCall"; },{},{}
 12213,Neuralizer,Neuralizer,11,2,,0,,,,,0xFFFFFFFF,7,2,,,,,,{ callfunc "F_CashReset"; },{},{}
@@ -7091,27 +7091,59 @@
 33512,_White_Valkyrie_Helm, White Valkyrie Helm,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1812,{ bonus bInt,4;},{ },{ }
 33513,Valkyrie_Helm_YingYang,Valkyrie Helm YingYang,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1813,{ bonus bVit,2; bonus bInt,2;},{ },{ }
 //
-33514,Black_Evolved_Majestic_Goat,Black Evolved Majestic Goat,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1814,{ },{ },{ }
-33515,Blue_Evolved_Majestic_Goat,Blue Evolved Majestic Goat,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1815,{ },{ },{ }
-33516,Cyan_Evolved_Majestic_Goat,Cyan Evolved Majestic Goat,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1816,{ },{ },{ }
-33517,Evolved_Majestic_Goat,Evolved Majestic Goat,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1817,{ },{ },{ }
-33518,Gold_Evolved_Majestic_Goat,Gold Evolved Majestic Goat,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1818,{ },{ },{ }
-33519,Green_Evolved_Majestic_Goat,Green Evolved Majestic Goat,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1819,{ },{ },{ }
-33520,Purple_Evolved_Majestic_Goat,Purple Evolved Majestic Goat,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1820,{ },{ },{ }
-33521,Red_Evolved_Majestic_Goat,Red Evolved Majestic Goat,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1821,{ },{ },{ }
-33522,White_Evolved_Majestic_Goat,White Evolved Majestic Goat,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1822,{ },{ },{ }
+//33514,Black_Evolved_Majestic_Goat,Black Evolved Majestic Goat,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1814,{ },{ },{ }
+//33515,Blue_Evolved_Majestic_Goat,Blue Evolved Majestic Goat,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1815,{ },{ },{ }
+//33516,Cyan_Evolved_Majestic_Goat,Cyan Evolved Majestic Goat,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1816,{ },{ },{ }
+//33517,Evolved_Majestic_Goat,Evolved Majestic Goat,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1817,{ },{ },{ }
+//33518,Gold_Evolved_Majestic_Goat,Gold Evolved Majestic Goat,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1818,{ },{ },{ }
+//33519,Green_Evolved_Majestic_Goat,Green Evolved Majestic Goat,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1819,{ },{ },{ }
+//33520,Purple_Evolved_Majestic_Goat,Purple Evolved Majestic Goat,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1820,{ },{ },{ }
+//33521,Red_Evolved_Majestic_Goat,Red Evolved Majestic Goat,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1821,{ },{ },{ }
+//33522,White_Evolved_Majestic_Goat,White Evolved Majestic Goat,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1822,{ },{ },{ }
 
-33523,Black_Feather_Beret,Black Feather Beret,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1823,{ },{ },{ }
-33524,Brown_Feather_Beret,Brown Feather Beret,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1824,{ },{ },{ }
-33525,Gold_Feather_Beret,Gold Feather Beret,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1825,{ },{ },{ }
-33526,Green_Feather_Beret,Green Feather Beret,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1826,{ },{ },{ }
-33527,Light_Blue_Feather_Beret,Light Blue Feather Beret,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1827,{ },{ },{ }
-33528,Orange_Feather_Beret,Orange Feather Beret,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1828,{ },{ },{ }
-33529,Pink_Feather_Beret,Pink Feather Beret,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1829,{ },{ },{ }
-33530,Purple_Feather_Beret,Purple Feather Beret,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1830,{ },{ },{ }
-33531,Red_Feather_Beret,Red Feather Beret,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1831,{ },{ },{ }
-33532,Silver_Feather_Beret,Silver Feather Beret,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1832,{ },{ },{ }
-33533,White_Feather_Beret,White Feather Beret,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1833,{ },{ },{ }
+//
+// Increase damage on DemiHuman monster 6 %
+33514,Black_Evolved_Majestic_Goat,Black Evolved Majestic Goat,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1814,{ bonus2 bAddRace,RC_DemiHuman,6; bonus2 bAddRace,RC_Player,6; },{ },{ }	
+// Increases damage of ranged attacks
+33515,Blue_Evolved_Majestic_Goat,Blue Evolved Majestic Goat,5,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1815,{ bonus bLongAtkRate,6; },{ },{ }	
+// Increases damage of e element magic by 6%
+33516,Cyan_Evolved_Majestic_Goat,Cyan Evolved Majestic Goat,5,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1816,{ bonus2 bMagicAtkEle,Ele_Water,6; },{ },{ }
+// 
+33517,Evolved_Majestic_Goat,Evolved Majestic Goat,5,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1817,{ },{ },{ }
+// 
+33518,Gold_Evolved_Majestic_Goat,Gold Evolved Majestic Goat,5,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1818,{ },{ },{ }
+// Magical attack power + n%
+33519,Green_Evolved_Majestic_Goat,Green Evolved Majestic Goat,5,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1819,{ bonus bMatkRate,6; },{ },{ }
+// 
+33520,Purple_Evolved_Majestic_Goat,Purple Evolved Majestic Goat,5,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1820,{ },{ },{ }
+// Increase Attack power + 6%
+33521,Red_Evolved_Majestic_Goat,Red Evolved Majestic Goat,5,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1821,{ bonus bAtkRate,6; },{ },{ }
+// Increase magic damage on DemiHuman monster
+33522,White_Evolved_Majestic_Goat,White Evolved Majestic Goat,5,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1822,{ bonus2 bMagicAddRace,RC_DemiHuman,6; bonus2 bMagicAddRace,RC_Player,6; },{ },{ } 
+
+//33523,Black_Feather_Beret,Black Feather Beret,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1823,{ },{ },{ }
+//33524,Brown_Feather_Beret,Brown Feather Beret,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1824,{ },{ },{ }
+//33525,Gold_Feather_Beret,Gold Feather Beret,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1825,{ },{ },{ }
+//33526,Green_Feather_Beret,Green Feather Beret,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1826,{ },{ },{ }
+//33527,Light_Blue_Feather_Beret,Light Blue Feather Beret,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1827,{ },{ },{ }
+//33528,Orange_Feather_Beret,Orange Feather Beret,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1828,{ },{ },{ }
+//33529,Pink_Feather_Beret,Pink Feather Beret,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1829,{ },{ },{ }
+//33530,Purple_Feather_Beret,Purple Feather Beret,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1830,{ },{ },{ }
+//33531,Red_Feather_Beret,Red Feather Beret,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1831,{ },{ },{ }
+//33532,Silver_Feather_Beret,Silver Feather Beret,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1832,{ },{ },{ }
+//33533,White_Feather_Beret,White Feather Beret,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1833,{ },{ },{ }
+//// MDEF + 1, Reduce 10% damage taken from DemiHuman monster, Increase resistance to the ? Property by 5%.
+33523,Black_Feather_Beret,Black Feather Beret,5,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1823,{ bonus bMdef,1; bonus2 bSubRace,RC_DemiHuman,10; bonus2 bSubRace,RC_Player,10; bonus2 bSubEle,Ele_Dark,5; },{ },{ }	
+33524,Brown_Feather_Beret,Brown Feather Beret,5,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1824,{ bonus bMdef,1; bonus2 bSubRace,RC_DemiHuman,10; bonus2 bSubRace,RC_Player,10; bonus2 bSubEle,Ele_Earth,5; },{ },{ }
+33525,Gold_Feather_Beret,Gold Feather Beret,5,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1825,{ bonus bMdef,1; bonus2 bSubRace,RC_DemiHuman,10; bonus2 bSubRace,RC_Player,10; bonus2 bSubEle,Ele_All,1; },{ },{ }
+33526,Green_Feather_Beret,Green Feather Beret,5,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1826,{ bonus bMdef,1; bonus2 bSubRace,RC_DemiHuman,10; bonus2 bSubRace,RC_Player,10; bonus2 bSubEle,Ele_Wind,5; },{ },{ }
+33527,Light_Blue_Feather_Beret,Light Blue Feather Beret,5,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1827,{ bonus bMdef,1; bonus2 bSubRace,RC_DemiHuman,10; bonus2 bSubRace,RC_Player,10; bonus2 bSubEle,Ele_Neutral,5; },{ },{ }
+33528,Orange_Feather_Beret,Orange Feather Beret,5,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1828,{ bonus bMdef,1; bonus2 bSubRace,RC_DemiHuman,10; bonus2 bSubRace,RC_Player,10; bonus2 bSubEle,Ele_All,1; },{ },{ }
+33529,Pink_Feather_Beret,Pink Feather Beret,5,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1829,{ bonus bMdef,1; bonus2 bSubRace,RC_DemiHuman,10; bonus2 bSubRace,RC_Player,10; bonus2 bSubEle,Ele_All,1; },{ },{ }
+33530,Purple_Feather_Beret,Purple Feather Beret,5,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1830,{ bonus bMdef,1; bonus2 bSubRace,RC_DemiHuman,10; bonus2 bSubRace,RC_Player,10; bonus2 bSubEle,Ele_Poison,5; },{ },{ }
+33531,Red_Feather_Beret,Red Feather Beret,5,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1831,{ bonus bMdef,1; bonus2 bSubRace,RC_DemiHuman,10; bonus2 bSubRace,RC_Player,10; bonus2 bSubEle,Ele_Fire,5; },{ },{ }
+33532,Silver_Feather_Beret,Silver Feather Beret,5,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1832,{ bonus bMdef,1; bonus2 bSubRace,RC_DemiHuman,10; bonus2 bSubRace,RC_Player,10; bonus2 bSubEle,Ele_Ghost,5; },{ },{ }
+33533,White_Feather_Beret,White Feather Beret,5,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1833,{ bonus bMdef,1; bonus2 bSubRace,RC_DemiHuman,10; bonus2 bSubRace,RC_Player,10; bonus2 bSubEle,Ele_Holy,5; },{ },{ }
 
 33534,Amistr_Hat,Amistr Hat,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1834,{ },{ },{ }
 33535,DevilingHat,DevilingHat,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1835,{ },{ },{ }
@@ -7154,7 +7186,7 @@
 33569,Green_Traveler_Hat,Green Traveler Hat,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1869,{ },{ },{ }
 33570,Purple_Traveler_Hat,Purple Traveler Hat,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1870,{ },{ },{ }
 33571,Red_Traveler_Hat,Red Traveler Hat,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1871,{ },{ },{ }
-33572,Traveler_Hat,Traveler Hat,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1872,{ },{ },{ }
+33572,Traveler_Hat,Traveler Hat,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1872,{ bonus bLongAtkRate,6; },{ },{ }
 33573,White_Traveler_Hat,White Traveler Hat,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1873,{ },{ },{ }
 
 33574,Black_Valkyrie_Randgris_Helm,Black Valkyrie Randgris Helm,4,20,,100,,5,,1,0xFFFFFFFF,63,2,256,,0,1,1874,{ },{ },{ }
@@ -7187,7 +7219,7 @@
 //================================================================================================================================
 34000,Machine_Wings,Machine Wings,4,20,,100,,5,,1,0xFFFFFFFF,63,2,1,,0,1,1900,{ bonus bAllStats,100; bonus bMaxHPrate,50; bonus bMaxSPrate,50;},{ },{}
 34001,Angel_Wings,Angel Wings,4,20,,100,,5,,1,0xFFFFFFFF,63,2,1,,0,1,1901,{ bonus bInt,4;},{ },{}
-34002,Animated_Angel_Wings,Animated Angel Wings,4,20,,100,,5,,1,0xFFFFFFFF,63,2,1,,0,1,1902,{ },{ },{}
+34002,Animated_Angel_Wings,Animated Angel Wings,4,20,,100,,5,,1,0xFFFFFFFF,63,2,1,,0,1,1902,{ bonus bSpeedRate,6; },{ },{}
 34003,Black_Animated_Angel_Wings,Black Animated Angel Wings,4,20,,100,,5,,1,0xFFFFFFFF,63,2,1,,0,1,1903,{ },{ },{}
 34004,Black_Butterfly_Wings,Black Butterfly Wings,4,20,,100,,5,,1,0xFFFFFFFF,63,2,1,,0,1,1904,{ },{ },{}
 34005,Black_Deviling_Wings,Black Deviling Wings,4,20,,100,,5,,1,0xFFFFFFFF,63,2,1,,0,1,1905,{ },{ },{}
@@ -7236,10 +7268,10 @@
 34048,Silver_Deviling_Wings,Silver Deviling Wings,4,20,,100,,5,,1,0xFFFFFFFF,63,2,1,,0,1,1948,{ },{ },{}
 34049,Silver_Fairy_Wings,Silver Fairy Wings,4,20,,100,,5,,1,0xFFFFFFFF,63,2,1,,0,1,1949,{ },{ },{}
 34050,Tribal_Wings,Tribal Wings,4,20,,100,,5,,1,0xFFFFFFFF,63,2,1,,0,1,1950,{ bonus bLuk,4;},{ },{}
-34051,Vampire_Wings,Vampire Wings,4,20,,100,,5,,1,0xFFFFFFFF,63,2,1,,0,1,1951,{ },{ },{}
+34051,Vampire_Wings,Vampire Wings,4,20,,100,,5,,1,0xFFFFFFFF,63,2,1,,0,1,1951,{ bonus bHPGainValue,((7*MaxHP)/100); },{ },{}
 34052,White_Butterfly_Wings,White Butterfly Wings,4,20,,100,,5,,1,0xFFFFFFFF,63,2,1,,0,1,1952,{ },{ },{}
 34053,White_Deviling_Wings,White Deviling Wings,4,20,,100,,5,,1,0xFFFFFFFF,63,2,1,,0,1,1953,{ },{ },{}
-34054,White_Dragon_Wings,White Dragon Wings,4,20,,100,,5,,1,0xFFFFFFFF,63,2,1,,0,1,1954,{ },{ },{}
+34054,White_Dragon_Wings,White Dragon Wings,4,20,,100,,5,,1,0xFFFFFFFF,63,2,1,,0,1,1954,{ bonus bMagicHPGainValue,((7*MaxHP)/100); },{ },{}
 34055,White_Tribal_Wings,White Tribal Wings,4,20,,100,,5,,1,0xFFFFFFFF,63,2,1,,0,1,1955,{ },{ },{}
 34056,Wings_Of_Goddes,Wings Of Goddes,4,20,,100,,5,,1,0xFFFFFFFF,63,2,1,,0,1,1956,{ bonus bVit,4;},{ },{}
 34057,Ying_Yang_Wings,Ying Yang Wings,4,20,,100,,5,,1,0xFFFFFFFF,63,2,1,,0,1,1957,{ bonus bVit,2; bonus bInt,2;},{ },{}
@@ -7250,7 +7282,7 @@
 // Custom Aura's
 //================================================================================================================================
 33001,Acient_Sisters,Acient Sisters,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1700,{ bonus bStr,4;},{ },{ }
-33002,Aura_of_Porings,Aura Of Porings,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1701,{ },{ },{ }
+33002,Aura_of_Porings,Aura Of Porings,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1701,{ bonus4 bAutoSpellWhenHit,"AL_HEAL",5,60,0; },{ },{ }
 33003,Auto_Guard_Aura,Auto Guard Aura,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1702,{ },{ },{ }
 33004,Black_Aura,Black Aura,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1703,{ },{ },{ }
 33005,Black_Bubble_Aura,Black Bubble Aura,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1704,{ },{ },{ }
@@ -7271,7 +7303,7 @@
 33020,Cyan_Cresent_Moon_aura,Cyan Cresent Moon Aura,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1719,{ },{ },{ }
 33021,Cyan_Snowflake_Aura,Cyan Snowflake Aura,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1720,{ },{ },{ }
 33022,Daisho_Aura,Daisho Aura,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1721,{ },{ },{ }
-33023,Dark_Angel,Dark Angel,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1722,{ },{ },{ }
+33023,Dark_Angel,Dark Angel,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1722,{ bonus bDelayRate,-6; },{ },{ }
 33024,Dark_Hyo,Dark Hyo,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1723,{ },{ },{ }
 33025,Deathwatcher_Aura,Deathwatcher Aura,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1724,{ },{ },{ }
 33026,fallen_gladiator_aura,Fallen Gladiator Aura,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1725,{ },{ },{ }
@@ -7308,18 +7340,28 @@
 33057,Red_Cresent_Moon_aura,Red Cresent Moon Aura,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1756,{ },{ },{ }
 33058,Red_Snowflake_Aura,Red Snowflake Aura,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1757,{ },{ },{ }
 33059,Spellring,Spellring,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1758,{ bonus bVit,2; bonus bInt,2;},{ },{ }
-33060,spirit_of_black_soul,Spirit Of Black Soul,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1759,{ },{ },{ }
-33061,spirit_of_blue_soul,Spirit Of Blue Soul,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1760,{ },{ },{ }
-33062,spirit_of_green_soul,Spirit Of Green Soul,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1761,{ },{ },{ }
-33063,spirit_of_orange_soul,Spirit Of Orange Soul,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1762,{ },{ },{ }
-33064,spirit_of_purple_soul,Spirit Of Purple Soul,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1763,{ },{ },{ }
-33065,spirit_of_red_soul,Spirit Of Red Soul,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1764,{ },{ },{ }
-33066,spirit_of_white_soul,Spirit Of White Soul,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1765,{ },{ },{ }
-33067,spirit_of_yellow_soul,Spirit Of Yellow Soul,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1766,{ },{ },{ }
+
+//33060,spirit_of_black_soul,Spirit Of Black Soul,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1759,{ },{ },{ }
+//33061,spirit_of_blue_soul,Spirit Of Blue Soul,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1760,{ },{ },{ }
+//33062,spirit_of_green_soul,Spirit Of Green Soul,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1761,{ },{ },{ }
+//33063,spirit_of_orange_soul,Spirit Of Orange Soul,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1762,{ },{ },{ }
+//33064,spirit_of_purple_soul,Spirit Of Purple Soul,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1763,{ },{ },{ }
+//33065,spirit_of_red_soul,Spirit Of Red Soul,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1764,{ },{ },{ }
+//33066,spirit_of_white_soul,Spirit Of White Soul,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1765,{ },{ },{ }
+//33067,spirit_of_yellow_soul,Spirit Of Yellow Soul,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1766,{ },{ },{ }
+33060,spirit_of_black_soul,Spirit Of Black Soul,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1759,{ bonus2 bAddEle,Ele_Dark,5; },{ },{ }
+33061,spirit_of_blue_soul,Spirit Of Blue Soul,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1760,{ bonus2 bAddEle,Ele_Water,5; },{ },{ }
+33062,spirit_of_green_soul,Spirit Of Green Soul,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1761,{ bonus2 bAddEle,Ele_Wind,5; },{ },{ }
+33063,spirit_of_orange_soul,Spirit Of Orange Soul,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1762,{ bonus2 bAddEle,Ele_Neutral,5; },{ },{ }
+33064,spirit_of_purple_soul,Spirit Of Purple Soul,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1763,{ bonus2 bAddEle,Ele_Poison,5; },{ },{ }
+33065,spirit_of_red_soul,Spirit Of Red Soul,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1764,{ bonus2 bAddEle,Ele_Fire,5; },{ },{ }
+33066,spirit_of_white_soul,Spirit Of White Soul,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1765,{ bonus2 bAddEle,Ele_Holy,5; },{ },{ }
+33067,spirit_of_yellow_soul,Spirit Of Yellow Soul,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1766,{ bonus2 bAddEle,Ele_Earth,5; },{ },{ }
+
 33068,Syrith,Syrith,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1767,{ },{ },{ }
 33069,Tribal_Rings,Tribal Rings,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1768,{ bonus bLuk,4;},{ },{ }
 33070,Violet_Aura,Violet Aura,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1769,{ },{ },{ }
-33071,White_Aura,White Aura,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1770,{ },{ },{ }
+33071,White_Aura,White Aura,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1770,{ bonus4 bAutoSpell,"MO_TRIPLEATTACK",5,40,0; },{ },{ }
 33072,White_Bubble_Aura,White Bubble Aura,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1771,{ },{ },{ }
 33073,White_Bubblegum,White Bubblegum,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1772,{ },{ },{ }
 33074,White_Chakra,White Chakra,4,20,,100,,4,,1,0xFFFFFFFF,63,2,512,,0,1,1773,{ },{ },{ }
@@ -7356,7 +7398,7 @@
 32506,Dyestuff_Box_7,Violet Dyestuffs Box,18,20,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ getitem 981,10; },{},{}
 32507,Dyestuff_Box_8,White Dyestuffs Box,18,20,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ getitem 982,10; },{},{}
 32508,Cash_Ticket1,Cash Ticket,18,10,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ set #CASHPOINTS, #CASHPOINTS + 1; dispbottom "[Cashpoint] Balance actual: "+#CASHPOINTS; },{},{}
-32509,Cash_Ticket2,Cash Ticket,18,10,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ set #CASHPOINTS, #CASHPOINTS + 5; dispbottom "[Cashpoint] Balance actual: "+#CASHPOINTS; },{},{}
+32509,Cash_Ticket2,Cash Ticket,18,10,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ set #CASHPOINTS, #CASHPOINTS + 2; dispbottom "[Cashpoint] Balance actual: "+#CASHPOINTS; },{},{}
 32510,Cash_Ticket3,Cash Ticket,18,10,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ set #CASHPOINTS, #CASHPOINTS + 10; dispbottom "[Cashpoint] Balance actual: "+#CASHPOINTS; },{},{}
 32511,Elemental_Box1,Fire Elemental Box,18,20,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ getitem 12114,40; },{},{}
 32512,Elemental_Box2,Water Elemental Box,18,20,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ getitem 12115,40; },{},{}
@@ -7367,7 +7409,7 @@
 32517,Elemental_Box7,Earthproof Potion Box,18,20,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ getitem 12120,40; },{},{}
 32518,Elemental_Box8,Thunderproof Potion Box,18,20,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ getitem 12121,40; },{},{}
 32519,Elemental_Box9,Alovera Box,18,20,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ getitem 606,40; },{},{}
-
+32520,Certificate_TW2,Certificate Weight,4,0,,0,,0,,0,0xFFFFFFFF,7,2,8192,,0,0,0,{ if(BaseClass != Job_Merchant) { dispbottom ""+JobLevel; bonus bAddMaxWeight, (JobLevel*200); } },{},{} // (0.1*200)*70 + 1400 Weight
 
 // Costume Hats
 35000,C_Garm_Hat,Garm Hat,4,0,,0,,0,,0,0xFFFFFFFF,7,2,1024,,1,0,1800,{ bonus2 bSubEle,Ele_Water,5;},{ },{}

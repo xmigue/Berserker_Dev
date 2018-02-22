@@ -1,0 +1,299 @@
+//===== rAthena Script =======================================
+//= Castle Manager NPC
+//===== By: ==================================================
+//= Nova
+//===== Current Version: =====================================
+//= 1.0 
+//= 1.1 Added ability to set a single value on a castle.
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= Manage WoE castle data.
+//= Thanks to Euphy's woe_controller script for the arrays.
+//= And thanks to Emistry for making me add more things to it.
+//============================================================
+
+-	script	Castle Manager	-1,{
+	.@n$ = "[ Castle Manager ]";
+	mes .@n$;
+	
+	if ( getgmlevel() < 99 ) {
+		mes "I only speak to Game Masters.";
+		end;
+	}
+	
+	if ( agitcheck() || agitcheck2() ) {
+		mes "Speak to me after WoE ends.";
+		end;
+	}
+	
+	for(.@i = 0; .@i < 6; .@i++) {
+		.@k = .@i * 5;
+		mes "Realm: ^676767"+.Realms$[.@i]+"^000000";
+		for(.@j = .@k; .@j < (.@k + 5); .@j++) {
+			.@t = getcastledata(.Castles$[.@j],1);
+			mes "  ~ "+getcastlename(.Castles$[.@j])+": "+((.@t)?"^0055FF"+getguildname(.@t):"^777777Unoccupied")+"^000000";
+		}
+		if (.@i < 5) mes " ";
+	}
+	
+	next;
+	
+	switch(select("View castle data:Transfer castle data:Copy a castle's data:Clear a castle's data:Modify a castle's data:Cancel")){
+		case 1:
+			for(.@i = 0; .@i < 6; .@i++) {
+				.@k = .@i * 5;
+				for(.@j = .@k; .@j < (.@k + 5); .@j++) {
+					.@t = getcastledata(.Castles$[.@j],1);
+					if(.@t) {
+						.@menu1$ = .@menu1$ + "  ~ "+getcastlename(.Castles$[.@j])+" (^0055FF"+.Castles$[.@j]+"^000000):";
+						.@menuIds1[.@id1] = .@j;
+						.@id1++;
+					}
+					else {
+						.@menu2$ = .@menu2$ + "  ~ "+getcastlename(.Castles$[.@j])+" (^777777"+.Castles$[.@j]+"^000000):";
+						.@menuIds2[.@id2] = .@j;
+						.@id2++;
+					}
+				}
+			}
+			
+			copyarray(.@menuIds1[.@id1], .@menuIds2[0], .@id2);
+			
+			.@old = select(.@menu1$ + .@menu2$) - 1;
+			.@old = .@menuIds1[.@old];
+			
+			mes "[ "+getcastlename(.Castles$[.@old])+" ]";
+			mes "Guild: ^3355FF"+getguildname(getcastledata(.Castles$[.@old],1))+"^000000";
+			mes "Leader: ^3355FF"+getguildmaster(getcastledata(.Castles$[.@old],1))+"^000000";
+			mes "Castle Economy: ^3355FF"+getcastledata(.Castles$[.@old],2)+"^000000";
+			mes "Castle Defense: ^3355FF"+getcastledata(.Castles$[.@old],3)+"^000000";
+			mes callfunc("F_InsertPlural",getcastledata(.Castles$[.@old],4),"investment",0,"^3355FF%d^000000 %s")+" in Economy today.";
+			mes callfunc("F_InsertPlural",getcastledata(.Castles$[.@old],4),"investment",0,"^3355FF%d^000000 %s")+" in Defense today.";
+			break;
+		case 2:
+			mes .@n$,"Which Castle's data do you wish to transfer?"; next;
+			
+			for(.@i = 0; .@i < 6; .@i++) {
+				.@k = .@i * 5;
+				for(.@j = .@k; .@j < (.@k + 5); .@j++) {
+					.@t = getcastledata(.Castles$[.@j],1);
+					if(.@t) {
+						.@menu1$ = .@menu1$ + "  ~ "+getcastlename(.Castles$[.@j])+" (^0055FF"+.Castles$[.@j]+"^000000):";
+						.@menuIds1[.@id1] = .@j;
+						.@id1++;
+					}
+					else {
+						.@menu2$ = .@menu2$ + "  ~ "+getcastlename(.Castles$[.@j])+" (^777777"+.Castles$[.@j]+"^000000):";
+						.@menuIds2[.@id2] = .@j;
+						.@id2++;
+					}
+				}
+			}
+			
+			copyarray(.@menuIds1[.@id1], .@menuIds2[0], .@id2);
+			
+			.@old = select(.@menu1$ + .@menu2$) - 1;
+			.@old = .@menuIds1[.@old];
+
+			mes .@n$,"To which Castle to you wish to transfer ^0055FF"+getcastlename(.Castles$[.@old])+"^000000's data?"; next;
+
+			for(.@i = 0; .@i < 6; .@i++) {
+				.@k = .@i * 5;
+				for(.@j = .@k; .@j < (.@k + 5); .@j++) {
+					.@t = getcastledata(.Castles$[.@j],1);
+					if(!.@t) {
+						.@menu3$ = .@menu3$ + "  ~ "+getcastlename(.Castles$[.@j])+" (^777777"+.Castles$[.@j]+"^000000):";
+						.@menuIds3[.@id3] = .@j;
+						.@id3++;
+					}
+					else {
+						.@menu4$ = .@menu4$ + "  ~ "+getcastlename(.Castles$[.@j])+" (^0055FF"+.Castles$[.@j]+"^000000):";
+						.@menuIds4[.@id4] = .@j;
+						.@id4++;
+					}
+				}
+			}
+
+			copyarray(.@menuIds3[.@id3], .@menuIds4[0], .@id4);
+
+			.@new = select(.@menu3$ + .@menu4$) - 1;
+			.@new = .@menuIds3[.@new];
+
+			mes .@n$,"Are you certain you wish to transfer ^0055FF"+getcastlename(.Castles$[.@old])+"^000000's data to ^0055FF"+getcastlename(.Castles$[.@new])+"^000000?"; next;
+
+			switch(select("Transfer Data:Cancel")){
+				case 1:
+					for (.@i = 1; .@i < 18; .@i++){
+						setd ".@"+.@i,getcastledata(.Castles$[.@old],.@i);
+						setcastledata(.Castles$[.@new],.@i, getd(".@"+.@i));
+						setcastledata(.Castles$[.@old],.@i, 0);
+					}
+					mes .@n$,"Data has been transfered from ^0055FF"+getcastlename(.Castles$[.@old])+"^000000 to ^0055FF"+getcastlename(.Castles$[.@new])+"^000000.";
+					break;
+				case 2:
+					break;
+			}
+			break;
+		case 3:
+			mes .@n$,"Which Castle's data do you wish to copy?"; next;
+			
+			for(.@i = 0; .@i < 6; .@i++) {
+				.@k = .@i * 5;
+				for(.@j = .@k; .@j < (.@k + 5); .@j++) {
+					.@t = getcastledata(.Castles$[.@j],1);
+					if(.@t) {
+						.@menu1$ = .@menu1$ + "  ~ "+getcastlename(.Castles$[.@j])+" (^0055FF"+.Castles$[.@j]+"^000000):";
+						.@menuIds1[.@id1] = .@j;
+						.@id1++;
+					}
+					else {
+						.@menu2$ = .@menu2$ + "  ~ "+getcastlename(.Castles$[.@j])+" (^777777"+.Castles$[.@j]+"^000000):";
+						.@menuIds2[.@id2] = .@j;
+						.@id2++;
+					}
+				}
+			}
+			
+			copyarray(.@menuIds1[.@id1], .@menuIds2[0], .@id2);
+			
+			.@old = select(.@menu1$ + .@menu2$) - 1;
+			.@old = .@menuIds1[.@old];
+
+			mes .@n$,"To which Castle to you wish to copy ^0055FF"+getcastlename(.Castles$[.@old])+"^000000's data?"; next;
+
+			for(.@i = 0; .@i < 6; .@i++) {
+				.@k = .@i * 5;
+				for(.@j = .@k; .@j < (.@k + 5); .@j++) {
+					.@t = getcastledata(.Castles$[.@j],1);
+					if(!.@t) {
+						.@menu3$ = .@menu3$ + "  ~ "+getcastlename(.Castles$[.@j])+" (^777777"+.Castles$[.@j]+"^000000):";
+						.@menuIds3[.@id3] = .@j;
+						.@id3++;
+					}
+					else {
+						.@menu4$ = .@menu4$ + "  ~ "+getcastlename(.Castles$[.@j])+" (^0055FF"+.Castles$[.@j]+"^000000):";
+						.@menuIds4[.@id4] = .@j;
+						.@id4++;
+					}
+				}
+			}
+
+			copyarray(.@menuIds3[.@id3], .@menuIds4[0], .@id4);
+
+			.@new = select(.@menu3$ + .@menu4$) - 1;
+			.@new = .@menuIds3[.@new];
+
+			mes .@n$,"Are you certain you wish to copy ^0055FF"+getcastlename(.Castles$[.@old])+"^000000's data to ^0055FF"+getcastlename(.Castles$[.@new])+"^000000?"; next;
+
+			switch(select("Copy Data:Cancel")){
+				case 1:
+					for (.@i = 1; .@i < 18; .@i++){
+						setd ".@"+.@i,getcastledata(.Castles$[.@old],.@i);
+						setcastledata(.Castles$[.@new],.@i, getd(".@"+.@i));
+					}
+					mes .@n$,"Data has been copied from ^0055FF"+getcastlename(.Castles$[.@old])+"^000000 to ^0055FF"+getcastlename(.Castles$[.@new])+"^000000.";
+					break;
+				case 2:
+					break;
+			}
+			break;
+		case 4:
+			mes .@n$,"Which Castle's data do you wish to clear?"; next;
+			
+			for(.@i = 0; .@i < 6; .@i++) {
+				.@k = .@i * 5;
+				for(.@j = .@k; .@j < (.@k + 5); .@j++) {
+					.@t = getcastledata(.Castles$[.@j],1);
+					if(.@t) {
+						.@menu1$ = .@menu1$ + "  ~ "+getcastlename(.Castles$[.@j])+" (^0055FF"+.Castles$[.@j]+"^000000):";
+						.@menuIds1[.@id1] = .@j;
+						.@id1++;
+					}
+					else {
+						.@menu2$ = .@menu2$ + "  ~ "+getcastlename(.Castles$[.@j])+" (^777777"+.Castles$[.@j]+"^000000):";
+						.@menuIds2[.@id2] = .@j;
+						.@id2++;
+					}
+				}
+			}
+			
+			copyarray(.@menuIds1[.@id1], .@menuIds2[0], .@id2);
+			
+			.@clear = select(.@menu1$ + .@menu2$) - 1;
+			.@clear = .@menuIds1[.@clear];
+			
+			mes .@n$,"Are you certain to wish to clear ^0055FF"+getcastlename(.Castles$[.@clear])+"^000000's data?"; next;
+			
+			switch(select("Clear Data:Cancel")){
+				case 1:
+					for (.@i = 1; .@i < 18; .@i++){
+						setcastledata(.Castles$[.@clear],.@i, 0);
+					}
+					mes .@n$,"^0055FF"+getcastlename(.Castles$[.@clear])+"^000000's data has been cleared.";
+					break;
+				case 2:
+					break;
+			}
+			break;
+		case 5:
+			mes .@n$,"Which castle's data do you wish to modify?"; next;
+			
+			for(.@i = 0; .@i < 6; .@i++) {
+				.@k = .@i * 5;
+				for(.@j = .@k; .@j < (.@k + 5); .@j++) {
+					.@t = getcastledata(.Castles$[.@j],1);
+					if(.@t) {
+						.@menu1$ = .@menu1$ + "  ~ "+getcastlename(.Castles$[.@j])+" (^0055FF"+.Castles$[.@j]+"^000000):";
+						.@menuIds1[.@id1] = .@j;
+						.@id1++;
+					}
+					else {
+						.@menu2$ = .@menu2$ + "  ~ "+getcastlename(.Castles$[.@j])+" (^777777"+.Castles$[.@j]+"^000000):";
+						.@menuIds2[.@id2] = .@j;
+						.@id2++;
+					}
+				}
+			}
+			
+			copyarray(.@menuIds1[.@id1], .@menuIds2[0], .@id2);
+			
+			.@old = select(.@menu1$ + .@menu2$) - 1;
+			.@old = .@menuIds1[.@old];
+			
+			mes .@n$,"Which value of ^0055FF"+getcastlename(.Castles$[.@old])+"^000000 do you wish to change?"; next;
+			
+			.@change = select(.Values$[1],.Values$[2],.Values$[3],.Values$[4],.Values$[5]);
+			
+			mes .@n$,"To what value do you wish to set the ^0055FF"+.Values$[.@change]+"^000000?"; next;
+			
+			input(.@n);
+			//dispbottom "" + .Castles$[.@old] + " - " + .@change + " - " + .@n;
+			setcastledata(.Castles$[.@old],.@change, .@n);
+			
+			mes .@n$,"^0055FF"+getcastlename(.Castles$[.@old])+"^000000's ^0055FF"+.Values$[.@change]+"^000000 has been set to "+.@n;
+			break;
+		case 6:
+			break;
+	}
+	end;
+
+OnInit:
+	setarray .Values$[1],"Guild ID","Economy","Defense","Economy added today","Defense added today";
+	setarray .Castles$[0],
+	"prtg_cas01","prtg_cas02","prtg_cas03","prtg_cas04","prtg_cas05",
+	"payg_cas01","payg_cas02","payg_cas03","payg_cas04","payg_cas05",
+	"gefg_cas01","gefg_cas02","gefg_cas03","gefg_cas04","gefg_cas05",
+	"aldeg_cas01","aldeg_cas02","aldeg_cas03","aldeg_cas04","aldeg_cas05",
+	"arug_cas01","arug_cas02","arug_cas03","arug_cas04","arug_cas05",
+	"schg_cas01","schg_cas02","schg_cas03","schg_cas04","schg_cas05";
+	setarray .Realms$[0],"Prontera","Payon","Geffen","Aldebaran","Arunafeltz","Schwaltzvalt";
+	end;
+}
+job3_rune01,64,63,4	duplicate(Castle Manager)	Castle Manager#prt	418
+//prt_gld,166,80,4	duplicate(Castle Manager)	Castle Manager#prt	418
+//pay_gld,208,167,4	duplicate(Castle Manager)	Castle Manager#pay	418
+//gef_fild13,179,202,6	duplicate(Castle Manager)	Castle Manager#gef	418
+//alde_gld,181,163,6	duplicate(Castle Manager)	Castle Manager#alde	418
+//aru_gld,249,205,4	duplicate(Castle Manager)	Castle Manager#aru	418
+//sch_gld,200,252,6	duplicate(Castle Manager)	Castle Manager#sch	418

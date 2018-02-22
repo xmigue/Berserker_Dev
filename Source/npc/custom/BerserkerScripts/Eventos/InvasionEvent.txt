@@ -291,7 +291,7 @@ end;
 
 OnInit:
 	disablenpc "WarpPortalInvasion";
-	.GM_Min_Access = 6;
+	.GM_Min_Access = 9;
 	.bEventEnabled = 0;
 	.Npc_Name$ = "[^0000FF Invasion Event ^000000]";
 	.map_name$ = "ordeal_1-1";

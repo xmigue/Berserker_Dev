@@ -1,0 +1,61 @@
+prontera,160,180,3	script	Event Room	508,{
+	OnTouch:
+		mes "[Sala de Evento]";
+		mes "Quieres entrar en el evento?";
+		next;
+		menu "No",noenter,"Si",-;
+		sc_end SC_ALL;
+		percentheal 100,100;
+		nude;
+		atcommand "@storeall "+ strcharinfo(0);
+		dispbottom "Todos tus items fueron movidos al storage.";
+		warp "06guild_01",49,50;
+	end;
+	
+	noenter:
+		mes "[Sala de Evento]";
+		mes "Esta bien, vuelve cuando quieras.";
+	close;
+	
+	OnInit:
+		disablenpc "Event Room";
+	end;
+}
+
+06guild_01,63,67,3	script	Salida	508,{	
+	OnTouch:
+		warp "prontera",156,191;
+	end;
+}
+
+-	script	Call_EventMaya	-1,{
+
+	L_StartJmp:
+		enablenpc "Event Room";
+	end;
+
+	OnCheckGMAccess:
+		if(getgroupid() >= .GM_Min_Access) goto L_StartJmp;
+	end;
+	
+	L_EndEvents:
+		disablenpc "Event Room";
+	end;
+	
+	OnCheckGMAccess2:
+		if(getgroupid() >= .GM_Min_Access) goto L_EndEvents;
+	end;
+	
+	OnInit:
+		.GM_Min_Access = 9;
+		bindatcmd "StartREvent","Call_EventMaya::OnCheckGMAccess";
+		bindatcmd "EndREvent","Call_EventMaya::OnCheckGMAccess2";
+	end;
+}
+
+06guild_01	mapflag	nosave	SavePoint
+06guild_01	mapflag	nocommand	9
+06guild_01	mapflag	noloot
+06guild_01	mapflag	nomemo
+06guild_01	mapflag	nopenalty
+06guild_08	mapflag	noteleport

@@ -594,7 +594,12 @@ int skill_calc_heal(struct block_list *src, struct block_list *target, uint16 sk
 	}
 
 	hp = (int)(hp * global_bonus);
-
+	// Reduccion de heal durante woe en un 55% xMigue 20/02/2018
+	// Si se encuentra woe activa y se encuentra en mapa gvg, se reduce la heal en un 55%
+	if(is_agit_start() && map_flag_vs(target->m) && !map[target->m].flag.pvp){
+		if((skill_id == AB_HIGHNESSHEAL || skill_id == AB_CHEAL || skill_id == AL_HEAL) && hp > 0)
+			hp = (hp - ((hp * 55) / 100));
+	}
 	return (heal) ? max(1, hp) : hp;
 }
 

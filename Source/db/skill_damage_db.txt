@@ -34,3 +34,40 @@
 // MC_MAMMONITE,1,1,50 // In normal maps, players deal +50% damage to other players with Mammonite.
 // MO_EXTREMITYFIST,1,6,-50 // In PVP and GVG, players deal -50% (half) damage to other players with Asura Strike.
 // AB_ADORAMUS,1,6,50,0,10,15 // In PVP and GVG, players deal +50% damage to other players, +0% to mobs, +10% to bosses, and +15% to other with Adoramus.
+
+// SO Sorcerer
+SO_EARTHGRAVE,1,12,-20		// GVG, Battleground
+SO_DIAMONDDUST,1,12,-10
+SO_PSYCHIC_WAVE,1,12,-30
+SO_EARTHGRAVE,1,2,-10		// PVP
+SO_DIAMONDDUST,1,2,-5
+SO_PSYCHIC_WAVE,1,2,-15
+
+// AB 
+AB_ADORAMUS,1,12,150		// GVG, Battleground
+AB_JUDEX,1,12,200
+AB_ADORAMUS,1,2,75		// PVP
+AB_JUDEX,1,2,100
+
+// Warlock
+WL_COMET,1,12,50		// GVG, Battleground
+WL_COMET,1,2,50			// PVP
+
+// Sura
+MO_EXTREMITYFIST,1,12,-20 	// GVG, Battleground, players deal -20% (half) damage to other players with Asura Strike.
+SR_HELLGATE,1,12,-20
+MO_EXTREMITYFIST,1,2,-10 	// PVP, players deal -10% (half) damage to other players with Asura Strike.
+SR_HELLGATE,1,2,-10
+
+
+// Ranger
+RA_ARROWSTORM,1,12,-40		// GVG, Battleground
+RA_ARROWSTORM,1,2,-20		// PVP
+
+// Mechanic
+NC_BOOSTKNUCKLE,1,12,-30	// GVG
+NC_BOOSTKNUCKLE,1,2,-20		// PVP
+
+// Alchemist
+CR_ACIDDEMONSTRATION,1,12,-30	// GVG
+CR_ACIDDEMONSTRATION,1,2,-20	// PVP

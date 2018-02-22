@@ -149,7 +149,7 @@ end;
 OnInit:	
 	.bEventoInicio = 0;
 	.map_name$ = "quiz_01";
-	.GM_Min_Access = 6;
+	.GM_Min_Access = 9;
 	bindatcmd "enovice","announce_nvz::OnStartGMEvent";
 	initnpctimer;
 end;

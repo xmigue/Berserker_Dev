@@ -57,8 +57,10 @@ alde_dun03,120,157,8,8	monster	Drainliar	1111,10,300000,150000
 // alde_dun04 - Clock Tower B4
 //==================================================
 alde_dun04,0,0	monster	Bathory	1102,50
-alde_dun04,0,0	monster	Joker	1131,10
+//alde_dun04,0,0	monster	Joker	1131,10
+alde_dun04,0,0	monster	Joker	1131,50
 alde_dun04,0,0	monster	Executioner	1205,1,3600000,1800000
 alde_dun04,0,0	monster	Mysteltainn	1203,1,3600000,1800000
 alde_dun04,0,0	monster	Ogretooth	1204,1,3600000,1800000
-alde_dun04,0,0	monster	Whisper	1179,10
+//alde_dun04,0,0	monster	Whisper	1179,10
+alde_dun04,0,0	monster	Whisper	1179,20

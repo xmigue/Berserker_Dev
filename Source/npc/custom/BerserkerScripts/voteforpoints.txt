@@ -64,6 +64,9 @@ add_item(4381,1,12,"Cartas");	// Green Card
 add_item(4079,1,12,"Cartas");	// Mantis Card
 add_item(4334,1,12,"Cartas");	// Noxious Card
 
+// Otros
+add_item(7539,1,3,"Otros");	// Poring Coin
+
 
 
 //Script Start	

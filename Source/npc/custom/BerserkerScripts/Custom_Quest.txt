@@ -2,6 +2,7 @@
 new_5-2,84,115,3	script	Lady Rampsey [Auras]	882,{
 
 	set .@nameNPC$, "[^045FB4 Lady Rampsey ^000000]";
+	.custom_selected = 0;
 	//setarray @look[0], getlook(LOOK_HEAD_BOTTOM), getlook(LOOK_HEAD_TOP), getlook(LOOK_HEAD_MID);
 	set @look, getlook(LOOK_HEAD_MID);
 	
@@ -14,6 +15,9 @@ new_5-2,84,115,3	script	Lady Rampsey [Auras]	882,{
 	callfunc "ClearData_Custom";
 	setarray @custom_items[0],33001,33016,33027,33039,33042,33069;
 	changelook LOOK_HEAD_MID, @look;
+	if(.custom_selected){
+		deltimer strnpcinfo(0)+"::OnEnd";
+	}
 	next;
 	mes .@nameNPC$;
 	mes "Dime de cual aura quieres saber que bonificaciones te otorga.";
@@ -135,6 +139,7 @@ new_5-2,84,115,3	script	Lady Rampsey [Auras]	882,{
 		end;
 		
 	OnEnd:
+		deltimer strnpcinfo(0)+"::OnEnd";
 		changelook LOOK_HEAD_MID, @look;
 	end;
 	
@@ -228,6 +233,7 @@ new_5-2,99,113,3	script	Miss Kelly [Hats]	894,{
 	set @look, getlook(LOOK_HEAD_TOP);
 	
 	mes .@nameNPC$;
+	.custom_selected = 0;
 	mes "Hola! Yo te puedo ayudar a mejorar incrementar tus habilidades con un fantastico hat, ¿Te gustaria que te creará uno?";
 	menu "Quisiera saber mas", next_step, "No gracias", no;
 	close;
@@ -236,6 +242,9 @@ new_5-2,99,113,3	script	Miss Kelly [Hats]	894,{
 	callfunc "ClearData_Custom";
 	setarray @custom_items[0],33503,33504,33506,33510,33511,33512;
 	changelook LOOK_HEAD_TOP, @look;
+	if(.custom_selected){
+		deltimer strnpcinfo(0)+"::OnEnd";
+	}
 	next;
 	mes .@nameNPC$;
 	mes "Dime de cual hat quieres saber que bonificaciones te otorga.";
@@ -350,6 +359,7 @@ new_5-2,99,113,3	script	Miss Kelly [Hats]	894,{
 		end;
 		
 	OnEnd:
+		deltimer strnpcinfo(0)+"::OnEnd";
 		changelook LOOK_HEAD_TOP, @look;
 	end;
 	
@@ -427,6 +437,7 @@ new_5-2,115,115,3	script	Sir Rasword [Wings]	934,{
 	set @look, getlook(LOOK_HEAD_BOTTOM);
 	
 	mes .@nameNPC$;
+	.custom_selected = 0;
 	mes "Hola! Yo te puedo ayudar a mejorar incrementar tus habilidades con unas geniales Alas, ¿Te gustaria que te creará uno?";
 	menu "Quisiera saber mas", next_step, "No gracias", no;
 	
@@ -434,6 +445,9 @@ new_5-2,115,115,3	script	Sir Rasword [Wings]	934,{
 	callfunc "ClearData_Custom";
 	setarray @custom_items[0],34000,34001,34011,34012,34014,34035,34040,34050,34051,34056,34057,34058;
 	changelook LOOK_HEAD_BOTTOM, @look;
+	if(.custom_selected){
+		deltimer strnpcinfo(0)+"::OnEnd";
+	}
 	next;
 	mes .@nameNPC$;
 	mes "Dime de que Alas quieres saber que bonificaciones te otorga.";
@@ -549,6 +563,7 @@ new_5-2,115,115,3	script	Sir Rasword [Wings]	934,{
 		end;
 		
 	OnEnd:
+		deltimer strnpcinfo(0)+"::OnEnd";
 		changelook LOOK_HEAD_BOTTOM, @look;
 	end;
 	
@@ -617,4 +632,565 @@ new_5-2,115,115,3	script	Sir Rasword [Wings]	934,{
 		close2;
 		deltimer strnpcinfo(0)+"::OnEnd";
 	end;
+}
+
+//=============================================================
+new_5-2,79,100,5	script	Spirit Soul [Auras]	880,{
+
+	set .@nameNPC$, "[^045FB4 Spirit Soul ^000000]";
+	//setarray @look[0], getlook(LOOK_HEAD_BOTTOM), getlook(LOOK_HEAD_TOP), getlook(LOOK_HEAD_MID);
+	set @look, getlook(LOOK_HEAD_MID);
+	
+	mes .@nameNPC$;
+	.custom_selected = 0;
+	mes "Parece que eres habil!";
+	mes "Podria ayudarte a crecer tus habilidades elementales...";
+	menu "Quisiera saber mas", next_step, "No gracias", no;
+	close;
+	
+	next_step:
+	callfunc "ClearData_Custom";
+	setarray @custom_items[0],33066,33065,33061,33062;
+	changelook LOOK_HEAD_MID, @look;
+	if(.custom_selected){
+		deltimer strnpcinfo(0)+"::OnEnd";
+	}
+		
+	next;
+	mes .@nameNPC$;
+	mes "Cada uno te ofrece aumentar el daño de tus habilidad elementales.";
+	menu 	"White Soul", White_Soul,
+			"Red Soul", Red_Soul,
+			"Blue Soul", Blue_Soul,
+			"Green Soul", Green_Soul;
+	end;
+	
+	White_Soul:
+		next;		
+		set .custom_selected, @custom_items[0];
+		mes .@nameNPC$;
+		mes "Esta Soul aumenta el daño de tus ataques de elemento:";
+		mes "Holy en 5%";
+		menu "Regresar", next_step, "Vista previa", preview,"¿Que necesito?",-;
+		next;
+		setarray @items_req[0],982,7087,2282,7063,949,7326;
+		setarray @items_cant[0],20,10,10,100,200,200;
+		goto mostrar_receta;
+	end;
+	
+	Red_Soul:
+		next;
+		set .custom_selected, @custom_items[1];
+		mes .@nameNPC$;
+		mes "Esta Soul aumenta el daño de tus ataques de elemento:";
+		mes "Fuego en 5%";
+		menu "Regresar", next_step, "Vista previa", preview,"¿Que necesito?",-;
+		next;
+		setarray @items_req[0],982,7087,2282,7440,660,7326,6088;
+		setarray @items_cant[0],20,10,10,100,100,200,100;
+		goto mostrar_receta;
+	end;
+	
+	Blue_Soul:
+		next;
+		set .custom_selected, @custom_items[2];
+		mes .@nameNPC$;
+		mes "Esta Soul aumenta el daño de tus ataques de elemento:";
+		mes "Agua en 5%";
+		menu "Regresar", next_step, "Vista previa", preview,"¿Que necesito?",-;
+		next;
+		setarray @items_req[0],982,7087,2282,7441,720,7326,6087;
+		setarray @items_cant[0],20,10,10,100,200,100,100;
+		goto mostrar_receta;
+	end;
+	
+	Green_Soul:
+		next;
+		set .custom_selected, @custom_items[3];
+		mes .@nameNPC$;
+		mes "Esta Soul aumenta el daño de tus ataques de elemento:";
+		mes "Viento en 5%";
+		menu "Regresar", next_step, "Vista previa", preview,"¿Que necesito?",-;
+		next;
+		setarray @items_req[0],982,7087,2282,7445,993,7326,7263;
+		setarray @items_cant[0],20,10,10,100,200,100,100;
+		goto mostrar_receta;
+	end;
+	
+	preview:
+		next;
+		changelook LOOK_HEAD_MID, @look;
+		deltimer strnpcinfo(0)+"::OnEnd";
+		@view = getiteminfo(.custom_selected, 11);
+		changelook LOOK_HEAD_MID, @view;
+		addtimer 5000, strnpcinfo(0)+"::OnEnd";
+		mes .@nameNPC$;
+		mes "Y.... que te parece, te gusta?";
+		switch(.custom_selected){
+			case 33066:
+				goto White_Soul;
+				end;
+			case 33065:
+				goto Red_Soul;
+				end;
+			case 33061:
+				goto Blue_Soul;
+				end;
+			case 33062:
+				goto Green_Soul;
+				end;
+		}
+		end;
+		
+	OnEnd:
+		deltimer strnpcinfo(0)+"::OnEnd";
+		changelook LOOK_HEAD_MID, @look;
+	end;
+	
+	mostrar_receta:
+		changelook LOOK_HEAD_MID, @look;
+		set .nMakeItem, 1;
+		mes .@nameNPC$;
+		mes "Necesitare que me traigas los siguientes items:";
+		mes " ";
+		for(set .@i, 0; .@i < getarraysize(@items_req); .@i++) {
+			set .nInventario, countitem(@items_req[.@i]);
+			if(.nInventario < @items_cant[.@i])
+				set .nMakeItem, 0;
+			
+			if(.nMakeItem == 0)
+				mes "- " + getitemname(@items_req[.@i]) + " [" + @items_req[.@i] + "] - [^FF0000" + .nInventario + " de " + @items_cant[.@i] + "^000000]";
+			else
+				mes "- " + getitemname(@items_req[.@i]) + " [" + @items_req[.@i] + "] - [^088A08" + .nInventario + " de " + @items_cant[.@i] + "^000000]";
+		}		
+		if (getgmlevel() < 80) {
+			if(.nMakeItem == 0)
+				menu "Regresar", next_step, "Salir", no;
+			else
+				menu "Obtener aura", make_aura, "Regresar", next_step, "Salir", no;
+		}
+		else{
+			if(.nMakeItem == 0) {
+				menu "Obtener items",-, "Regresar", next_step, "Salir", no;
+				next;
+				for(set .@i, 0; .@i < getarraysize(@items_req); .@i++) {
+					getitem @items_req[.@i], @items_cant[.@i];
+				}
+				goto mostrar_receta;
+			}
+			else
+				menu "Obtener aura", make_aura, "Regresar", next_step, "Salir", no;
+		}
+	end;
+		
+	make_aura:
+		next;
+		mes .@nameNPC$;
+		mes "Valla parece que si lograste conseguir todo, bueno manos a la obra.";
+		next;
+		// SAVE LOG
+		set .lastInserId, 0;
+		query_sql("INSERT INTO log_custom_entregado (id_custom, char_id, account_id, dfecha, entregado) VALUES (" + .custom_selected + ", " + getcharid(0) + ", " + getcharid(3) + ", '" + gettimestr("%Y-%m-%d %H:%M:%S",21) + "', 0);");
+		query_sql("SELECT LAST_INSERT_ID();", .lastInserId);
+
+		mes .@nameNPC$;
+		mes "Listo!! alli lo tienes, ahora ve y enseñales quien tiene mas poder.";
+		for(set .@i, 0; .@i < getarraysize(@items_req); .@i++) {
+			query_sql("INSERT INTO log_custom_quest (id_logcustom, id_item, cantidad_item, dfecha) VALUES ("+.lastInserId+", "+@items_req[.@i]+", "+@items_cant[.@i]+", '" + gettimestr("%Y-%m-%d %H:%M:%S",21) + "')");
+			delitem @items_req[.@i], @items_cant[.@i];
+		}
+		getitem .custom_selected, 1;
+		query_sql("UPDATE log_custom_entregado SET entregado = 1 WHERE id_logcustom = " + .lastInserId);
+		callfunc "ClearData_Custom";
+		close;
+	end;
+	
+	get_items:
+		next;
+		for(set .@i, 0; .@i < getarraysize(@items_req); .@i++) {
+			getitem @items_req[.@i], @items_cant[.@i];
+		}
+		menu "Obtener aura", make_aura, "Regresar", next_step, "Salir", no;
+	end;
+	no:
+		next;
+		callfunc "ClearData_Custom";
+		mes .@nameNPC$;
+		mes "Nos vemos pronto, buena suerte!";
+		close2;
+		deltimer strnpcinfo(0)+"::OnEnd";
+	end;
+}
+
+//=============================================================
+//new_5-2,120,100,3	script	Beret Color	915,{
+//
+//	set .@nameNPC$, "[^045FB4 Beret Color ^000000]";
+//	//setarray @look[0], getlook(LOOK_HEAD_BOTTOM), getlook(LOOK_HEAD_TOP), getlook(LOOK_HEAD_MID);
+//	set @look, getlook(LOOK_HEAD_MID);
+//	
+//	mes .@nameNPC$;
+//	.custom_selected = 0;
+//	mes "Parece que eres habil!";
+//	mes "Podria ayudarte a mejorar tu Feather Beret";
+//	menu "Quisiera saber mas", next_step, "No gracias", no;
+//	close;
+//	
+//	next_step:
+//	callfunc "ClearData_Custom";
+//	setarray @custom_items[0],33523,33524,33525,33526,33527,33528,33529,33530,33531,33532,33533;
+//	changelook LOOK_HEAD_MID, @look;
+//	if(.custom_selected){
+//		deltimer strnpcinfo(0)+"::OnEnd";
+//	}
+//		
+//	next;
+//	mes .nameNPC$;
+//	mes "A parte del bonus actual,";
+//	mes "Te puedo aumentar el daño de tus ataques elementales.";
+//	menu "Black Feather Beret",Black_Feather_Beret,
+//		"Brown Feather Beret",Brown_Feather_Beret,
+//		//"Gold Feather Beret",Gold_Feather_Beret,
+//		"Green Feather Beret",Green_Feather_Beret,
+//		"Light Blue Feather Beret",Light_Blue_Feather_Beret,
+//		"Orange Feather Beret",Orange_Feather_Beret,
+//		"Pink Feather Beret",Pink_Feather_Beret,
+//		"Purple Feather Beret",Purple_Feather_Beret,
+//		"Red Feather Beret",Red_Feather_Beret,
+//		"Silver Feather Beret",Silver_Feather_Beret,
+//		"White Feather Beret",White_Feather_Beret;
+//
+//	end;
+//	
+//	Black_Feather_Beret:
+//		next;
+//		set .custom_selected, @custom_items[0];
+//		mes .@nameNPC$;
+//		mes "Este Beret te otorga:";
+//		mes "Mdef +1";
+//		mes "Reduce 10% damage taken from DemiHuman monster";
+//		mes "Increase resistance to the Dark Property by 5%.";
+//		menu "Regresar", next_step, "Vista previa", preview,"¿Que necesito?",-;
+//		next;setarray @items_req[0],5170,983,7539;
+//		setarray @items_cant[0],1,10,10;
+//		goto mostrar_receta;
+//	end;
+//	
+//	Brown_Feather_Beret:
+//		next;
+//		set .custom_selected, @custom_items[1];
+//		mes .@nameNPC$;
+//		mes "Este Beret te otorga:";
+//		mes "Mdef +1";
+//		mes "Reduce 10% damage taken from DemiHuman monster";
+//		mes "Increase resistance to the Earth Property by 5%.";
+//		menu "Regresar", next_step, "Vista previa", preview,"¿Que necesito?",-;
+//		next;
+//		setarray @items_req[0],5170,979,980,7539;
+//		setarray @items_cant[0],1,5,5,10;
+//		goto mostrar_receta;
+//	end;
+//	
+//	Gold_Feather_Beret:
+//		next;
+//		set .custom_selected, @custom_items[2];
+//		mes .@nameNPC$;
+//		mes "Este Beret te otorga:";
+//		mes "Mdef +1";
+//		mes "Reduce 10% damage taken from DemiHuman monster";
+//		mes "Increase resistance to the All Elements Property by 1%.";
+//		menu "Regresar", next_step, "Vista previa", preview,"¿Que necesito?",-;
+//		next;
+//		setarray @items_req[0],5170,696,7539;
+//		setarray @items_cant[0],1,10,10;
+//		goto mostrar_receta;
+//	end;
+//	
+//	Green_Feather_Beret:
+//		next;
+//		set .custom_selected, @custom_items[3];
+//		mes .@nameNPC$;
+//		mes "Este Beret te otorga:";
+//		mes "Mdef +1";
+//		mes "Reduce 10% damage taken from DemiHuman monster";
+//		mes "Increase resistance to the Wind Property by 5%.";
+//		menu "Regresar", next_step, "Vista previa", preview,"¿Que necesito?",-;
+//		next;
+//		setarray @items_req[0],5170,979,7539;
+//		setarray @items_cant[0],1,10,10;
+//		goto mostrar_receta;
+//	end;
+//	
+//	Light_Blue_Feather_Beret:
+//		next;
+//		set .custom_selected, @custom_items[4];
+//		mes .@nameNPC$;
+//		mes "Este Beret te otorga:";
+//		mes "Mdef +1";
+//		mes "Reduce 10% damage taken from DemiHuman monster";
+//		mes "Increase resistance to the Neutral Property by 5%.";
+//		menu "Regresar", next_step, "Vista previa", preview,"¿Que necesito?",-;
+//		next;
+//		setarray @items_req[0],5170,978,7539;
+//		setarray @items_cant[0],1,10,10;
+//		goto mostrar_receta;
+//	end;
+//	
+//	Orange_Feather_Beret:
+//		next;
+//		set .custom_selected, @custom_items[5];
+//		mes .@nameNPC$;
+//		mes "Este Beret te otorga:";
+//		mes "Mdef +1";
+//		mes "Reduce 10% damage taken from DemiHuman monster";
+//		mes "Increase resistance to the All Elements Property by 5%.";
+//		menu "Regresar", next_step, "Vista previa", preview,"¿Que necesito?",-;
+//		next;
+//		setarray @items_req[0],5170,980,7539;
+//		setarray @items_cant[0],1,10,10;
+//		goto mostrar_receta;
+//	end;
+//	
+//	Pink_Feather_Beret:
+//		next;
+//		set .custom_selected, @custom_items[6];
+//		mes .@nameNPC$;
+//		mes "Este Beret te otorga:";
+//		mes "Mdef +1";
+//		mes "Reduce 10% damage taken from DemiHuman monster";
+//		mes "Increase resistance to the All Elements Property by 5%.";
+//		menu "Regresar", next_step, "Vista previa", preview,"¿Que necesito?",-;
+//		next;
+//		setarray @items_req[0],5170,975,982,7539;
+//		setarray @items_cant[0],1,5,5,10;
+//		goto mostrar_receta;
+//	end;
+//	
+//	Purple_Feather_Beret:
+//		next;
+//		set .custom_selected, @custom_items[7];
+//		mes .@nameNPC$;
+//		mes "Este Beret te otorga:";
+//		mes "Mdef +1";
+//		mes "Reduce 10% damage taken from DemiHuman monster";
+//		mes "Increase resistance to the Poison Property by 5%.";
+//		menu "Regresar", next_step, "Vista previa", preview,"¿Que necesito?",-;
+//		next;
+//		setarray @items_req[0],5170,981,7539;
+//		setarray @items_cant[0],1,10,10;
+//		goto mostrar_receta;
+//	end;
+//	
+//	Red_Feather_Beret:
+//		next;
+//		set .custom_selected, @custom_items[8];
+//		mes .@nameNPC$;
+//		mes "Este Beret te otorga:";
+//		mes "Mdef +1";
+//		mes "Reduce 10% damage taken from DemiHuman monster";
+//		mes "Increase resistance to the Fire Property by 5%.";
+//		menu "Regresar", next_step, "Vista previa", preview,"¿Que necesito?",-;
+//		next;
+//		setarray @items_req[0],5170,975,7539;
+//		setarray @items_cant[0],1,10,10;
+//		goto mostrar_receta;
+//	end;
+//	
+//	Silver_Feather_Beret:
+//		next;
+//		set .custom_selected, @custom_items[9];
+//		mes .@nameNPC$;
+//		mes "Este Beret te otorga:";
+//		mes "Mdef +1";
+//		mes "Reduce 10% damage taken from DemiHuman monster";
+//		mes "Increase resistance to the Ghost Property by 5%.";
+//		menu "Regresar", next_step, "Vista previa", preview,"¿Que necesito?",-;
+//		next;
+//		setarray @items_req[0],5170,982,983,7539;
+//		setarray @items_cant[0],1,5,5,10;
+//		goto mostrar_receta;
+//	end;
+//	
+//	White_Feather_Beret:
+//		next;
+//		set .custom_selected, @custom_items[10];
+//		mes .@nameNPC$;
+//		mes "Este Beret te otorga:";
+//		mes "Mdef +1";
+//		mes "Reduce 10% damage taken from DemiHuman monster";
+//		mes "Increase resistance to the Holy Property by 5%.";
+//		menu "Regresar", next_step, "Vista previa", preview,"¿Que necesito?",-;
+//		next;
+//		setarray @items_req[0],5170,982,7539;
+//		setarray @items_cant[0],1,10,10;
+//		goto mostrar_receta;
+//	end;
+//		
+//	preview:
+//		next;
+//		changelook LOOK_HEAD_MID, @look;
+//		deltimer strnpcinfo(0)+"::OnEnd";
+//		@view = getiteminfo(.custom_selected, 11);
+//		changelook LOOK_HEAD_MID, @view;
+//		addtimer 5000, strnpcinfo(0)+"::OnEnd";
+//		mes .@nameNPC$;
+//		mes "Y.... que te parece, te gusta?";
+//		switch(.custom_selected){
+//			case 33523: goto Black_Feather_Beret; break;
+//			case 33524: goto Brown_Feather_Beret; break;
+//			case 33525: goto Gold_Feather_Beret; break;
+//			case 33526: goto Green_Feather_Beret; break;
+//			case 33527: goto Light_Blue_Feather_Beret; break;
+//			case 33528: goto Orange_Feather_Beret; break;
+//			case 33529: goto Pink_Feather_Beret; break;
+//			case 33530: goto Purple_Feather_Beret; break;
+//			case 33531: goto Red_Feather_Beret; break;
+//			case 33532: goto Silver_Feather_Beret; break;
+//			case 33533: goto White_Feather_Beret; break;
+//		}
+//		end;
+//		
+//	OnEnd:
+//		deltimer strnpcinfo(0)+"::OnEnd";
+//		changelook LOOK_HEAD_MID, @look;
+//	end;
+//	
+//	mostrar_receta:
+//		changelook LOOK_HEAD_MID, @look;
+//		set .nMakeItem, 1;
+//		mes .@nameNPC$;
+//		mes "Necesitare que me traigas los siguientes items:";
+//		mes " ";
+//		for(set .@i, 0; .@i < getarraysize(@items_req); .@i++) {
+//			set .nInventario, countitem(@items_req[.@i]);
+//			if(.nInventario < @items_cant[.@i])
+//				set .nMakeItem, 0;
+//			
+//			if(.nMakeItem == 0)
+//				mes "- " + getitemname(@items_req[.@i]) + " [" + @items_req[.@i] + "] - [^FF0000" + .nInventario + " de " + @items_cant[.@i] + "^000000]";
+//			else
+//				mes "- " + getitemname(@items_req[.@i]) + " [" + @items_req[.@i] + "] - [^088A08" + .nInventario + " de " + @items_cant[.@i] + "^000000]";
+//		}		
+//		if (getgmlevel() < 80) {
+//			if(.nMakeItem == 0)
+//				menu "Regresar", next_step, "Salir", no;
+//			else
+//				menu "Obtener aura", make_aura, "Regresar", next_step, "Salir", no;
+//		}
+//		else{
+//			if(.nMakeItem == 0) {
+//				menu "Obtener items",-, "Regresar", next_step, "Salir", no;
+//				next;
+//				for(set .@i, 0; .@i < getarraysize(@items_req); .@i++) {
+//					getitem @items_req[.@i], @items_cant[.@i];
+//				}
+//				goto mostrar_receta;
+//			}
+//			else
+//				menu "Obtener aura", make_aura, "Regresar", next_step, "Salir", no;
+//		}
+//	end;
+//		
+//	make_aura:
+//		next;
+//		mes .@nameNPC$;
+//		mes "Manos a la obra.";
+//		next;
+//		// SAVE LOG
+//		set .lastInserId, 0;
+//		query_sql("INSERT INTO log_custom_entregado (id_custom, char_id, account_id, dfecha, entregado) VALUES (" + .custom_selected + ", " + getcharid(0) + ", " + getcharid(3) + ", '" + gettimestr("%Y-%m-%d %H:%M:%S",21) + "', 0);");
+//		query_sql("SELECT LAST_INSERT_ID();", .lastInserId);
+//
+//		mes .@nameNPC$;
+//		mes "Listo!! alli lo tienes, ahora ve y enseñales quien tiene mas poder.";
+//		for(set .@i, 0; .@i < getarraysize(@items_req); .@i++) {
+//			query_sql("INSERT INTO log_custom_quest (id_logcustom, id_item, cantidad_item, dfecha) VALUES ("+.lastInserId+", "+@items_req[.@i]+", "+@items_cant[.@i]+", '" + gettimestr("%Y-%m-%d %H:%M:%S",21) + "')");
+//			delitem @items_req[.@i], @items_cant[.@i];
+//		}
+//		getitem .custom_selected, 1;
+//		query_sql("UPDATE log_custom_entregado SET entregado = 1 WHERE id_logcustom = " + .lastInserId);
+//		callfunc "ClearData_Custom";
+//		close;
+//	end;
+//	
+//	get_items:
+//		next;
+//		for(set .@i, 0; .@i < getarraysize(@items_req); .@i++) {
+//			getitem @items_req[.@i], @items_cant[.@i];
+//		}
+//		menu "Obtener aura", make_aura, "Regresar", next_step, "Salir", no;
+//	end;
+//	no:
+//		next;
+//		callfunc "ClearData_Custom";
+//		mes .@nameNPC$;
+//		mes "Nos vemos pronto, buena suerte!";
+//		close2;
+//		deltimer strnpcinfo(0)+"::OnEnd";
+//	end;
+//}
+
+new_5-2,79,110,5	script	Montura	915,{
+		.@nameNPC$ = "[^045FB4 Montura ^000000]";
+		mes .@nameNPC$;
+		mes "Con que quieres la montura eeh!";
+		next;
+		
+		.nIdMontura = 12622;
+		setarray @items_req[0],7200,7195,7539;
+		setarray @items_cant[0],100,200,10;
+		mes .@nameNPC$;
+		mes "Necesito estos articulos:";
+		set .nMakeItem, 1;
+		for(set .@i, 0; .@i < getarraysize(@items_req); .@i++) {
+			set .nTempMakeItem, 1;
+			set .nInventario, countitem(@items_req[.@i]);
+			if(.nInventario < @items_cant[.@i]){
+				set .nMakeItem, 0;
+				set .nTempMakeItem, 0;
+			}
+			
+			if(.nTempMakeItem == 0)
+				mes "- " + getitemname(@items_req[.@i]) + " [" + @items_req[.@i] + "] - [^FF0000" + .nInventario + " de " + @items_cant[.@i] + "^000000]";
+			else
+				mes "- " + getitemname(@items_req[.@i]) + " [" + @items_req[.@i] + "] - [^088A08" + .nInventario + " de " + @items_cant[.@i] + "^000000]";
+		}
+		if(!.nMakeItem){
+			deletearray @items_cant[0],getarraysize( @items_cant );
+			deletearray @items_req[0],getarraysize( @items_req );
+			close;
+			end;
+		}
+		menu "Regreso luego...",salir, "Tengo todo, sigamos",-;		
+		next;
+		for(set .@i, 0; .@i < getarraysize(@items_req); .@i++) {
+			set .nInventario, countitem(@items_req[.@i]);
+			if(.nInventario < @items_cant[.@i])
+				set .nMakeItem, 0;
+		}
+		mes .@nameNPC$;
+		mes "Bien parece que lo conseguiste!";
+		set .lastInserId, 0;
+		query_sql("INSERT INTO log_custom_entregado (id_custom, char_id, account_id, dfecha, entregado) VALUES (" + .nIdMontura + ", " + getcharid(0) + ", " + getcharid(3) + ", '" + gettimestr("%Y-%m-%d %H:%M:%S",21) + "', 0);");
+		query_sql("SELECT LAST_INSERT_ID();", .lastInserId);
+		for(set .@i, 0; .@i < getarraysize(@items_req); .@i++) {
+			query_sql("INSERT INTO log_custom_quest (id_logcustom, id_item, cantidad_item, dfecha) VALUES ("+.lastInserId+", "+@items_req[.@i]+", "+@items_cant[.@i]+", '" + gettimestr("%Y-%m-%d %H:%M:%S",21) + "')");
+			delitem @items_req[.@i], @items_cant[.@i];
+		}
+		mes "Felicidades, es todo tuyo!";
+		getitem .nIdMontura, 1;
+		query_sql("UPDATE log_custom_entregado SET entregado = 1 WHERE id_logcustom = " + .lastInserId);
+		deletearray @items_cant[0],getarraysize( @items_cant );
+		deletearray @items_req[0],getarraysize( @items_req );
+		close;
+		end;
+		
+		salir:
+			next;
+			mes .@nameNPC$;
+			mes "Hasta pronto!";
+			deletearray @items_cant[0],getarraysize( @items_cant );
+			deletearray @items_req[0],getarraysize( @items_req );
+			close;
+		end;
 }

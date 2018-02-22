@@ -89,7 +89,7 @@
 	end;
 	
 	OnInit:
-		.GM_Min_Access = 6;
+		.GM_Min_Access = 9;
 		bindatcmd "eporing","EventPoring::OnCheckPermiso";
 	end;
 }

@@ -1,0 +1,63 @@
+
+-	script	KillMVP	-1,{
+	OnNPCKillEvent:
+		.@nMobId = killedrid;
+		.@mapname$ = strcharinfo(3);	// get map user
+		if(.@mapname$ != "ordeal_1-1"){
+			if( .@nMobId == 1511 || //	Amon Ra
+				.@nMobId == 1647 || // Assassin Cross Eremes
+				.@nMobId == 1785 || //	Atroce
+				.@nMobId == 1630 || //	Bacsojin
+				.@nMobId == 1039 || //	Baphomet
+				.@nMobId == 1874 || //	Beelzebub
+				.@nMobId == 2068 || //	Boitata
+				.@nMobId == 1272 || //	Dark Lord
+				.@nMobId == 1719 || //	Datale
+				.@nMobId == 1046 || //	Doppelgangger
+				.@nMobId == 1389 || //	Dracula
+				.@nMobId == 1112 || //	Drake
+				.@nMobId == 1115 || //	Eddga
+				.@nMobId == 1418 || //	Evil Snake Lord
+				.@nMobId == 1871 || //	Fallen Bishop
+				.@nMobId == 1252 || //	Garm
+				.@nMobId == 1768 || //	Gloom Under Night
+				.@nMobId == 1086 || //	Golden Thief Bug
+				.@nMobId == 1885 || //	Gopinich
+				.@nMobId == 1649 || // High Priest Magaleta
+				.@nMobId == 1651 || // High Wizard Katrinn
+				.@nMobId == 1832 || //	Ifrit
+				.@nMobId == 1492 || //	Incantation Samurai
+				.@nMobId == 1734 || //	Kiel D-01
+				.@nMobId == 1251 || //	Knight of Windstorm
+				.@nMobId == 1779 || //	Ktullanux
+				.@nMobId == 1688 || //	Lady Tanee
+				.@nMobId == 1646 || // Lord Knight Seyren
+				.@nMobId == 1373 || //	Lord of Death
+				.@nMobId == 1147 || //	Maya
+				.@nMobId == 1059 || //	Mistress
+				.@nMobId == 1150 || //	Moonlight Flower
+				.@nMobId == 2022 || //	Nidhoggr's Shadow
+				.@nMobId == 1087 || //	Orc Hero
+				.@nMobId == 1190 || //	Orc Lord
+				.@nMobId == 1038 || //	Osiris
+				.@nMobId == 1157 || //	Pharaoh
+				.@nMobId == 1159 || //	Phreeoni
+				.@nMobId == 2087 || //	Queen Scaraba
+				.@nMobId == 1623 || //	RSX 0806
+				.@nMobId == 1650 || // Sniper Shecil
+				.@nMobId == 1583 || //	Tao Gunka
+				.@nMobId == 1708 || //	Thanatos
+				.@nMobId == 1312 || //	Turtle General
+				.@nMobId == 1751 || //	Valkyrie Randgris
+				.@nMobId == 1685 || // Vesper
+				.@nMobId == 1648 || // Whitesmith Harword
+				.@nMobId == 1917 || // Wounded Morroc
+				.@nMobId == 1658 ) 	//	Ygnizem
+				{
+				getitem 7087,1;	// Breath of Spirit 
+				.@SqlQuery$ = "INSERT INTO mvplog (mvp_id, mvp_date, kill_char_id, map) VALUES ("+.@nMobId+",'"+gettimestr("%Y-%m-%d %H:%M:%S",21)+"', "+getcharid(0)+", '"+.@mapname$+"')";
+				query_sql(.@SqlQuery$, .lastInserId);
+			}
+		}
+	end;
+}

@@ -42,7 +42,8 @@ um_dun02,272,163,15,15	monster	Wooden Golem	1497,2,180000,60000
 um_dun02,232,156,15,15	monster	Wooden Golem	1497,2,300000,60000
 um_dun02,232,156,15,15	monster	Wooden Golem	1497,2,180000,60000
 um_dun02,0,0	monster	Driller	1380,5
-um_dun02,0,0	monster	Wootan Shooter	1498,10
+//um_dun02,0,0	monster	Wootan Shooter	1498,10
+um_dun02,0,0	monster	Wootan Shooter	1498,40
 um_dun02,213,217,15,15	monster	Wootan Shooter	1498,2,120000,60000
 um_dun02,72,258,15,15	monster	Wootan Shooter	1498,3,120000,60000
 um_dun02,79,227,10,10	monster	Wootan Shooter	1498,1,120000,60000

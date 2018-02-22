@@ -1,0 +1,100 @@
+
+//=================================
+// = Created by -xMigue-
+//=================================
+//= Hourly Points Script.
+//=================================
+//= Version 1.0
+//=================================
+//= Notes:
+//= 1.0 - Initial Working Script.
+// How to do whisper
+// npc:Reward_Points (box left chat, like pm)
+// info (box right chat, like message)
+//=================================
+-	script	Reward_Points	-1,{
+	//** CONFIGURACION **//
+	OnInit:
+		set .TimeInMinutes, 5; 		//Check at 5 Minutes
+		set .WhatRewardHour, 1; 	//Reward at 1 Hour
+		set .ItemRewardAmount, 1; 	//Reward Amount
+		set .dlimit, 300; 		// time at seconds, if stay at the same position by 5 min
+	end;
+	
+	OnPCLoginEvent: 
+		dispbottom "[Reward_Points] - Los puntos por hora, han sido habilitados para este personaje.";
+		set #TimeActive, 0;
+		attachnpctimer ""+strcharinfo(0)+"";
+		initnpctimer;
+	end;
+		
+	OnPCLogoutEvent:
+		stopnpctimer;	
+	end;
+
+	OnWhisperGlobal:
+//		if(@whispervar0$ == "info") {
+			mes "[Reward_Points]";
+			mes "Selecciona una opcion";
+			switch(select("Tiempo activo:Tiempo ausente:Balance actual")) {
+				case 1:
+					dispbottom "[Reward_Points] - Tienes " + #TimeActive + (#TimeActive == 1 ? " minuto" : " minutos") +" activo";
+				break;
+
+				case 2:
+					set .@nSegundos, checkidle();
+					dispbottom "[Reward_Points] - Tiempo ausente: " + ( .@nSegundos < 61 ? (.@nSegundos + " seg.") : ( (.@nSegundos/60) + " min.")) + " Si permaneces 5 min inactivo, se detendra esta funcionalidad";
+				break;
+
+				case 3:
+					set .@records, 0;
+					set .@query_result, query_sql("SELECT points_hour FROM points_hour WHERE account_id = " + getcharid(3), .@records);
+					dispbottom "[Reward_Points] - Actualmente tienes " + (.@records == 1 ? "acumulado = " : "acumulados = ") + .@records + ( .@records == 1 ? " punto." : " puntos.");
+				break;
+
+			}
+//		}
+//		else {
+//			dispbottom "[Reward_Points] - Comando no válido.";
+//		}
+
+	end;
+
+	OnTimer60000:	// Cada minuto
+		set #TimeActive, #TimeActive + 1;
+		set .Continuar, 1;
+		if(checkidle() >= 200 && checkidle() <= 260 ){
+			dispbottom "[Reward_Points] - Aproximadamente en 1 min, se detendra la funcion de puntos por hora.";
+		}
+		if(checkvending() >= 1 || checkchatting() == 1 || checkidle() >= .dlimit) {			
+			dispbottom "[Reward_Points] - La generacion de puntos por hora de actividad, han sido detenidos, reloguea para volver a iniciar.";
+			set .Continuar, 0;
+		}
+		else{
+			if(#TimeActive == 60 && .Continuar == 1) { // 60 Minutos activo, se genera punto
+				set #TimeActive, 0;		// Reinicio el contador de minutos
+				set .@records, 0;
+				
+				// Reviso si hay ya un registro previo en la tabla de puntos por hora
+				set .@query_result, query_sql("SELECT COUNT(*) FROM points_hour WHERE account_id = " + getcharid(3), .@records);
+				
+				// Si no hay registro previo, creo su registro
+				if(.@records == 0)
+					query_sql("INSERT INTO points_hour (account_id, points_hour) VALUES (" + getcharid(3) + ", 1)");
+				else { // Actualizo el monto de puntos de la cuenta del personaje
+					query_sql("UPDATE points_hour SET points_hour = points_hour + 1 WHERE account_id = " + getcharid(3));
+					set .@records, 0;
+				}
+				
+				// Obtengo el balance actual en puntos de la cuenta
+				set .@query_result, query_sql("SELECT points_hour FROM points_hour WHERE account_id = " + getcharid(3), .@records);
+				dispbottom "[Reward_Points] - Actualmente tienes " + (.@records > 1 ? "acumulados = " : "acumulado = ") + .@records + ( .@records > 1 ? " puntos." : " punto.");
+			}
+		}
+
+		stopnpctimer; // detengo el timer
+		if(.Continuar == 1) // Reinicio el timer
+			initnpctimer;
+	end;
+
+}

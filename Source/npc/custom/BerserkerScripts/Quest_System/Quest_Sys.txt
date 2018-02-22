@@ -836,17 +836,17 @@ switch(.@s) {
 close;
 
 OnInit:
-while($@QSys == 0) sleep 5000;
-if($@q_tab == 0) end;
-if(strnpcinfo(3) == "QuestTemp") end;
-if(query_sql("SELECT `npc_name` FROM `quest_npc` WHERE `npc_id` = '"+atoi(strnpcinfo(2))+"' AND `npc_map` = '"+strnpcinfo(4)+"'",.@npc) == 0) {
-	getmapxy(.@n_map$,.@n_x,.@n_y,1);
-	query_sql "INSERT INTO `quest_npc` ( `npc_id` , `npc_name` , `npc_map` , `npc_x` , `npc_y` ) VALUES ( '"+atoi(strnpcinfo(2))+"' , '"+escape_sql(strnpcinfo(1))+"' , '"+escape_sql(strnpcinfo(4))+"' , '"+.@n_x+"' , '"+.@n_y+"' )"; 
-}
-if(query_sql("SELECT `map` FROM `quest_map` WHERE `map` = '"+strnpcinfo(4)+"'",.@m) != 0)
-	query_sql "UPDATE `quest_map` SET `npc_count` = `npc_count` + 1 WHERE `map` = '"+strnpcinfo(4)+"'";
-else 
-	query_sql "INSERT INTO `quest_map` ( `map` , `npc_count` ) VALUES ( '"+strnpcinfo(4)+"' , '1' )";
+	while($@QSys == 0) sleep 5000;
+	if($@q_tab == 0) end;
+	if(strnpcinfo(3) == "QuestTemp") end;
+	if(query_sql("SELECT `npc_name` FROM `quest_npc` WHERE `npc_id` = '"+atoi(strnpcinfo(2))+"' AND `npc_map` = '"+strnpcinfo(4)+"'",.@npc) == 0) {
+		getmapxy(.@n_map$,.@n_x,.@n_y,1);
+		query_sql "INSERT INTO `quest_npc` ( `npc_id` , `npc_name` , `npc_map` , `npc_x` , `npc_y` ) VALUES ( '"+atoi(strnpcinfo(2))+"' , '"+escape_sql(strnpcinfo(1))+"' , '"+escape_sql(strnpcinfo(4))+"' , '"+.@n_x+"' , '"+.@n_y+"' )"; 
+	}
+	if(query_sql("SELECT `map` FROM `quest_map` WHERE `map` = '"+strnpcinfo(4)+"'",.@m) != 0)
+		query_sql "UPDATE `quest_map` SET `npc_count` = `npc_count` + 1 WHERE `map` = '"+strnpcinfo(4)+"'";
+	else 
+		query_sql "INSERT INTO `quest_map` ( `map` , `npc_count` ) VALUES ( '"+strnpcinfo(4)+"' , '1' )";
 end;
 }
 
@@ -855,4 +855,5 @@ end;
 // map,x,y,0	duplicate(QuestTemp)	NPC Name#NPC ID	100
 // Example: 
 // prontera,100,120,0	duplicate(QuestTemp)	Quest Guy#1	100
-//prontera,152,174,4	duplicate(QuestTemp)	Johny Quest#1	100
+job3_rune01,70,60,4	duplicate(QuestTemp)	Johny Quest#1	100
+prontera,140,225,4	duplicate(QuestTemp)	Quest Guy#2	100

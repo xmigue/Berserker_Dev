@@ -78,7 +78,7 @@ OnInit:
 	disablenpc "mazeevent";
 	.nWarpsHabilitados = 1;
     disablenpc "Maze#asdf";
-	.GM_Min_Access = 6;
+	.GM_Min_Access = 9;
 	bindatcmd "elaberinto","Maze#announcer::OnStartGMEvent";
 end;
 
