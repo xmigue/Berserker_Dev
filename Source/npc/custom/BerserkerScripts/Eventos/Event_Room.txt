@@ -4,11 +4,13 @@ prontera,160,180,3	script	Event Room	508,{
 		mes "Quieres entrar en el evento?";
 		next;
 		menu "No",noenter,"Si",-;
-		sc_end SC_ALL;
-		percentheal 100,100;
-		nude;
-		atcommand "@storeall "+ strcharinfo(0);
-		dispbottom "Todos tus items fueron movidos al storage.";
+		if(getgroupid() < 9){
+			sc_end SC_ALL;
+			percentheal 100,100;
+			nude;
+			atcommand "@storeall "+ strcharinfo(0);
+			dispbottom "Todos tus items fueron movidos al storage.";
+		}
 		warp "06guild_01",49,50;
 	end;
 	
@@ -54,7 +56,7 @@ prontera,160,180,3	script	Event Room	508,{
 }
 
 06guild_01	mapflag	nosave	SavePoint
-06guild_01	mapflag	nocommand	9
+06guild_01	mapflag	nocommand	1
 06guild_01	mapflag	noloot
 06guild_01	mapflag	nomemo
 06guild_01	mapflag	nopenalty
